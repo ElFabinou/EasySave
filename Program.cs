@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using easysave;
+
+Save save = new Save(DateTime.Now, "Sauvegarde de test", "Ceci est une sauvegarde de test pour tester les tests unitaires.");
+Console.WriteLine(save.displaySaveInformation());
