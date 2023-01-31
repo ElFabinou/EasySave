@@ -22,7 +22,7 @@ namespace easysave
 
         public string displaySaveInformation()
         {
-            return ("La sauvegarde "+this._name+" été créée à cette date : "+this._created+"\nDescription : "+this._description);
+            return ("La sauvegarde "+this._name+" été créée à cette date suivante : "+this._created+"\nDescription : "+this._description);
         }
 
     }
