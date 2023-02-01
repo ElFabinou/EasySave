@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace easysave
+namespace easysave.Objects
 {
-    internal class SaveWork
+    public class BasicSaveWork
     {
-        private string? sourcePath;
-        private string? targetPath;
-        private DateTime dateTime = DateTime.Now;
-        private string saveName = "Sauvegarde-"+DateTime.Now.ToString();
+
+        public string sourcePath;
+        public string targetPath;
+        public DateTime dateTime = DateTime.Now;
+        public string saveName = "Sauvegarde-" + DateTime.Now.ToString();
+
 
         public void setSourcePath(string sourcePath)
         {
@@ -23,20 +25,18 @@ namespace easysave
 
         public void setTargetPath(string targetPath)
         {
-            if (pathExists(targetPath))
-            {
-                this.targetPath = targetPath;
-            }
+
+            this.targetPath = targetPath;
         }
 
-        public string? getSourcePath()
+        public string getSourcePath()
         {
-            return this.sourcePath;
+            return sourcePath;
         }
 
-        public string? getTargetPath()
+        public string getTargetPath()
         {
-            return this.targetPath;
+            return targetPath;
         }
 
         public bool pathExists(string path)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using easysave.Objects;
+using easysave.ViewModels;
 
 namespace easysave
 {
@@ -28,19 +25,23 @@ namespace easysave
                 Console.WriteLine("\n");
                 string? choice = "";
                 int attempt = 0;
-                while (choice != "O" && choice != "N")
+                while (choice != "1" && choice != "2" && choice != "3" && choice != "4")
                 {
-                    Console.WriteLine("Créer une nouvelle sauvegarde ? (O/N) " + (attempt > 0 ? "Tapez O pour Oui ou N pour Non." : ""));
+                    Console.WriteLine("[1] Sauvegarde basique\t");
+                    Console.WriteLine("[x] Travail de sauvegarde\t");
+                    Console.WriteLine("[3] Slots de travail de sauvegarde\t");
+                    Console.WriteLine("[x] Paramètres\t");
                     choice = Console.ReadLine();
                     attempt++;
                 }
-                if(choice == "O")
+                switch (choice)
                 {
-                    initSaveWork();
-                }
-                else
-                {
-                    Console.WriteLine("Terminé");
+                    case "1":
+                        initBasicSaveWork();
+                        break;
+                    case "3":
+                        initSlotModification();
+                        break;
                 }
             }
             else
@@ -48,23 +49,62 @@ namespace easysave
                 Console.WriteLine("Erreur, impossible de charger l'interface.");
             }
         }
-    
-        public void initSaveWork()
+
+        private void initSlotModification()
         {
-            SaveWork saveWork = new SaveWork();
-            string ?sourcePath = "";
-            while(sourcePath == "" || sourcePath == null || !saveWork.pathExists(sourcePath)) {
-                Console.WriteLine("Veuillez saisir chemin d'accès existant à sauvegarder : ");
-                sourcePath = Console.ReadLine();
-            }
-            string? targetPath = "";
-            while (targetPath == "" || targetPath == null || !saveWork.pathExists(targetPath))
+            if (this.selectedMode == mode.Console)
             {
-                Console.WriteLine("Veuillez saisir un chemin d'accès existant sur lequel sauvegarder : ");
-                targetPath = Console.ReadLine();
+                RegisteredSaveWork registeredSaveWork = new RegisteredSaveWork();
+                string? name = "";
+                while (name == "" || name == null)
+                {
+                    Console.WriteLine("Veuillez saisir le nom du travail de sauvegarde (notez que le nom du dossier qui sera créé contiendra automatiquement la date et heure de la sauvegarde) : ");
+                    name = Console.ReadLine();
+                }
+                string? sourcePath = "";
+                while (sourcePath == "" || sourcePath == null || !registeredSaveWork.pathExists(sourcePath))
+                {
+                    Console.WriteLine("Veuillez saisir chemin d'accès existant à sauvegarder : ");
+                    sourcePath = Console.ReadLine();
+                }
+                string? targetPath = "";
+                while (targetPath == "" || targetPath == null)
+                {
+                    Console.WriteLine("Veuillez saisir un chemin d'accès existant sur lequel sauvegarder : ");
+                    targetPath = Console.ReadLine();
+                }
+                registeredSaveWork.setSaveName(name);
+                registeredSaveWork.setSourcePath(sourcePath);
+                registeredSaveWork.setTargetPath(targetPath);
+                RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
+                Console.WriteLine(viewModel.initSlotCreationAsync());
+
             }
-            saveWork.setSourcePath(sourcePath);
-            saveWork.setTargetPath(targetPath);
+        }
+
+        public string initBasicSaveWork()
+        {
+            if (this.selectedMode == mode.Console)
+            {
+                BasicSaveWork basicSaveWork = new BasicSaveWork();
+                string? sourcePath = "";
+                while (sourcePath == "" || sourcePath == null || !basicSaveWork.pathExists(sourcePath))
+                {
+                    Console.WriteLine("Veuillez saisir chemin d'accès existant à sauvegarder : ");
+                    sourcePath = Console.ReadLine();
+                }
+                string? targetPath = "";
+                while (targetPath == "" || targetPath == null)
+                {
+                    Console.WriteLine("Veuillez saisir un chemin d'accès existant sur lequel sauvegarder : ");
+                    targetPath = Console.ReadLine();
+                }
+                basicSaveWork.setSourcePath(sourcePath);
+                basicSaveWork.setTargetPath(targetPath);
+                BasicSaveWorkViewModel viewModel = new BasicSaveWorkViewModel(basicSaveWork);
+                Console.WriteLine(viewModel.initBasicSaveWork());
+            }
+            return "Mode non implémenté pour le moment";
         }
     
     }
