@@ -12,7 +12,7 @@ namespace easysave.ViewModels
     {
         public RegisteredSaveWork registeredSaveWork;
 
-        public RegisteredSaveViewModel(RegisteredSaveWork registeredSaveWork)
+        public RegisteredSaveViewModel(RegisteredSaveWork? registeredSaveWork = null)
         {
                 this.registeredSaveWork = registeredSaveWork;
         }
@@ -23,11 +23,17 @@ namespace easysave.ViewModels
             return model.copyFilesToTarget();
         } */
 
-        public string initSlotCreationAsync()
+        public string initSlotCreation()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
-            registeredSaveModel.writeInJsonAsync();
+            registeredSaveModel.writeInJson();
             return "ok";
+        }
+
+        public List<RegisteredSaveWork> initSlotSelection()
+        {
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel();
+            return registeredSaveModel.getAllRegisteredSaveWork();
         }
     }
 }

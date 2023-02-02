@@ -28,7 +28,7 @@ namespace easysave
                 while (choice != "1" && choice != "2" && choice != "3" && choice != "4")
                 {
                     Console.WriteLine("[1] Sauvegarde basique\t");
-                    Console.WriteLine("[x] Travail de sauvegarde\t");
+                    Console.WriteLine("[2] Travail de sauvegarde\t");
                     Console.WriteLine("[3] Slots de travail de sauvegarde\t");
                     Console.WriteLine("[x] Paramètres\t");
                     choice = Console.ReadLine();
@@ -38,6 +38,9 @@ namespace easysave
                 {
                     case "1":
                         initBasicSaveWork();
+                        break;
+                    case "2":
+                        initSlotSelection();
                         break;
                     case "3":
                         initSlotModification();
@@ -77,12 +80,39 @@ namespace easysave
                 registeredSaveWork.setSourcePath(sourcePath);
                 registeredSaveWork.setTargetPath(targetPath);
                 RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
-                Console.WriteLine(viewModel.initSlotCreationAsync());
+                Console.WriteLine(viewModel.initSlotCreation());
 
             }
         }
 
-        public string initBasicSaveWork()
+        public void initSlotSelection()
+        {
+            if (this.selectedMode == mode.Console)
+            {
+                RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                Console.WriteLine("Choissez un slot de sauvegarde à éditer : ");
+                int i = 1;
+                foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                {
+                    Console.WriteLine("["+i+"] "+registeredSaveWork.getSaveName());
+                    i++;
+                }
+                int s = 0;
+                while (s > registeredSaveViewModelList.Count || s < 1)
+                {
+                    try {
+                        s = Convert.ToInt32(Console.Read());
+                    }catch(Exception e)
+                    {
+                        Console.WriteLine("Vous n'avez pas saisi un nombre.");
+                    }
+                }
+
+            }
+        }
+
+        public void initBasicSaveWork()
         {
             if (this.selectedMode == mode.Console)
             {
@@ -104,7 +134,7 @@ namespace easysave
                 BasicSaveWorkViewModel viewModel = new BasicSaveWorkViewModel(basicSaveWork);
                 Console.WriteLine(viewModel.initBasicSaveWork());
             }
-            return "Mode non implémenté pour le moment";
+            Console.WriteLine("Mode non implémenté pour le moment");
         }
     
     }
