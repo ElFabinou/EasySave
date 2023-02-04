@@ -8,20 +8,13 @@ namespace easysave.Objects
 {
     public class RegisteredSaveWork : BasicSaveWork
     {
+        public enum Type
+        {
+            Complet,
+            Differentiel
+        };
 
-        public void setDateTime(DateTime dateTime)
-        {
-            this.dateTime = dateTime;
-        }
-
-        public DateTime getDateTime()
-        {
-            return dateTime;
-        }
-        public void setDate(DateTime dateTime)
-        {
-            this.dateTime = dateTime;
-        }
+        public Type type;
 
         public void setSaveName(string saveName)
         {
@@ -33,5 +26,13 @@ namespace easysave.Objects
             return saveName;
         }
 
+        public Type getType()
+        {
+            return type;
+        }
+
+        public void setType(Type type) {
+            this.type = type;
+        }
     }
 }

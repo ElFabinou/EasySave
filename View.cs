@@ -23,13 +23,16 @@ namespace easysave
             {
                 Console.WriteLine("  ______                 _____                    _____ _      _____ \r\n |  ____|               / ____|                  / ____| |    |_   _|\r\n | |__   __ _ ___ _   _| (___   __ ___   _____  | |    | |      | |  \r\n |  __| / _` / __| | | |\\___ \\ / _` \\ \\ / / _ \\ | |    | |      | |  \r\n | |___| (_| \\__ \\ |_| |____) | (_| |\\ V /  __/ | |____| |____ _| |_ \r\n |______\\__,_|___/\\__, |_____/ \\__,_| \\_/ \\___|  \\_____|______|_____|\r\n                   __/ |                                             \r\n                  |___/                                              \r\n\r\n");
                 Console.WriteLine("\n");
+                Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.WriteLine("Menu principal");
+                Console.ForegroundColor= ConsoleColor.Gray;
                 string? choice = "";
                 int attempt = 0;
                 while (choice != "1" && choice != "2" && choice != "3" && choice != "4")
                 {
                     Console.WriteLine("[1] Sauvegarde basique\t");
-                    Console.WriteLine("[2] Travail de sauvegarde\t");
-                    Console.WriteLine("[3] Slots de travail de sauvegarde\t");
+                    Console.WriteLine("[2] Liste des travaux de sauvegarde\t");
+                    Console.WriteLine("[3] Créer un travail de sauvegarde\t");
                     Console.WriteLine("[x] Paramètres\t");
                     choice = Console.ReadLine();
                     attempt++;
@@ -76,45 +79,96 @@ namespace easysave
                     Console.WriteLine("Veuillez saisir un chemin d'accès existant sur lequel sauvegarder : ");
                     targetPath = Console.ReadLine();
                 }
+                string? type = "";
+                while (type == "" || type == null)
+                {
+                    Console.WriteLine("Veuillez saisir un type de sauvegarde : ");
+                    Console.WriteLine("[1] Complet\t");
+                    Console.WriteLine("[2] Differentiel\t");
+                    type = Console.ReadLine();
+                }
+                registeredSaveWork.setType(RegisteredSaveWork.Type.Complet);
+                if (type == "2") registeredSaveWork.setType(RegisteredSaveWork.Type.Differentiel);
                 registeredSaveWork.setSaveName(name);
                 registeredSaveWork.setSourcePath(sourcePath);
                 registeredSaveWork.setTargetPath(targetPath);
                 RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
-                Console.WriteLine(viewModel.initSlotCreation());
+                viewModel.initSlotCreation().Print();
+                mainMenu();
 
             }
         }
 
         public void initSlotSelection()
         {
-            if (this.selectedMode == mode.Console)
+            if (selectedMode == mode.Console)
             {
                 RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
                 List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
                 Console.WriteLine("Choissez un slot de sauvegarde à éditer : ");
                 int i = 1;
+                if (registeredSaveViewModelList.Count == 0) {
+                    Console.WriteLine("\tAucun slot de travail trouvé dans les sauvegardes, retour en arrière.");
+                    mainMenu(); 
+                }
                 foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
                 {
-                    Console.WriteLine("["+i+"] "+registeredSaveWork.getSaveName());
+                    Console.WriteLine("["+i+"] "+registeredSaveWork.getSaveName()+
+                        "\n ├── Type : "+registeredSaveWork.getType().ToString() +
+                        "\n ├── Source : "+registeredSaveWork.getSourcePath() +
+                        "\n └── Cible : "+registeredSaveWork.getTargetPath());
                     i++;
                 }
                 int s = 0;
                 while (s > registeredSaveViewModelList.Count || s < 1)
                 {
                     try {
-                        s = Convert.ToInt32(Console.Read());
-                    }catch(Exception e)
+                        Console.WriteLine("Choisissez un travail de sauvegarde valable :");
+                        s = Convert.ToInt32(Console.ReadLine());
+                    }catch(Exception)
                     {
-                        Console.WriteLine("Vous n'avez pas saisi un nombre.");
+                        Console.WriteLine("Veuillez saisir un nombre.");
                     }
                 }
+                initSlotInteraction(registeredSaveViewModelList[s-1]);
+            }
+        }
 
+        public void initSlotInteraction(RegisteredSaveWork registeredSaveWork)
+        {
+            if (selectedMode == mode.Console)
+            {
+                string? choice = "";
+                while (choice == "" || choice == null || (choice != "1" && choice != "2"))
+                {
+                    Console.WriteLine("Interaction avec le slot de sauvegarde : ");
+                    Console.WriteLine(registeredSaveWork.getSaveName()+
+                           "\n ├── Type : "+registeredSaveWork.getType().ToString() +
+                           "\n ├── Source : "+registeredSaveWork.getSourcePath() +
+                           "\n └── Cible : "+registeredSaveWork.getTargetPath());
+                    Console.WriteLine("[1] Lancer cette sauvegarde\t");
+                    Console.WriteLine("[2] Supprimer cette sauvegarde\t");
+                    Console.WriteLine("[x] Modifier cette sauvegarde\t");
+                    choice = Console.ReadLine();
+                }
+                if(choice == "1")
+                {
+                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
+                    viewModel.initRegisteredSaveWork().Print();
+                    mainMenu();
+                }
+                if(choice == "2")
+                {
+                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
+                    viewModel.initSlotDeletion().Print();
+                    mainMenu();
+                }
             }
         }
 
         public void initBasicSaveWork()
         {
-            if (this.selectedMode == mode.Console)
+            if (selectedMode == mode.Console)
             {
                 BasicSaveWork basicSaveWork = new BasicSaveWork();
                 string? sourcePath = "";

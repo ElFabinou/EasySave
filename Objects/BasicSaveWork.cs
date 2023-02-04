@@ -11,7 +11,6 @@ namespace easysave.Objects
 
         public string sourcePath;
         public string targetPath;
-        public DateTime dateTime = DateTime.Now;
         public string saveName = "Sauvegarde-" + DateTime.Now.ToString();
 
 

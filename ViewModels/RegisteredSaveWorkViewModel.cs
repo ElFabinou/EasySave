@@ -23,17 +23,28 @@ namespace easysave.ViewModels
             return model.copyFilesToTarget();
         } */
 
-        public string initSlotCreation()
+        public ReturnHandler initSlotCreation()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
-            registeredSaveModel.writeInJson();
-            return "ok";
+            return registeredSaveModel.addRegisteredSaveWork();
         }
 
         public List<RegisteredSaveWork> initSlotSelection()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel();
             return registeredSaveModel.getAllRegisteredSaveWork();
+        }
+
+        public ReturnHandler initSlotDeletion()
+        {
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+            return registeredSaveModel.deleteRegisteredWork();
+        }
+
+        public ReturnHandler initRegisteredSaveWork()
+        {
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+            return registeredSaveModel.copyFilesToTarget();
         }
     }
 }
