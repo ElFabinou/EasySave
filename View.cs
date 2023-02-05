@@ -1,5 +1,9 @@
 ﻿using easysave.Objects;
 using easysave.ViewModels;
+using System;
+using System.Resources;
+using System.Xml.Serialization;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave
 {
@@ -17,23 +21,26 @@ namespace easysave
             this.selectedMode = selectedMode;
         }
 
+        public ResourceManager language;
+
         public void mainMenu()
         {
             if (this.selectedMode == mode.Console)
             {
+                this.language = Instance.rm;
                 Console.WriteLine("  ______                 _____                    _____ _      _____ \r\n |  ____|               / ____|                  / ____| |    |_   _|\r\n | |__   __ _ ___ _   _| (___   __ ___   _____  | |    | |      | |  \r\n |  __| / _` / __| | | |\\___ \\ / _` \\ \\ / / _ \\ | |    | |      | |  \r\n | |___| (_| \\__ \\ |_| |____) | (_| |\\ V /  __/ | |____| |____ _| |_ \r\n |______\\__,_|___/\\__, |_____/ \\__,_| \\_/ \\___|  \\_____|______|_____|\r\n                   __/ |                                             \r\n                  |___/                                              \r\n\r\n");
                 Console.WriteLine("\n");
                 Console.ForegroundColor= ConsoleColor.Yellow;
-                Console.WriteLine("Menu principal");
+                Console.WriteLine(language.GetString("menu_title"));
                 Console.ForegroundColor= ConsoleColor.Gray;
                 string? choice = "";
                 int attempt = 0;
                 while (choice != "1" && choice != "2" && choice != "3" && choice != "4")
                 {
-                    Console.WriteLine("[1] Sauvegarde basique\t");
-                    Console.WriteLine("[2] Liste des travaux de sauvegarde\t");
-                    Console.WriteLine("[3] Créer un travail de sauvegarde\t");
-                    Console.WriteLine("[x] Paramètres\t");
+                    Console.WriteLine("[1] "+language.GetString("menu_basic_save"));
+                    Console.WriteLine("[2] "+language.GetString("menu_new_save_work"));
+                    Console.WriteLine("[3] "+language.GetString("menu_work_list"));
+                    Console.WriteLine("[4] "+language.GetString("menu_settings")); 
                     choice = Console.ReadLine();
                     attempt++;
                 }
@@ -46,17 +53,20 @@ namespace easysave
                         initSlotSelection();
                         break;
                     case "3":
-                        initSlotModification();
+                        initSlotCreation();
+                        break;
+                    case "4":
+                        initSettings();
                         break;
                 }
             }
             else
             {
-                Console.WriteLine("Erreur, impossible de charger l'interface.");
+                Console.WriteLine(language.GetString("menu_error_load"));
             }
         }
 
-        private void initSlotModification()
+        private void initSlotCreation()
         {
             if (this.selectedMode == mode.Console)
             {
@@ -64,27 +74,27 @@ namespace easysave
                 string? name = "";
                 while (name == "" || name == null)
                 {
-                    Console.WriteLine("Veuillez saisir le nom du travail de sauvegarde (notez que le nom du dossier qui sera créé contiendra automatiquement la date et heure de la sauvegarde) : ");
+                    Console.WriteLine(language.GetString("slotcreation_ask_name"));
                     name = Console.ReadLine();
                 }
                 string? sourcePath = "";
                 while (sourcePath == "" || sourcePath == null || !registeredSaveWork.pathExists(sourcePath))
                 {
-                    Console.WriteLine("Veuillez saisir chemin d'accès existant à sauvegarder : ");
+                    Console.WriteLine(language.GetString("slotcreation_ask_source_path"));
                     sourcePath = Console.ReadLine();
                 }
                 string? targetPath = "";
                 while (targetPath == "" || targetPath == null)
                 {
-                    Console.WriteLine("Veuillez saisir un chemin d'accès existant sur lequel sauvegarder : ");
+                    Console.WriteLine(language.GetString("slotcreation_ask_target_path"));
                     targetPath = Console.ReadLine();
                 }
                 string? type = "";
                 while (type == "" || type == null)
                 {
-                    Console.WriteLine("Veuillez saisir un type de sauvegarde : ");
-                    Console.WriteLine("[1] Complet\t");
-                    Console.WriteLine("[2] Differentiel\t");
+                    Console.WriteLine(language.GetString("slotcreation_ask_save_type"));
+                    Console.WriteLine("[1] "+language.GetString("slotcreation_choice_save_type_complete"));
+                    Console.WriteLine("[2] "+language.GetString("slotcreation_choice_save_type_differential"));
                     type = Console.ReadLine();
                 }
                 registeredSaveWork.setType(RegisteredSaveWork.Type.Complet);
@@ -108,26 +118,26 @@ namespace easysave
                 Console.WriteLine("Choissez un slot de sauvegarde à éditer : ");
                 int i = 1;
                 if (registeredSaveViewModelList.Count == 0) {
-                    Console.WriteLine("\tAucun slot de travail trouvé dans les sauvegardes, retour en arrière.");
+                    Console.WriteLine(language.GetString("slotselection_error_no_slot"));
                     mainMenu(); 
                 }
                 foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
                 {
                     Console.WriteLine("["+i+"] "+registeredSaveWork.getSaveName()+
-                        "\n ├── Type : "+registeredSaveWork.getType().ToString() +
-                        "\n ├── Source : "+registeredSaveWork.getSourcePath() +
-                        "\n └── Cible : "+registeredSaveWork.getTargetPath());
+                        "\n ├── "+language.GetString("slotselection_info_slot_type")+registeredSaveWork.getType().ToString() +
+                        "\n ├── "+language.GetString("slotselection_info_slot_source")+registeredSaveWork.getSourcePath() +
+                        "\n └── "+language.GetString("slotselection_info_slot_cible")+registeredSaveWork.getTargetPath());
                     i++;
                 }
                 int s = 0;
                 while (s > registeredSaveViewModelList.Count || s < 1)
                 {
                     try {
-                        Console.WriteLine("Choisissez un travail de sauvegarde valable :");
+                        Console.WriteLine(language.GetString("slotselection_ask_slot_valid_number"));
                         s = Convert.ToInt32(Console.ReadLine());
                     }catch(Exception)
                     {
-                        Console.WriteLine("Veuillez saisir un nombre.");
+                        Console.WriteLine(language.GetString("slotselection_error_invalid_number"));
                     }
                 }
                 initSlotInteraction(registeredSaveViewModelList[s-1]);
@@ -141,14 +151,13 @@ namespace easysave
                 string? choice = "";
                 while (choice == "" || choice == null || (choice != "1" && choice != "2"))
                 {
-                    Console.WriteLine("Interaction avec le slot de sauvegarde : ");
+                    Console.WriteLine(language.GetString("slotinteraction_ask_operation"));
                     Console.WriteLine(registeredSaveWork.getSaveName()+
-                           "\n ├── Type : "+registeredSaveWork.getType().ToString() +
-                           "\n ├── Source : "+registeredSaveWork.getSourcePath() +
-                           "\n └── Cible : "+registeredSaveWork.getTargetPath());
-                    Console.WriteLine("[1] Lancer cette sauvegarde\t");
-                    Console.WriteLine("[2] Supprimer cette sauvegarde\t");
-                    Console.WriteLine("[x] Modifier cette sauvegarde\t");
+                        "\n ├── "+language.GetString("slotselection_info_slot_type")+registeredSaveWork.getType().ToString() +
+                        "\n ├── "+language.GetString("slotselection_info_slot_source")+registeredSaveWork.getSourcePath() +
+                        "\n └── "+language.GetString("slotselection_info_slot_cible")+registeredSaveWork.getTargetPath());
+                    Console.WriteLine("[1] "+language.GetString("slotinteraction_choice_run_save_work"));
+                    Console.WriteLine("[2] "+language.GetString("slotinteraction_choice_delete_save_work"));
                     choice = Console.ReadLine();
                 }
                 if(choice == "1")
@@ -190,6 +199,53 @@ namespace easysave
             }
             Console.WriteLine("Mode non implémenté pour le moment");
         }
-    
+
+        public void initSettings()
+        {
+            if (selectedMode == mode.Console)
+            {
+                string? choice = "";
+                while (choice != "1" && choice != "2")
+                {
+                    Console.WriteLine("[1] "+language.GetString("settings_choice_language"));
+                    Console.WriteLine("[2] "+language.GetString("setting_choice_config_path"));
+                    choice = Console.ReadLine();
+                }
+                if(choice == "1")
+                {
+                    initLanguageSelection();
+                }
+                else if(choice == "2") 
+                {
+
+                }
+            }
+        }
+
+        public void initLanguageSelection()
+        {
+            Array allLanguages = Enum.GetNames(typeof(Language));
+            for (int i = 0; i<allLanguages.Length;i++)
+            {
+                Console.WriteLine("["+(i+1)+"] "+allLanguages.GetValue(i)!.ToString()+" "+(allLanguages.GetValue(i)!.ToString() == Instance.getLanguage().ToString() ? " ["+language.GetString("language_current")+"]" : ""));
+            }
+            int s = 0;
+            while (s > allLanguages.Length || s < 1)
+            {
+                try
+                {
+                    Console.WriteLine(language.GetString("language_ask_choice"));
+                    s = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(language.GetString("slotselection_error_invalid_number"));
+                }
+            }
+            LanguageHandlerViewModel languageHandlerViewModel = new LanguageHandlerViewModel();
+            languageHandlerViewModel.setLanguage((Language)(s-1));
+            languageHandlerViewModel.initLanguageSelection().Print();
+            mainMenu();
+        }
     }
 }
