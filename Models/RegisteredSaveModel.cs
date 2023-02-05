@@ -86,11 +86,18 @@ namespace easysave.Models
 
         public ReturnHandler copyFilesToTarget()
         {
-            DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName()+DateTime.Now.ToString("yyyyMMddTHHmmss"), true);
-            return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
+            try
+            {
+                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType());
+                return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
+            }
+            catch (Exception e)
+            {
+                return new ReturnHandler("Un erreur est survenue : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
+            }
         }
 
-        public string DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type)
         {
             try
             {
@@ -116,7 +123,18 @@ namespace easysave.Models
                 foreach (FileInfo file in files)
                 {
                     string temppath = Path.Combine(destDirName, file.Name);
-                    file.CopyTo(temppath, false);
+                    FileInfo destFile = new FileInfo(temppath);
+                    if ((int)type == 1)
+                    {
+                        if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
+                        {
+                            file.CopyTo(temppath, true);
+                        }
+                    }
+                    else
+                    {
+                        file.CopyTo(temppath, true);
+                    }
                 }
 
                 // If copying subdirectories, copy them and their contents to new location.
@@ -125,14 +143,13 @@ namespace easysave.Models
                     foreach (DirectoryInfo subdir in dirs)
                     {
                         string temppath = Path.Combine(destDirName, subdir.Name);
-                        DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type);
                     }
                 }
-                return "ok";
             }
             catch (Exception ex)
             {
-                return ex.ToString();
+                throw new Exception(ex.ToString());
             }
         }
     }
