@@ -17,12 +17,6 @@ namespace easysave.ViewModels
                 this.registeredSaveWork = registeredSaveWork;
         }
 
-        /* public string initRegisteredSaveWork()
-        {
-            RegisteredSaveModel model = new RegisteredSaveModel(registeredSaveWork);
-            return model.copyFilesToTarget();
-        } */
-
         public ReturnHandler initSlotCreation()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
