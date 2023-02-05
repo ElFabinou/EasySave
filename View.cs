@@ -38,8 +38,8 @@ namespace easysave
                 while (choice != "1" && choice != "2" && choice != "3" && choice != "4")
                 {
                     Console.WriteLine("[1] "+language.GetString("menu_basic_save"));
-                    Console.WriteLine("[2] "+language.GetString("menu_new_save_work"));
-                    Console.WriteLine("[3] "+language.GetString("menu_work_list"));
+                    Console.WriteLine("[2] "+language.GetString("menu_work_list")); 
+                    Console.WriteLine("[3] "+language.GetString("menu_new_save_work"));
                     Console.WriteLine("[4] "+language.GetString("menu_settings")); 
                     choice = Console.ReadLine();
                     attempt++;
