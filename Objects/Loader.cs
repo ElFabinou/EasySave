@@ -10,6 +10,19 @@ namespace easysave.Objects
     {
 
         public double percentage;
+        public FileInfo fileInfo;
+        public DirectoryInfo directoryInfo;
+        public bool isFile;
+
+        public void setIsFile(bool isFile)
+        {
+            this.isFile = isFile;
+        }
+
+        public bool getIsFile()
+        {
+            return isFile;
+        }
 
         public void setPercentage(double totalFile, double currentFile) {
             percentage = (currentFile/totalFile)*100; 
@@ -25,6 +38,25 @@ namespace easysave.Objects
                 loaderString += "#";
             }
             return loaderString;
+        }
+
+        public void setFile(FileInfo fileInfo)
+        {
+            this.fileInfo = fileInfo;
+        }
+
+        public FileInfo getFile() { 
+            return fileInfo; 
+        }
+
+        public void setFolder(DirectoryInfo directoryInfo)
+        {
+            this.directoryInfo = directoryInfo;
+        }
+
+        public DirectoryInfo getFolder()
+        {
+            return directoryInfo;
         }
 
     }

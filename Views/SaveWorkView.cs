@@ -133,11 +133,15 @@ namespace easysave.Views
 
         public void sendPercentage(Loader loader)
         {
-            int currentLineCursor = Console.CursorTop;
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, currentLineCursor - 1);
-            Console.WriteLine(loader.getPercentage() + "% " + loader.percentageToChar());
+            Console.Clear();
+            if (loader.getIsFile())
+            {
+                Console.WriteLine(Math.Round(loader.getPercentage(),1) + "% " + loader.percentageToChar() + " "+loader.getFile().Name +" "+loader.getFile().Length+" bytes");
+            }
+            else
+            {
+                Console.WriteLine(Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " "+loader.getFolder().Name);
+            }
         }
 
     }
