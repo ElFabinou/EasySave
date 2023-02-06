@@ -1,4 +1,5 @@
-﻿using System;
+﻿using easysave.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,10 @@ namespace easysave.Objects
         public ReturnHandler(string String, ReturnTypeEnum returnType) {
             this.String = String;
             this.ReturnType = returnType;
+            LoggerHandler loggerHandler = new LoggerHandler(DateTime.Now, returnType.ToString(), String);
+            LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
+            loggerModel.writeLog();
+
         }
 
         public void Print()

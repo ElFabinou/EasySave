@@ -18,7 +18,7 @@ namespace easysave.Models
         }
 
         public bool createConfigFileIfNotExists() {
-            string path = ConfigurationManager.AppSettings["configPath"]!.ToString();
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             if (File.Exists(path+"saveWorks.json")) return false;
             System.IO.Directory.CreateDirectory(@path);
             var file = File.Create(@path+"saveWorks.json");
@@ -58,7 +58,7 @@ namespace easysave.Models
         }
 
         public List<RegisteredSaveWork> getAllRegisteredSaveWork() {
-            string path = ConfigurationManager.AppSettings["configPath"]!.ToString();
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             List<RegisteredSaveWork> registeredSaveWorksList = new List<RegisteredSaveWork>();
             createConfigFileIfNotExists();
             using (StreamReader r = new StreamReader(path+"saveWorks.json"))
