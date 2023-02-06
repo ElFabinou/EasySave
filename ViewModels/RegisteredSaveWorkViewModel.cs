@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using easysave.Models;
 using easysave.Objects;
+using easysave.Views;
 
 namespace easysave.ViewModels
 {
@@ -39,6 +40,12 @@ namespace easysave.ViewModels
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             return registeredSaveModel.copyFilesToTarget();
+        }
+
+        public void notifyViewPercentage(Loader loader)
+        {
+            SaveWorkView saveWorkView = new SaveWorkView();
+            saveWorkView.sendPercentage(loader);
         }
     }
 }

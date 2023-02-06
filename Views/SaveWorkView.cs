@@ -13,7 +13,7 @@ namespace easysave.Views
     internal class SaveWorkView : MainView
     {
 
-        public SaveWorkView(mode selectedMode)
+        public SaveWorkView(mode selectedMode = mode.Console)
         {
             this.language = Instance.rm;
             this.selectedMode = selectedMode;
@@ -129,6 +129,15 @@ namespace easysave.Views
                     mainMenu();
                 }
             }
+        }
+
+        public void sendPercentage(Loader loader)
+        {
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, currentLineCursor - 1);
+            Console.WriteLine(loader.getPercentage() + "% " + loader.percentageToChar());
         }
 
     }
