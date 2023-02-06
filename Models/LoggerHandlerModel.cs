@@ -24,7 +24,7 @@ namespace easysave.Models
 
         public bool createLoggerFileIfNotExists()
         {
-            string path = ConfigurationManager.AppSettings["configPath"]!.ToString();
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
             if (File.Exists(path+"logs.json")) return false;
             System.IO.Directory.CreateDirectory(@path);
             var file = File.Create(@path+"logs.json");
@@ -36,7 +36,7 @@ namespace easysave.Models
         {
             List<LoggerHandler> loggerHandlers = getAllLogs();
             loggerHandlers.Add(loggerHandler);
-            string path = ConfigurationManager.AppSettings["configPath"]!.ToString();
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             string jsonString = JsonConvert.SerializeObject(loggerHandlers, Newtonsoft.Json.Formatting.Indented);
             using (var streamWriter = new StreamWriter(path+"logs.json"))
             {
@@ -46,7 +46,7 @@ namespace easysave.Models
 
         public List<LoggerHandler> getAllLogs()
         {
-            string path = ConfigurationManager.AppSettings["configPath"]!.ToString();
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             List<LoggerHandler> loggerHandlers = new List<LoggerHandler>();
             createLoggerFileIfNotExists();
             using (StreamReader r = new StreamReader(path+"logs.json"))
