@@ -1,10 +1,11 @@
 ﻿using easysave;
+using easysave.Views;
 using System.Configuration;
 class Program
 {
     static void Main(string[] args)
     {
-        View view = new View(View.mode.Console);
-        view.mainMenu();
+        MainView mainView = new MainView();
+        mainView.mainMenu();
     }
 }
