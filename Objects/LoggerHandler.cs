@@ -9,15 +9,17 @@ namespace easysave.Objects
     public class LoggerHandler
     {
 
-        public DateTime dateTime;
-        public string type;
-        public string content;
+        private RegisteredSaveWork saveWork;
 
-        public LoggerHandler(DateTime dateTime, string type, string content)
+        public LoggerHandler(RegisteredSaveWork saveWork)
         {
-            this.dateTime=dateTime;
-            this.type=type;
-            this.content=content;
+            this.saveWork=saveWork;
+        }
+
+        public RegisteredSaveWork getSaveWork() { return saveWork; }
+        public void setSaveWork(RegisteredSaveWork registeredSaveWork)
+        {
+            this.saveWork = registeredSaveWork;
         }
     }
 }

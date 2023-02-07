@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.IO;
 using System;
 using easysave.ViewModels;
+using System.Drawing;
+using static easysave.Objects.RegisteredSaveWork;
 
 namespace easysave.Models
 {
@@ -100,6 +102,7 @@ namespace easysave.Models
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
+                callDailyLogger(100, 0, 0, RegisteredSaveWork.State.END);
                 return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
@@ -125,12 +128,13 @@ namespace easysave.Models
                 // If the destination directory doesn't exist, create it.
                 if (!Directory.Exists(destDirName))
                 {
-                    ++doneFiles;
+                    Console.WriteLine(doneFiles);
                     Directory.CreateDirectory(destDirName);
                     loader.setPercentage(totalFile, doneFiles);
                     loader.setIsFile(false);
                     loader.setFolder(dir);
                     registeredSaveViewModel.notifyViewPercentage(loader);
+                    callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
                 }
 
                 // Get the files in the directory and copy them to the new location.
@@ -144,20 +148,24 @@ namespace easysave.Models
                     {
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
                         {
+                            Console.WriteLine(doneFiles);
                             file.CopyTo(temppath, true);
                             loader.setPercentage(totalFile, doneFiles);
-                            loader.setFile(destFile);
+                            loader.setFile(file);
                             loader.setIsFile(true);
                             registeredSaveViewModel.notifyViewPercentage(loader);
+                            callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
                         }
                     }
                     else
                     {
+                        Console.WriteLine(doneFiles);
                         file.CopyTo(temppath, true);
                         loader.setPercentage(totalFile, doneFiles);
-                        loader.setFile(destFile);
+                        loader.setFile(file);
                         loader.setIsFile(true);
                         registeredSaveViewModel.notifyViewPercentage(loader);
+                        callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
                     }
                 }
 
@@ -167,12 +175,14 @@ namespace easysave.Models
                     foreach (DirectoryInfo subdir in dirs)
                     {
                         ++doneFiles;
+                        Console.WriteLine(doneFiles);
                         string temppath = Path.Combine(destDirName, subdir.Name);
                         loader.setPercentage(totalFile, doneFiles);
                         loader.setIsFile(false);
                         loader.setFolder(subdir);
                         registeredSaveViewModel.notifyViewPercentage(loader);
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
+                        callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
                     }
                 }
             }
@@ -180,6 +190,17 @@ namespace easysave.Models
             {
                 throw new Exception(ex.ToString());
             }
+        }
+
+        public void callDailyLogger(double progression, int totalFiles, int doneFiles, RegisteredSaveWork.State state)
+        {
+            registeredSaveWork.setProgression(progression);
+            registeredSaveWork.setTotalFilesToCopy(totalFiles);
+            registeredSaveWork.setRemainingFiles(totalFiles-doneFiles);
+            registeredSaveWork.setState(state);
+            LoggerHandler loggerHandler = new LoggerHandler(registeredSaveWork);
+            LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
+            loggerModel.updateDailyLog();
         }
     }
 }

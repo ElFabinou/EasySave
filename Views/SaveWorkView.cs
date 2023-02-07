@@ -136,6 +136,8 @@ namespace easysave.Views
             Console.Clear();
             if (loader.getIsFile())
             {
+                if(loader.getPercentage() > 100) { 
+                    Console.WriteLine(loader.getPercentage()); }
                 Console.WriteLine(Math.Round(loader.getPercentage(),1) + "% " + loader.percentageToChar() + " "+loader.getFile().Name +" "+loader.getFile().Length+" bytes");
             }
             else

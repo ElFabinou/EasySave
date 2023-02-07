@@ -33,9 +33,10 @@ namespace easysave.Objects
         public string percentageToChar()
         {
             string loaderString = "";
-            for (int i = 0; i < (int)Math.Round(getPercentage(), 0); i++)
+            int i = 0;
+            for (i = 0; i < (int)Math.Round(getPercentage(), 0); i++)
             {
-                loaderString += "#";
+                loaderString += "█";
             }
             return loaderString;
         }

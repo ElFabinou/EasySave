@@ -1,13 +1,6 @@
 ﻿using easysave.Objects;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace easysave.Models
 {
@@ -22,7 +15,7 @@ namespace easysave.Models
             this.loggerHandler=loggerHandler;
         }
 
-        public bool createLoggerFileIfNotExists()
+        public bool createDailyLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
             if (File.Exists(path+"logs.json")) return false;
@@ -32,31 +25,32 @@ namespace easysave.Models
             return true;
         }
 
-        public void writeLog()
+        public void updateDailyLog()
         {
-            List<LoggerHandler> loggerHandlers = getAllLogs();
-            loggerHandlers.Add(loggerHandler);
+            List<RegisteredSaveWork> registeredSaveWorks = getAllLogs();
+            registeredSaveWorks.Add(loggerHandler.getSaveWork());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            string jsonString = JsonConvert.SerializeObject(loggerHandlers, Newtonsoft.Json.Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(registeredSaveWorks, Newtonsoft.Json.Formatting.Indented);
             using (var streamWriter = new StreamWriter(path+"logs.json"))
             {
                 streamWriter.Write(jsonString);
             }
         }
 
-        public List<LoggerHandler> getAllLogs()
+        public List<RegisteredSaveWork> getAllLogs()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            List<LoggerHandler> loggerHandlers = new List<LoggerHandler>();
-            createLoggerFileIfNotExists();
+            List<RegisteredSaveWork> registeredSaveWorks = new List<RegisteredSaveWork>();
+            createDailyLoggerFileIfNotExists();
             using (StreamReader r = new StreamReader(path+"logs.json"))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")
                 {
-                    loggerHandlers = JsonConvert.DeserializeObject<List<LoggerHandler>>(json);
+                    registeredSaveWorks = JsonConvert.DeserializeObject<List<RegisteredSaveWork>>(json);
+                    registeredSaveWorks.RemoveAll(x => x.getSaveName() == this.loggerHandler.getSaveWork().getSaveName());
                 }
-                return loggerHandlers;
+                return registeredSaveWorks;
             }
         }
     }
