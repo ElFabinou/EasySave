@@ -195,4 +195,7 @@
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Change configuration file location (save slots)</value>
   </data>
+  <data name="exit" xml:space="preserve">
+    <value>Exit application</value>
+  </data>
 </root>

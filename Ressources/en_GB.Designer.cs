@@ -293,5 +293,16 @@ namespace easysave.Ressources {
                 return ResourceManager.GetString("slotselection_info_slot_type", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Quitter l'application.
+        /// </summary>
+        internal static string exit
+        {
+            get
+            {
+                return ResourceManager.GetString("exit", resourceCulture);
+            }
+        }
     }
 }
