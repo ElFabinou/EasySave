@@ -10,3 +10,6 @@ This version of the application allows you to create saveworks in console mode.
 1.	Create and Delete saveworks
 2.	Modifiy the saveworks's configurations (Change name, save's type, sourcepath and destinationpath)
 3.	Allows you to create up to 5 saveworks
+4.  XAML Logs :
+    - The software write in real time in a daily log file the history of the actions of the backup jobs.
+    - The software  record in real time, in a single file, the progress of the backup work.
