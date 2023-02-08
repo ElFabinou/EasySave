@@ -1,6 +1,4 @@
-﻿using easysave;
-using easysave.Views;
-using System.Configuration;
+﻿using easysave.Views;
 class Program
 {
     static void Main(string[] args)
