@@ -27,28 +27,39 @@ namespace easysave.Views
                 string? name = "";
                 while (name == "" || name == null)
                 {
-                    Console.WriteLine(language.GetString("slotcreation_ask_name"));
+                    Console.WriteLine($"{Environment.NewLine} [x]" + language.GetString("settings_choice_back"));
+                    Console.WriteLine($"{Environment.NewLine}  " + language.GetString($"slotcreation_ask_name"));
                     name = Console.ReadLine();
+                    if (name == "x") { mainMenu(); }
                 }
                 string? sourcePath = "";
                 while (sourcePath == "" || sourcePath == null || !registeredSaveWork.pathExists(sourcePath))
                 {
-                    Console.WriteLine(language.GetString("slotcreation_ask_source_path"));
+                    Console.WriteLine($"{Environment.NewLine} [x]" + language.GetString("settings_choice_back"));
+                    Console.WriteLine($"{Environment.NewLine} " + language.GetString("slotcreation_ask_source_path"));
                     sourcePath = Console.ReadLine();
+                    if (sourcePath == "x") { mainMenu(); }
+
                 }
                 string? targetPath = "";
                 while (targetPath == "" || targetPath == null)
                 {
-                    Console.WriteLine(language.GetString("slotcreation_ask_target_path"));
+                    Console.WriteLine($"{Environment.NewLine} [x]" + language.GetString("settings_choice_back"));
+                    Console.WriteLine($"{Environment.NewLine} " + language.GetString("slotcreation_ask_target_path"));
                     targetPath = Console.ReadLine();
+                    if (targetPath == "x") { mainMenu(); }
+
                 }
                 string? type = "";
                 while (type == "" || type == null)
                 {
+                    Console.WriteLine($"{Environment.NewLine} [x]" + language.GetString("settings_choice_back") + $"{Environment.NewLine} ");
                     Console.WriteLine(language.GetString("slotcreation_ask_save_type"));
                     Console.WriteLine("[1] "+language.GetString("slotcreation_choice_save_type_complete"));
                     Console.WriteLine("[2] "+language.GetString("slotcreation_choice_save_type_differential"));
                     type = Console.ReadLine();
+                    if (type == "x") { mainMenu(); }
+
                 }
                 registeredSaveWork.setType(RegisteredSaveWork.Type.Complet);
                 if (type == "2") registeredSaveWork.setType(RegisteredSaveWork.Type.Differentiel);
@@ -58,7 +69,6 @@ namespace easysave.Views
                 RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
                 viewModel.initSlotCreation().Print();
                 mainMenu();
-
             }
         }
 

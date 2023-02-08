@@ -30,20 +30,20 @@ namespace easysave.Views
 
                     choice = Console.ReadLine();
                 }
-                switch(choice)
+               /* switch(choice)
                 {
                     case "1":
                         initLanguageSelection();
                         break;
                     case "2":
-                        Console.WriteLine("test putainnnnn");
+                        Console.WriteLine("test ptn");
                         initLanguageSelection();
                         break;
                     case "3":
                         mainMenu();
                         break;
-                }
-                /* if (choice == "1")
+                }*/
+                 if (choice == "1")
                  {
                      initLanguageSelection();
                  }
@@ -53,9 +53,8 @@ namespace easysave.Views
                  }
                  else if (choice == "3")
                  {
-                     Console.WriteLine("test putain");
                      mainMenu();
-                 }*/
+                 }
             }
         }
 
