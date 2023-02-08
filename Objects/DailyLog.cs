@@ -14,7 +14,7 @@ namespace easysave.Objects
         public string destPath;
         public long fileSize;
         public DateTime dateTime;
-        public float duration;
+        public double duration;
 
         public string getSaveName()
         {
@@ -76,12 +76,12 @@ namespace easysave.Objects
             this.dateTime = dateTime;
         }
 
-        public float getDuration()
+        public double getDuration()
         {
             return duration;
         }
 
-        public void setDuration(float duration)
+        public void setDuration(double duration)
         {
             this.duration = duration;
         }

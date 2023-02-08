@@ -1,6 +1,7 @@
 ﻿using easysave.Objects;
 using Newtonsoft.Json;
 using System.Configuration;
+using System.Globalization;
 
 namespace easysave.Models
 {
@@ -18,10 +19,10 @@ namespace easysave.Models
         public bool createLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
-            if (File.Exists(path+"dailyLogs.json") && File.Exists(path+"stateLogs.json")) return false;
-            if (!File.Exists(path+"dailyLogs.json")){
+            if (File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json") && File.Exists(path+"stateLogs.json")) return false;
+            if (!File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json")){
                 System.IO.Directory.CreateDirectory(@path);
-                var file = File.Create(@path+"dailyLogs.json");
+                var file = File.Create(@path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json");
                 file.Close();
             }
             if (!File.Exists(path+"stateLogs.json"))
@@ -51,7 +52,7 @@ namespace easysave.Models
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             string jsonString = JsonConvert.SerializeObject(dailyLogs, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"dailyLogs.json"))
+            using (var streamWriter = new StreamWriter(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json"))
             {
                 streamWriter.Write(jsonString);
             }
@@ -79,7 +80,7 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             List<DailyLog>? stateLogs = new List<DailyLog>();
             createLoggerFileIfNotExists();
-            using (StreamReader r = new StreamReader(path+"dailyLogs.json"))
+            using (StreamReader r = new StreamReader(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json"))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")

@@ -120,8 +120,8 @@
   <data name="menu_title" xml:space="preserve">
     <value>Main menu</value>
   </data>
-  <data name="menu_basic_save" xml:space="preserve">
-    <value>Standard save</value>
+  <data name="menu_save_all" xml:space="preserve">
+    <value>Sequential save</value>
   </data>
   <data name="menu_error_load" xml:space="preserve">
     <value>Error, impossible to load interface.</value>
@@ -194,12 +194,6 @@
   </data>
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Change configuration file location (save slots)</value>
-  </data>
-	<data name="langage_update" xml:space="preserve">
-    <value>The language has been successfully modified!</value>
-  </data>
-	<data name="slotselection-info-editing" xml:space="preserve">
-    <value>Choose a save slot to edit:</value>
   </data>
   <data name="langage_update" xml:space="preserve">
     <value>The language has been successfully modified!</value>
