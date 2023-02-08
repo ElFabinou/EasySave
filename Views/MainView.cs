@@ -47,7 +47,7 @@ namespace easysave.Views
                     Console.WriteLine("[2] "+language.GetString("menu_work_list"));
                     Console.WriteLine("[3] "+language.GetString("menu_new_save_work"));
                     Console.WriteLine("[4] "+language.GetString("menu_settings"));
-                    Console.WriteLine("[5] " + language.GetString("menu_exit"));
+                    Console.WriteLine("[5] "+language.GetString("menu_exit"));
 
                     choice = Console.ReadLine();
                     attempt++;
