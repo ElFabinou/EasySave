@@ -11,7 +11,7 @@ namespace easysave.ViewModels
 {
     public class RegisteredSaveViewModel
     {
-        public RegisteredSaveWork registeredSaveWork;
+        public RegisteredSaveWork? registeredSaveWork;
 
         public RegisteredSaveViewModel(RegisteredSaveWork? registeredSaveWork = null)
         {

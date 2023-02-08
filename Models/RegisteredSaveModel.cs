@@ -13,7 +13,7 @@ namespace easysave.Models
 {
     public class RegisteredSaveModel
     {
-        public RegisteredSaveWork registeredSaveWork;
+        public RegisteredSaveWork? registeredSaveWork;
 
         private int doneFiles = 0;
 
@@ -36,7 +36,7 @@ namespace easysave.Models
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
-            if (getRegisteredWork(registeredSaveWork.getSaveName()) != null) { return new ReturnHandler("Un travail de sauvegarde porte déjà ce nom. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
+            if (getRegisteredWork(registeredSaveWork!.getSaveName()) != null) { return new ReturnHandler("Un travail de sauvegarde porte déjà ce nom. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
             if (registeredSaveWorksList.Count >= 5) { return new ReturnHandler("Limite de travail de sauvegarde atteinte (5/5). Veuillez en supprimer un pour pouvoir en créer un. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
             registeredSaveWorksList.Add(registeredSaveWork);
@@ -54,7 +54,7 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
-            registeredSaveWorksList.RemoveAll(tempRegisteredSaveWork => tempRegisteredSaveWork.getSaveName() == registeredSaveWork.getSaveName());
+            registeredSaveWorksList.RemoveAll(tempRegisteredSaveWork => tempRegisteredSaveWork.getSaveName() == registeredSaveWork!.getSaveName());
             string jsonString = JsonConvert.SerializeObject(registeredSaveWorksList, Newtonsoft.Json.Formatting.Indented);
             using (var streamWriter = new StreamWriter(path+"saveWorks.json"))
             {
@@ -66,7 +66,7 @@ namespace easysave.Models
         public List<RegisteredSaveWork> getAllRegisteredSaveWork()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            List<RegisteredSaveWork> registeredSaveWorksList = new List<RegisteredSaveWork>();
+            List<RegisteredSaveWork>? registeredSaveWorksList = new List<RegisteredSaveWork>();
             createConfigFileIfNotExists();
             using (StreamReader r = new StreamReader(path+"saveWorks.json"))
             {
@@ -81,8 +81,8 @@ namespace easysave.Models
 
         public RegisteredSaveWork? getRegisteredWork(string name)
         {
-            List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
-            foreach (RegisteredSaveWork registeredSaveWork in registeredSaveWorksList)
+            List<RegisteredSaveWork>? registeredSaveWorksList = getAllRegisteredSaveWork();
+            foreach (RegisteredSaveWork? registeredSaveWork in registeredSaveWorksList)
             {
                 if (registeredSaveWork.getSaveName() == name)
                 {
@@ -96,13 +96,13 @@ namespace easysave.Models
         {
             try
             {
-                DirectoryInfo root = new DirectoryInfo(registeredSaveWork.getSourcePath());
+                DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
-                callDailyLogger(100, 0, 0, RegisteredSaveWork.State.END);
+                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), StateLog.State.END);
                 return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
@@ -134,7 +134,7 @@ namespace easysave.Models
                     loader.setIsFile(false);
                     loader.setFolder(dir);
                     registeredSaveViewModel.notifyViewPercentage(loader);
-                    callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
+                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
                 }
 
                 // Get the files in the directory and copy them to the new location.
@@ -154,7 +154,7 @@ namespace easysave.Models
                             loader.setFile(file);
                             loader.setIsFile(true);
                             registeredSaveViewModel.notifyViewPercentage(loader);
-                            callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
+                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
                         }
                     }
                     else
@@ -165,7 +165,7 @@ namespace easysave.Models
                         loader.setFile(file);
                         loader.setIsFile(true);
                         registeredSaveViewModel.notifyViewPercentage(loader);
-                        callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
+                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
                     }
                 }
 
@@ -182,7 +182,7 @@ namespace easysave.Models
                         loader.setFolder(subdir);
                         registeredSaveViewModel.notifyViewPercentage(loader);
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
-                        callDailyLogger(loader.getPercentage(), totalFile, doneFiles, RegisteredSaveWork.State.ACTIVE);
+                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
                     }
                 }
             }
@@ -192,14 +192,21 @@ namespace easysave.Models
             }
         }
 
-        public void callDailyLogger(double progression, int totalFiles, int doneFiles, RegisteredSaveWork.State state)
+        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, StateLog.State state)
         {
-            registeredSaveWork.setProgression(progression);
-            registeredSaveWork.setTotalFilesToCopy(totalFiles);
-            registeredSaveWork.setRemainingFiles(totalFiles-doneFiles);
-            registeredSaveWork.setState(state);
-            LoggerHandler loggerHandler = new LoggerHandler(registeredSaveWork);
+            StateLog stateLog = new StateLog();
+            stateLog!.setProgression(progression);
+            stateLog.setTotalFilesToCopy(totalFiles);
+            stateLog.setRemainingFiles(totalFiles-doneFiles);
+            stateLog.setState(state);
+            stateLog.setTotalFileSize(fileSize);
+            DailyLog dailyLog = new DailyLog();
+            dailyLog.setDuration(0);
+            dailyLog.setfileSize(fileSize);
+            dailyLog.setSaveName(saveName);
+            LoggerHandler loggerHandler = new LoggerHandler(stateLog, dailyLog);
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
+            loggerModel.updateStateLog();
             loggerModel.updateDailyLog();
         }
     }

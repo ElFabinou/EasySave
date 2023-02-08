@@ -9,17 +9,24 @@ namespace easysave.Objects
     public class LoggerHandler
     {
 
-        private RegisteredSaveWork saveWork;
+        private StateLog stateLog;
+        private DailyLog dailyLog;
 
-        public LoggerHandler(RegisteredSaveWork saveWork)
+        public LoggerHandler(StateLog? stateLog = null, DailyLog? dailyLog = null)
         {
-            this.saveWork=saveWork;
+            this.stateLog=stateLog;
+            this.dailyLog=dailyLog;
         }
 
-        public RegisteredSaveWork getSaveWork() { return saveWork; }
-        public void setSaveWork(RegisteredSaveWork registeredSaveWork)
+        public StateLog getStateLog() { return stateLog; }
+        public void setStateLog(StateLog stateLog)
         {
-            this.saveWork = registeredSaveWork;
+            this.stateLog = stateLog;
+        }
+        public DailyLog getDailyLog() { return dailyLog; }
+        public void setDailyLog(DailyLog dailyLog)
+        {
+            this.dailyLog = dailyLog;
         }
     }
 }
