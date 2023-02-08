@@ -27,7 +27,7 @@ namespace easysave.Models
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
             LanguageHandler languageHandler = LanguageHandler.Instance;
             languageHandler.setLanguage(language);
-            return new ReturnHandler("Le langage a bien été modifié !", ReturnHandler.ReturnTypeEnum.Success);
+            return new ReturnHandler(languageHandler.rm.GetString("langage_update"), ReturnHandler.ReturnTypeEnum.Success);
         }
     }
 }
