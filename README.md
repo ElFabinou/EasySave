@@ -21,3 +21,4 @@ Stay tuned for the next version, which will include :
 3. User documentation
 
 A user documentation is available in the project repository.
+

@@ -1,13 +1,6 @@
 ﻿using easysave.Objects;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace easysave.Models
 {
@@ -25,38 +18,75 @@ namespace easysave.Models
         public bool createLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
-            if (File.Exists(path+"logs.json")) return false;
-            System.IO.Directory.CreateDirectory(@path);
-            var file = File.Create(@path+"logs.json");
-            file.Close();
+            if (File.Exists(path+"dailyLogs.json") && File.Exists(path+"stateLogs.json")) return false;
+            if (!File.Exists(path+"dailyLogs.json")){
+                System.IO.Directory.CreateDirectory(@path);
+                var file = File.Create(@path+"dailyLogs.json");
+                file.Close();
+            }
+            if (!File.Exists(path+"stateLogs.json"))
+            {
+                System.IO.Directory.CreateDirectory(@path);
+                var file = File.Create(@path+"stateLogs.json");
+                file.Close();
+            }
             return true;
         }
 
-        public void writeLog()
+        public void updateStateLog()
         {
-            List<LoggerHandler> loggerHandlers = getAllLogs();
-            loggerHandlers.Add(loggerHandler);
+            List<StateLog> stateLogs = getAllStateLog();
+            stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            string jsonString = JsonConvert.SerializeObject(loggerHandlers, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"logs.json"))
+            string jsonString = JsonConvert.SerializeObject(stateLogs, Newtonsoft.Json.Formatting.Indented);
+            using (var streamWriter = new StreamWriter(path+"stateLogs.json"))
             {
                 streamWriter.Write(jsonString);
             }
         }
 
-        public List<LoggerHandler> getAllLogs()
+        public void updateDailyLog()
+        {
+            List<DailyLog> dailyLogs = getAllDailyLog();
+            dailyLogs.Add(loggerHandler.getDailyLog());
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
+            string jsonString = JsonConvert.SerializeObject(dailyLogs, Newtonsoft.Json.Formatting.Indented);
+            using (var streamWriter = new StreamWriter(path+"dailyLogs.json"))
+            {
+                streamWriter.Write(jsonString);
+            }
+        }
+
+        public List<StateLog> getAllStateLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            List<LoggerHandler> loggerHandlers = new List<LoggerHandler>();
+            List<StateLog>? stateLogs = new List<StateLog>();
             createLoggerFileIfNotExists();
-            using (StreamReader r = new StreamReader(path+"logs.json"))
+            using (StreamReader r = new StreamReader(path+"stateLogs.json"))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")
                 {
-                    loggerHandlers = JsonConvert.DeserializeObject<List<LoggerHandler>>(json);
+                    stateLogs = JsonConvert.DeserializeObject<List<StateLog>>(json);
+                    stateLogs!.RemoveAll(x => x.getSaveName() == this.loggerHandler.getStateLog().getSaveName());
                 }
-                return loggerHandlers;
+                return stateLogs;
+            }
+        }
+
+        public List<DailyLog> getAllDailyLog()
+        {
+            string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
+            List<DailyLog>? stateLogs = new List<DailyLog>();
+            createLoggerFileIfNotExists();
+            using (StreamReader r = new StreamReader(path+"dailyLogs.json"))
+            {
+                string json = r.ReadToEnd();
+                if (json != null && json != "")
+                {
+                    stateLogs = JsonConvert.DeserializeObject<List<DailyLog>>(json);
+                }
+                return stateLogs;
             }
         }
     }

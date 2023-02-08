@@ -13,7 +13,7 @@ namespace easysave.Views
     internal class SaveWorkView : MainView
     {
 
-        public SaveWorkView(mode selectedMode)
+        public SaveWorkView(mode selectedMode = mode.Console)
         {
             this.language = Instance.rm;
             this.selectedMode = selectedMode;
@@ -78,7 +78,7 @@ namespace easysave.Views
             {
                 RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
                 List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                Console.WriteLine("Choisissez un slot de sauvegarde à éditer : ");
+                Console.WriteLine(""+language.GetString("slotselection_info_editing"));
                 int i = 1;
                 if (registeredSaveViewModelList.Count == 0)
                 {
@@ -138,6 +138,21 @@ namespace easysave.Views
                     viewModel.initSlotDeletion().Print();
                     mainMenu();
                 }
+            }
+        }
+
+        public void sendPercentage(Loader loader)
+        {
+            Console.Clear();
+            if (loader.getIsFile())
+            {
+                if(loader.getPercentage() > 100) { 
+                    Console.WriteLine(loader.getPercentage()); }
+                Console.WriteLine(Math.Round(loader.getPercentage(),1) + "% " + loader.percentageToChar() + " "+loader.getFile().Name +" "+loader.getFile().Length+" bytes");
+            }
+            else
+            {
+                Console.WriteLine(Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " "+loader.getFolder().Name);
             }
         }
 

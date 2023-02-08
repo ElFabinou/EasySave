@@ -201,4 +201,10 @@
   <data name="settings_choice_back" xml:space="preserve">
     <value>Retour au menu principal</value>
   </data>
+  <data name="langage_update" xml:space="preserve">
+    <value>Le langage a bien été modifié !</value>
+  </data>
+  <data name="slotselection-info-editing" xml:space="preserve">
+    <value>Choissez un slot de sauvegarde à éditer :</value>
+  </data>
 </root>

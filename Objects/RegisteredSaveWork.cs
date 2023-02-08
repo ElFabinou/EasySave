@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace easysave.Objects
+﻿namespace easysave.Objects
 {
     public class RegisteredSaveWork : BasicSaveWork
     {
+
+        public Type type;
+
         public enum Type
         {
             Complet,
             Differentiel
         };
 
-        public Type type;
+        public string getSaveName()
+        {
+            return saveName;
+        }
 
         public void setSaveName(string saveName)
         {
             this.saveName = saveName;
-        }
-
-        public string getSaveName()
-        {
-            return saveName;
         }
 
         public Type getType()
@@ -34,5 +29,8 @@ namespace easysave.Objects
         public void setType(Type type) {
             this.type = type;
         }
+
+
+
     }
 }

@@ -195,6 +195,18 @@
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Change configuration file location (save slots)</value>
   </data>
+	<data name="langage_update" xml:space="preserve">
+    <value>The language has been successfully modified!</value>
+  </data>
+	<data name="slotselection-info-editing" xml:space="preserve">
+    <value>Choose a save slot to edit:</value>
+  </data>
+  <data name="langage_update" xml:space="preserve">
+    <value>The language has been successfully modified!</value>
+  </data>
+  <data name="slotselection-info-editing" xml:space="preserve">
+    <value>Choose a save slot to edit:</value>
+  </data>
   <data name="menu_exit" xml:space="preserve">
     <value>Exit application</value>
   </data>

@@ -9,15 +9,24 @@ namespace easysave.Objects
     public class LoggerHandler
     {
 
-        public DateTime dateTime;
-        public string type;
-        public string content;
+        private StateLog stateLog;
+        private DailyLog dailyLog;
 
-        public LoggerHandler(DateTime dateTime, string type, string content)
+        public LoggerHandler(StateLog? stateLog = null, DailyLog? dailyLog = null)
         {
-            this.dateTime=dateTime;
-            this.type=type;
-            this.content=content;
+            this.stateLog=stateLog;
+            this.dailyLog=dailyLog;
+        }
+
+        public StateLog getStateLog() { return stateLog; }
+        public void setStateLog(StateLog stateLog)
+        {
+            this.stateLog = stateLog;
+        }
+        public DailyLog getDailyLog() { return dailyLog; }
+        public void setDailyLog(DailyLog dailyLog)
+        {
+            this.dailyLog = dailyLog;
         }
     }
 }
