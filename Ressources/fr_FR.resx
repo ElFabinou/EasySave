@@ -120,8 +120,8 @@
   <data name="menu_title" xml:space="preserve">
     <value>Menu principal</value>
   </data>
-  <data name="menu_basic_save" xml:space="preserve">
-    <value>Sauvegarde basique</value>
+  <data name="menu_save_all" xml:space="preserve">
+    <value>Sauvegarde séquentielles</value>
   </data>
   <data name="menu_error_load" xml:space="preserve">
     <value>Erreur, impossible de charger l'interface.</value>
@@ -206,5 +206,14 @@
   </data>
   <data name="slotselection-info-editing" xml:space="preserve">
     <value>Choissez un slot de sauvegarde à éditer :</value>
+  </data>
+  <data name="delete-work" xml:space="preserve">
+    <value>Le travail de sauvegarde a bien été supprimé !</value>
+  </data>
+  <data name="save-work" xml:space="preserve">
+    <value>Le travail de sauvegarde a bien été créé et enregistré !"</value>
+  </data>
+  <data name="copy-file" xml:space="preserve">
+    <value>Les fichiers ont bien été copiés !</value>
   </data>
 </root>

@@ -166,5 +166,19 @@ namespace easysave.Views
             }
         }
 
+        public void initSequentialSave()
+        {
+            if (selectedMode == mode.Console)
+            {
+                RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                {
+                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
+                    viewModel.initRegisteredSaveWork().Print();
+                    mainMenu();
+                }
+            }
+        }
     }
 }

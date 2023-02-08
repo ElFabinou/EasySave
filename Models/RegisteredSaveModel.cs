@@ -7,7 +7,8 @@ using System.IO;
 using System;
 using easysave.ViewModels;
 using System.Drawing;
-using static easysave.Objects.RegisteredSaveWork;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Models
 {
@@ -17,11 +18,13 @@ namespace easysave.Models
 
         private int doneFiles = 0;
 
+
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
             this.registeredSaveWork = registeredSaveWork;
         }
 
+        public ResourceManager language;
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -34,6 +37,7 @@ namespace easysave.Models
 
         public ReturnHandler addRegisteredSaveWork()
         {
+            this.language = Instance.rm;
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             if (getRegisteredWork(registeredSaveWork!.getSaveName()) != null) { return new ReturnHandler("Un travail de sauvegarde porte déjà ce nom. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
@@ -45,12 +49,13 @@ namespace easysave.Models
             {
                 streamWriter.Write(jsonString);
             }
-            return new ReturnHandler("Le travail de sauvegarde a bien été créé et enregistré !", ReturnHandler.ReturnTypeEnum.Success);
+            return new ReturnHandler(language.GetString("save-work"), ReturnHandler.ReturnTypeEnum.Success);
 
         }
 
         public ReturnHandler deleteRegisteredWork()
         {
+            this.language = Instance.rm;
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
@@ -60,7 +65,7 @@ namespace easysave.Models
             {
                 streamWriter.Write(jsonString);
             }
-            return new ReturnHandler("Le travail de sauvegarde a bien été supprimé !", ReturnHandler.ReturnTypeEnum.Success);
+            return new ReturnHandler(language.GetString("delete-work"), ReturnHandler.ReturnTypeEnum.Success);
         }
 
         public List<RegisteredSaveWork> getAllRegisteredSaveWork()
@@ -96,18 +101,19 @@ namespace easysave.Models
         {
             try
             {
+                this.language = Instance.rm;
                 DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
-                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), StateLog.State.END);
-                return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
+                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
+                return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
             {
-                return new ReturnHandler("Un erreur est survenue : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
+                return new ReturnHandler("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
             }
         }
 
@@ -128,13 +134,12 @@ namespace easysave.Models
                 // If the destination directory doesn't exist, create it.
                 if (!Directory.Exists(destDirName))
                 {
-                    Console.WriteLine(doneFiles);
                     Directory.CreateDirectory(destDirName);
                     loader.setPercentage(totalFile, doneFiles);
                     loader.setIsFile(false);
                     loader.setFolder(dir);
                     registeredSaveViewModel.notifyViewPercentage(loader);
-                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
+                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
                 }
 
                 // Get the files in the directory and copy them to the new location.
@@ -143,29 +148,32 @@ namespace easysave.Models
                 {
                     ++doneFiles;
                     string temppath = Path.Combine(destDirName, file.Name);
+                    string sourcepath = Path.Combine(sourceDirName, file.Name);
                     FileInfo destFile = new FileInfo(temppath);
                     if ((int)type == 1)
                     {
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
                         {
-                            Console.WriteLine(doneFiles);
+                            double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
                             file.CopyTo(temppath, true);
                             loader.setPercentage(totalFile, doneFiles);
+                            totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                             loader.setFile(file);
                             loader.setIsFile(true);
                             registeredSaveViewModel.notifyViewPercentage(loader);
-                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
+                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                         }
                     }
                     else
                     {
-                        Console.WriteLine(doneFiles);
+                        double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
                         file.CopyTo(temppath, true);
                         loader.setPercentage(totalFile, doneFiles);
+                        totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                         loader.setFile(file);
                         loader.setIsFile(true);
                         registeredSaveViewModel.notifyViewPercentage(loader);
-                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
+                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                     }
                 }
 
@@ -175,14 +183,14 @@ namespace easysave.Models
                     foreach (DirectoryInfo subdir in dirs)
                     {
                         ++doneFiles;
-                        Console.WriteLine(doneFiles);
                         string temppath = Path.Combine(destDirName, subdir.Name);
+                        string sourcepath = Path.Combine(sourceDirName, subdir.Name);
                         loader.setPercentage(totalFile, doneFiles);
                         loader.setIsFile(false);
                         loader.setFolder(subdir);
                         registeredSaveViewModel.notifyViewPercentage(loader);
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
-                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), StateLog.State.ACTIVE);
+                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
                     }
                 }
             }
@@ -192,7 +200,7 @@ namespace easysave.Models
             }
         }
 
-        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, StateLog.State state)
+        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath)
         {
             StateLog stateLog = new StateLog();
             stateLog!.setProgression(progression);
@@ -201,9 +209,13 @@ namespace easysave.Models
             stateLog.setState(state);
             stateLog.setTotalFileSize(fileSize);
             DailyLog dailyLog = new DailyLog();
+            dailyLog.setSaveName(saveName);
             dailyLog.setDuration(0);
             dailyLog.setfileSize(fileSize);
             dailyLog.setSaveName(saveName);
+            dailyLog.setDuration(duration);
+            dailyLog.setSource(sourcePath);
+            dailyLog.setDestPath(destPath);
             LoggerHandler loggerHandler = new LoggerHandler(stateLog, dailyLog);
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
             loggerModel.updateStateLog();

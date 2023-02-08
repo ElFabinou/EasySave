@@ -120,8 +120,8 @@
   <data name="menu_title" xml:space="preserve">
     <value>Main menu</value>
   </data>
-  <data name="menu_basic_save" xml:space="preserve">
-    <value>Standard save</value>
+  <data name="menu_save_all" xml:space="preserve">
+    <value>Sequential save</value>
   </data>
   <data name="menu_error_load" xml:space="preserve">
     <value>Error, impossible to load interface.</value>
@@ -133,7 +133,7 @@
     <value>Settings</value>
   </data>
   <data name="menu_work_list" xml:space="preserve">
-    <value>Save work liste</value>
+    <value>Save work list</value>
   </data>
   <data name="slotcreation_ask_name" xml:space="preserve">
     <value>Please enter the name of the backup job (note that the name of the folder that will be created will automatically contain the date and time of the backup):</value>
@@ -195,12 +195,6 @@
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Change configuration file location (save slots)</value>
   </data>
-	<data name="langage_update" xml:space="preserve">
-    <value>The language has been successfully modified!</value>
-  </data>
-	<data name="slotselection-info-editing" xml:space="preserve">
-    <value>Choose a save slot to edit:</value>
-  </data>
   <data name="langage_update" xml:space="preserve">
     <value>The language has been successfully modified!</value>
   </data>
@@ -212,5 +206,14 @@
   </data>
   <data name="settings_choice_back" xml:space="preserve">
     <value>Go back to main menu</value>
+  </data>
+  <data name="delete-work" xml:space="preserve">
+    <value>The backup work has been removed!</value>
+  </data>
+  <data name="save-work" xml:space="preserve">
+    <value>The backup job has been created and saved!</value>
+  </data>
+  <data name="copy-file" xml:space="preserve">
+    <value>The files have been copied!</value>
   </data>
 </root>
