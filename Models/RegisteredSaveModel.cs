@@ -7,6 +7,8 @@ using System.IO;
 using System;
 using easysave.ViewModels;
 using System.Drawing;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Models
 {
@@ -16,11 +18,13 @@ namespace easysave.Models
 
         private int doneFiles = 0;
 
+
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
             this.registeredSaveWork = registeredSaveWork;
         }
 
+        public ResourceManager language;
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -33,6 +37,7 @@ namespace easysave.Models
 
         public ReturnHandler addRegisteredSaveWork()
         {
+            this.language = Instance.rm;
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             if (getRegisteredWork(registeredSaveWork!.getSaveName()) != null) { return new ReturnHandler("Un travail de sauvegarde porte déjà ce nom. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
@@ -44,12 +49,13 @@ namespace easysave.Models
             {
                 streamWriter.Write(jsonString);
             }
-            return new ReturnHandler("Le travail de sauvegarde a bien été créé et enregistré !", ReturnHandler.ReturnTypeEnum.Success);
+            return new ReturnHandler(language.GetString("save-work"), ReturnHandler.ReturnTypeEnum.Success);
 
         }
 
         public ReturnHandler deleteRegisteredWork()
         {
+            this.language = Instance.rm;
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
@@ -59,7 +65,7 @@ namespace easysave.Models
             {
                 streamWriter.Write(jsonString);
             }
-            return new ReturnHandler("Le travail de sauvegarde a bien été supprimé !", ReturnHandler.ReturnTypeEnum.Success);
+            return new ReturnHandler(language.GetString("delete-work"), ReturnHandler.ReturnTypeEnum.Success);
         }
 
         public List<RegisteredSaveWork> getAllRegisteredSaveWork()
@@ -95,6 +101,7 @@ namespace easysave.Models
         {
             try
             {
+                this.language = Instance.rm;
                 DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
@@ -102,11 +109,11 @@ namespace easysave.Models
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
                 callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
-                return new ReturnHandler("Les fichiers ont bien été copiés !", ReturnHandler.ReturnTypeEnum.Success);
+                return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
             {
-                return new ReturnHandler("Un erreur est survenue : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
+                return new ReturnHandler("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
             }
         }
 
