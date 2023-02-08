@@ -1,20 +1,23 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+EASYSAVE
+
+EasySave is an opensource backup application that allows you to create save works. Once you create a save work, you will be able to launch it in order to execute the saving process.
+This application will allow you to define a name, type, source and target path for your save works.
+This is available in French and in English.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+You'll have to clone the project and open the solution in Visual Studio.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+2.	Latest releases
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+This version of the application allows you to create up to 5 save works in console mode.
+
+Stay tuned for the next version, which will include :
+- Logs in XML format
+- Unlimited save works slots
+
+3. User documentation
+
+A user documentation is available in the project repository.
