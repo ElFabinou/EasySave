@@ -24,7 +24,7 @@ namespace easysave.Models
                 string sourcePath = basicSaveWork.getSourcePath();
                 string targetPath = basicSaveWork.getTargetPath();
                 string test;
-                string test2;
+                
                 string test23;
 
                 // Create target directory if it doesn't exist
