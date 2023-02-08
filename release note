@@ -3,11 +3,11 @@
 
 # About the Release Note 
 
-1. 
+This version of the application allows you to create up to 5 saveworks in console mode.
 
 # New Features
 
-1.	Installation process
-2.	Software dependencies
+1.	Create and Delete saveworks
+2.	Modifiy the saveworks's configurations (Change name, save's type, sourcepath and destinationpath)
 3.	Latest releases
 4.	API references
