@@ -207,4 +207,13 @@
   <data name="slotselection-info-editing" xml:space="preserve">
     <value>Choissez un slot de sauvegarde à éditer :</value>
   </data>
+  <data name="delete-work" xml:space="preserve">
+    <value>Le travail de sauvegarde a bien été supprimé !</value>
+  </data>
+  <data name="save-work" xml:space="preserve">
+    <value>Le travail de sauvegarde a bien été créé et enregistré !"</value>
+  </data>
+  <data name="copy-file" xml:space="preserve">
+    <value>Les fichiers ont bien été copiés !</value>
+  </data>
 </root>

@@ -61,6 +61,24 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The files have been copied!.
+        /// </summary>
+        internal static string copy_file {
+            get {
+                return ResourceManager.GetString("copy-file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The backup work has been removed!.
+        /// </summary>
+        internal static string delete_work {
+            get {
+                return ResourceManager.GetString("delete-work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à The language has been successfully modified!.
         /// </summary>
         internal static string langage_update {
@@ -142,11 +160,20 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Save work liste.
+        ///   Recherche une chaîne localisée semblable à Save work list.
         /// </summary>
         internal static string menu_work_list {
             get {
                 return ResourceManager.GetString("menu_work_list", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The backup job has been created and saved!.
+        /// </summary>
+        internal static string save_work {
+            get {
+                return ResourceManager.GetString("save-work", resourceCulture);
             }
         }
         
