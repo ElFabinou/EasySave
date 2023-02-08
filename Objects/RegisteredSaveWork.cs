@@ -1,6 +1,6 @@
 ﻿namespace easysave.Objects
 {
-    public class RegisteredSaveWork : BasicSaveWork
+    public class RegisteredSaveWork
     {
 
         public Type type;
