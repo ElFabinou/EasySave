@@ -22,20 +22,40 @@ namespace easysave.Views
             if (selectedMode == mode.Console)
             {
                 string? choice = "";
-                while (choice != "1" && choice != "2")
+                while (choice != "1" && choice != "2" && choice != "3")
                 {
                     Console.WriteLine("[1] "+language.GetString("settings_choice_language"));
                     Console.WriteLine("[2] "+language.GetString("setting_choice_config_path"));
+                    Console.WriteLine("[3] " + language.GetString("settings_choice_back"));
+
                     choice = Console.ReadLine();
                 }
-                if (choice == "1")
+                switch(choice)
                 {
-                    initLanguageSelection();
+                    case "1":
+                        initLanguageSelection();
+                        break;
+                    case "2":
+                        Console.WriteLine("test putainnnnn");
+                        initLanguageSelection();
+                        break;
+                    case "3":
+                        mainMenu();
+                        break;
                 }
-                else if (choice == "2")
-                {
+                /* if (choice == "1")
+                 {
+                     initLanguageSelection();
+                 }
+                 else if (choice == "2")
+                 {
 
-                }
+                 }
+                 else if (choice == "3")
+                 {
+                     Console.WriteLine("test putain");
+                     mainMenu();
+                 }*/
             }
         }
 

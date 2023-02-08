@@ -195,7 +195,10 @@
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Changer l'emplacement du fichier de configuration (slots de sauvegarde)</value>
   </data>
-  <data name="exit" xml:space="preserve">
+  <data name="menu_exit" xml:space="preserve">
     <value>Quitter l'application</value>
+  </data>
+  <data name="settings_choice_back" xml:space="preserve">
+    <value>Retour au menu principal</value>
   </data>
 </root>

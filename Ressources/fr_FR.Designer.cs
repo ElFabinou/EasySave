@@ -297,11 +297,22 @@ namespace easysave.Ressources {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Quitter l'application.
         /// </summary>
-        internal static string exit
+        internal static string menu_exit
         {
             get
             {
-                return ResourceManager.GetString("exit", resourceCulture);
+                return ResourceManager.GetString("menu_exit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Retour au menu principal.
+        /// </summary>
+        internal static string settings_choice_back
+        {
+            get
+            {
+                return ResourceManager.GetString("settings_choice_back", resourceCulture);
             }
         }
     }

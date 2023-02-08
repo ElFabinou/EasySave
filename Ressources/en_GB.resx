@@ -195,7 +195,10 @@
   <data name="setting_choice_config_path" xml:space="preserve">
     <value>Change configuration file location (save slots)</value>
   </data>
-  <data name="exit" xml:space="preserve">
+  <data name="menu_exit" xml:space="preserve">
     <value>Exit application</value>
+  </data>
+  <data name="settings_choice_back" xml:space="preserve">
+    <value>Go back to main menu</value>
   </data>
 </root>

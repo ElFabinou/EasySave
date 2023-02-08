@@ -68,7 +68,7 @@ namespace easysave.Views
             {
                 RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
                 List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                Console.WriteLine("Choissez un slot de sauvegarde à éditer : ");
+                Console.WriteLine("Choisissez un slot de sauvegarde à éditer : ");
                 int i = 1;
                 if (registeredSaveViewModelList.Count == 0)
                 {
