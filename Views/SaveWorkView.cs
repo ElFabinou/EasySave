@@ -94,12 +94,16 @@ namespace easysave.Views
                     i++;
                 }
                 int s = 0;
+                Console.WriteLine($"{Environment.NewLine} [0]" + language.GetString("settings_choice_back") + Environment.NewLine);
+
                 while (s > registeredSaveViewModelList.Count || s < 1)
                 {
                     try
                     {
                         Console.WriteLine(language.GetString("slotselection_ask_slot_valid_number"));
-                        s = Convert.ToInt32(Console.ReadLine());
+                         s = Convert.ToInt32(Console.ReadLine());
+                        if (s == 0) { mainMenu(); }
+
                     }
                     catch (Exception)
                     {
@@ -115,7 +119,7 @@ namespace easysave.Views
             if (selectedMode == mode.Console)
             {
                 string? choice = "";
-                while (choice == "" || choice == null || (choice != "1" && choice != "2"))
+                while (choice == "" || choice == null || (choice != "1" && choice != "2" && choice != "3"))
                 {
                     Console.WriteLine(language.GetString("slotinteraction_ask_operation"));
                     Console.WriteLine(registeredSaveWork.getSaveName()+
@@ -124,6 +128,8 @@ namespace easysave.Views
                         "\n └── "+language.GetString("slotselection_info_slot_cible")+registeredSaveWork.getTargetPath());
                     Console.WriteLine("[1] "+language.GetString("slotinteraction_choice_run_save_work"));
                     Console.WriteLine("[2] "+language.GetString("slotinteraction_choice_delete_save_work"));
+                    Console.WriteLine("[3] "+language.GetString("settings_choice_back"));
+
                     choice = Console.ReadLine();
                 }
                 if (choice == "1")
@@ -136,6 +142,10 @@ namespace easysave.Views
                 {
                     RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
                     viewModel.initSlotDeletion().Print();
+                    mainMenu();
+                }
+                if (choice == "3")
+                {
                     mainMenu();
                 }
             }

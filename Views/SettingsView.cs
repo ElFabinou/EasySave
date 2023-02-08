@@ -30,19 +30,7 @@ namespace easysave.Views
 
                     choice = Console.ReadLine();
                 }
-               /* switch(choice)
-                {
-                    case "1":
-                        initLanguageSelection();
-                        break;
-                    case "2":
-                        Console.WriteLine("test ptn");
-                        initLanguageSelection();
-                        break;
-                    case "3":
-                        mainMenu();
-                        break;
-                }*/
+
                  if (choice == "1")
                  {
                      initLanguageSelection();
