@@ -38,7 +38,7 @@ namespace easysave.Views
                 int attempt = 0;
                 while (choice != "1" && choice != "2" && choice != "3" && choice != "4" && choice != "5")
                 {
-                    Console.WriteLine("[1] "+language.GetString("menu_basic_save"));
+                    Console.WriteLine("[1] "+language.GetString("menu_save_all"));
                     Console.WriteLine("[2] "+language.GetString("menu_work_list"));
                     Console.WriteLine("[3] "+language.GetString("menu_new_save_work"));
                     Console.WriteLine("[4] "+language.GetString("menu_settings"));
@@ -51,7 +51,7 @@ namespace easysave.Views
                 switch (choice)
                 {
                     case "1":
-                        //initBasicSaveWork();
+                        saveWorkView.initSequentialSave();
                         break;
                     case "2":
                         saveWorkView.initSlotSelection();

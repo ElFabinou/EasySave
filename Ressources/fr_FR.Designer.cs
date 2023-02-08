@@ -61,6 +61,15 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le langage a bien été modifié !.
+        /// </summary>
+        internal static string langage_update {
+            get {
+                return ResourceManager.GetString("langage_update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Choisissez la langue que vous souhaitez utiliser :.
         /// </summary>
         internal static string language_ask_choice {
@@ -79,15 +88,6 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Sauvegarde basique.
-        /// </summary>
-        internal static string menu_basic_save {
-            get {
-                return ResourceManager.GetString("menu_basic_save", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à Erreur, impossible de charger l&apos;interface..
         /// </summary>
         internal static string menu_error_load {
@@ -97,11 +97,29 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Quitter l&apos;application.
+        /// </summary>
+        internal static string menu_exit {
+            get {
+                return ResourceManager.GetString("menu_exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Créer un travail de sauvegarde.
         /// </summary>
         internal static string menu_new_save_work {
             get {
                 return ResourceManager.GetString("menu_new_save_work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sauvegarde séquentielles.
+        /// </summary>
+        internal static string menu_save_all {
+            get {
+                return ResourceManager.GetString("menu_save_all", resourceCulture);
             }
         }
         
@@ -138,6 +156,15 @@ namespace easysave.Ressources {
         internal static string setting_choice_config_path {
             get {
                 return ResourceManager.GetString("setting_choice_config_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Retour au menu principal.
+        /// </summary>
+        internal static string settings_choice_back {
+            get {
+                return ResourceManager.GetString("settings_choice_back", resourceCulture);
             }
         }
         
@@ -268,6 +295,15 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Choissez un slot de sauvegarde à éditer :.
+        /// </summary>
+        internal static string slotselection_info_editing {
+            get {
+                return ResourceManager.GetString("slotselection-info-editing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Cible : .
         /// </summary>
         internal static string slotselection_info_slot_cible {
@@ -291,28 +327,6 @@ namespace easysave.Ressources {
         internal static string slotselection_info_slot_type {
             get {
                 return ResourceManager.GetString("slotselection_info_slot_type", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Quitter l'application.
-        /// </summary>
-        internal static string menu_exit
-        {
-            get
-            {
-                return ResourceManager.GetString("menu_exit", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Retour au menu principal.
-        /// </summary>
-        internal static string settings_choice_back
-        {
-            get
-            {
-                return ResourceManager.GetString("settings_choice_back", resourceCulture);
             }
         }
     }
