@@ -42,7 +42,6 @@ namespace easysave.Models
             createConfigFileIfNotExists();
             if (getRegisteredWork(registeredSaveWork!.getSaveName()) != null) { return new ReturnHandler("Un travail de sauvegarde porte déjà ce nom. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
-            if (registeredSaveWorksList.Count >= 5) { return new ReturnHandler("Limite de travail de sauvegarde atteinte (5/5). Veuillez en supprimer un pour pouvoir en créer un. Action annulée.", ReturnHandler.ReturnTypeEnum.Error); }
             registeredSaveWorksList.Add(registeredSaveWork);
             string jsonString = JsonConvert.SerializeObject(registeredSaveWorksList, Newtonsoft.Json.Formatting.Indented);
             using (var streamWriter = new StreamWriter(path+"saveWorks.json"))

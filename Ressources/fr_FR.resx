@@ -216,4 +216,16 @@
   <data name="copy-file" xml:space="preserve">
     <value>Les fichiers ont bien été copiés !</value>
   </data>
+  <data name="config_extension_update" xml:space="preserve">
+    <value>L'extension des fichiers de log a été changée avec succès !</value>
+  </data>
+  <data name="setting_ask_extension" xml:space="preserve">
+    <value>Choisissez une extension pour les logs :</value>
+  </data>
+  <data name="extension_current" xml:space="preserve">
+    <value>Extension actuelle</value>
+  </data>
+  <data name="setting_choice_change_extension" xml:space="preserve">
+    <value>Changer l'extension des logs</value>
+  </data>
 </root>
