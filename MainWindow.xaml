@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:easysave"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="900" Width="1600">
+    <Grid Background="#FFE1E8FF">
+        <Image x:Name="Logo" HorizontalAlignment="Center" Height="266" Margin="0,10,0,0" VerticalAlignment="Top" Width="260" Source="/image 1.png"/>
+        <Button Content="Liste des travaux de sauvegarde" HorizontalAlignment="Center" Margin="0,322,0,0" VerticalAlignment="Top" Height="61" Width="348" Click="Button_Click" FontSize="16" Background="WhiteSmoke"/>
+        <Button Content="Créer un travail de sauvegarde" HorizontalAlignment="Center" Margin="0,405,0,0" VerticalAlignment="Top" Height="61" Width="348" Click="Button_Click" FontSize="16" Background="WhiteSmoke"/>
+        <Button Content="Paramètres" HorizontalAlignment="Center" Margin="0,497,0,0" VerticalAlignment="Top" Height="61" Width="348" Click="Button_Click" FontSize="16" Background="WhiteSmoke"/>
+        <Button Content="Quitter" HorizontalAlignment="Center" Margin="0,591,0,0" VerticalAlignment="Top" Height="61" Width="348" Click="Button_Click" FontSize="16" Background="WhiteSmoke"/>
 
     </Grid>
 </Window>
