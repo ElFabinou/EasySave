@@ -9,6 +9,8 @@ using easysave.ViewModels;
 using System.Drawing;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace easysave.Models
 {

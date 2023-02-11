@@ -1,4 +1,7 @@
-﻿namespace easysave.Objects
+﻿using System;
+using System.IO;
+
+namespace easysave.Objects
 {
     public class RegisteredSaveWork
     {
