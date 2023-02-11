@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using easysave.Objects;
 using Ookii.Dialogs.Wpf;
 
 namespace easysave.Views
@@ -14,9 +15,11 @@ namespace easysave.Views
     /// </summary>
     public partial class CreateSaveWorkViewGUI : Page
     {
+
         public CreateSaveWorkViewGUI()
         {
             InitializeComponent();
+            cbType.ItemsSource = Enum.GetValues(typeof(RegisteredSaveWork.Type)).Cast<RegisteredSaveWork.Type>();
         }
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
@@ -35,6 +38,21 @@ namespace easysave.Views
                 return selectedPath;
             }
             return "";
+        }
+
+        private void initSlotCreation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void fileExplorerSource_Click(object sender, RoutedEventArgs e)
+        {
+            sourcePath.Text = openFileExplorer();
+        }
+
+        private void fileExplorerTarget_Click(object sender, RoutedEventArgs e)
+        {
+            targetPath.Text = openFileExplorer();
         }
     }
 }

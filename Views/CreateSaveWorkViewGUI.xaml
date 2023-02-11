@@ -10,22 +10,23 @@
 
     <Grid>
         <Grid Background="White">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="334*"/>
-                <ColumnDefinition Width="28*"/>
-                <ColumnDefinition Width="439*"/>
-            </Grid.ColumnDefinitions>
             <Button x:Name="mainMenu" Grid.Column="2" Content="Go to main menu" HorizontalAlignment="Left" Margin="141,357,0,0" VerticalAlignment="Top" Height="66" Width="273" Background="#FFEBEBEB" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click"/>
         </Grid>
         <Border BorderBrush="Black" BorderThickness="1">
-            <TextBox TextWrapping="Wrap" Text="sourcePath" Margin="91,103,512,325"/>
+            <TextBox x:Name="saveName" TextWrapping="Wrap" Text="saveName" Margin="91,79,512,349"/>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1">
-            <TextBox TextWrapping="Wrap" Text="sourcePath" Margin="91,125,512,303"/>
+            <TextBox x:Name="targetPath" TextWrapping="Wrap" Text="targetPath" Margin="91,103,512,325"/>
         </Border>
-        <Button x:Name="fileExplorerTarget" Content="File explorer" HorizontalAlignment="Left" Margin="288,104,0,0" VerticalAlignment="Top"/>
+        <Border BorderBrush="Black" BorderThickness="1">
+            <TextBox x:Name="sourcePath" TextWrapping="Wrap" Text="sourcePath" Margin="91,125,512,303"/>
+        </Border>
         <Grid/>
-        <Button x:Name="fileExplorerSource" Content="File explorer" HorizontalAlignment="Left" Margin="288,126,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="fileExplorerTarget" Content="File explorer" HorizontalAlignment="Left" Margin="288,104,0,0" VerticalAlignment="Top" Click="fileExplorerTarget_Click"/>
+        <Button x:Name="fileExplorerSource" Content="File explorer" HorizontalAlignment="Left" Margin="288,126,0,0" VerticalAlignment="Top" Click="fileExplorerSource_Click"/>
+        <Button x:Name="initSlotCreation" Content="Valider" HorizontalAlignment="Left" Margin="92,181,0,0" VerticalAlignment="Top" Click="initSlotCreation_Click"/>
+        <ComboBox x:Name="cbType" HorizontalAlignment="Left" Margin="167,149,0,0" VerticalAlignment="Top" Width="120">
+        </ComboBox>
 
     </Grid>
 </Page>
