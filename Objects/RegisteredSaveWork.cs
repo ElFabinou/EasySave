@@ -6,9 +6,12 @@ namespace easysave.Objects
     public class RegisteredSaveWork
     {
 
-        public Type type;
+        public Type type { get; set; }
+        public string sourcePath { get; set; }
+        public string targetPath { get; set; }
+        public string saveName { get; set; }
 
-        public enum Type
+    public enum Type
         {
             Complet,
             Differentiel
@@ -32,11 +35,6 @@ namespace easysave.Objects
         public void setType(Type type) {
             this.type = type;
         }
-
-        public string sourcePath;
-        public string targetPath;
-        public string saveName = "Sauvegarde-" + DateTime.Now.ToString();
-
 
         public void setSourcePath(string sourcePath)
         {

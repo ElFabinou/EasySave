@@ -2,6 +2,7 @@
 using System.Configuration;
 using System;
 using static easysave.Objects.LanguageHandler;
+using System.Collections.Generic;
 
 namespace easysave.Views
 {
