@@ -2,6 +2,9 @@
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Globalization;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Resources;
 
 namespace easysave.Models
 {
@@ -16,20 +19,42 @@ namespace easysave.Models
             this.loggerHandler=loggerHandler;
         }
 
+        public ResourceManager language;
+
         public bool createLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
-            if (File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json") && File.Exists(path+"stateLogs.json")) return false;
-            if (!File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json")){
+            if (File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+"."+loggerHandler.getFormat().ToString()) && File.Exists(path+"stateLogs"+"."+loggerHandler.getFormat().ToString())) return false;
+            if (!File.Exists(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+"."+loggerHandler.getFormat().ToString())){
                 System.IO.Directory.CreateDirectory(@path);
-                var file = File.Create(@path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json");
+                var file = File.Create(@path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+"."+loggerHandler.getFormat().ToString());
                 file.Close();
+                if (loggerHandler.getFormat().ToString() == "xml")
+                {
+                    using (XmlWriter writer = XmlWriter.Create(@path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+"."+loggerHandler.getFormat().ToString()))
+                    {
+                        writer.WriteStartDocument();
+                        writer.WriteStartElement("root");
+                        writer.WriteEndElement();
+                        writer.WriteEndDocument();
+                    }
+                }
             }
-            if (!File.Exists(path+"stateLogs.json"))
+            if (!File.Exists(path+"stateLogs"+"."+loggerHandler.getFormat().ToString()))
             {
                 System.IO.Directory.CreateDirectory(@path);
-                var file = File.Create(@path+"stateLogs.json");
+                var file = File.Create(path+"stateLogs"+"."+loggerHandler.getFormat().ToString());
                 file.Close();
+                if (loggerHandler.getFormat().ToString() == "xml")
+                {
+                    using (XmlWriter writer = XmlWriter.Create(path+"stateLogs"+"."+loggerHandler.getFormat().ToString()))
+                    {
+                        writer.WriteStartDocument();
+                        writer.WriteStartElement("root");
+                        writer.WriteEndElement();
+                        writer.WriteEndDocument();
+                    }
+                }
             }
             return true;
         }
@@ -39,10 +64,26 @@ namespace easysave.Models
             List<StateLog> stateLogs = getAllStateLog();
             stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            string jsonString = JsonConvert.SerializeObject(stateLogs, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"stateLogs.json"))
+            switch (loggerHandler.getFormat().ToString().ToLower())
             {
-                streamWriter.Write(jsonString);
+                case "json":
+                    string jsonString = JsonConvert.SerializeObject(stateLogs, Newtonsoft.Json.Formatting.Indented);
+                    using (var streamWriter = new StreamWriter(path + "stateLogs" + "." + loggerHandler.getFormat().ToString()))
+                    {
+                        streamWriter.Write(jsonString);
+                    }
+                    break;
+                case "xml":
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<StateLog>), new XmlRootAttribute("root"));
+                    using (StringWriter writer = new StringWriter())
+                    {
+                        serializer.Serialize(writer, stateLogs);
+                        using (var streamWriter = new StreamWriter(path + "stateLogs" + "." + loggerHandler.getFormat().ToString()))
+                        {
+                            streamWriter.Write(writer.ToString());
+                        }
+                    }
+                    break;
             }
         }
 
@@ -51,10 +92,21 @@ namespace easysave.Models
             List<DailyLog> dailyLogs = getAllDailyLog();
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            string jsonString = JsonConvert.SerializeObject(dailyLogs, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json"))
+            if (loggerHandler.getFormat().ToString().ToLower() == "xml")
             {
-                streamWriter.Write(jsonString);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<DailyLog>), new XmlRootAttribute("root"));
+                using (var streamWriter = new StreamWriter(path + "dailyLogs-" + DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture) + "." + loggerHandler.getFormat().ToString()))
+                {
+                    serializer.Serialize(streamWriter, dailyLogs);
+                }
+            }
+            else
+            {
+                string jsonString = JsonConvert.SerializeObject(dailyLogs, Newtonsoft.Json.Formatting.Indented);
+                using (var streamWriter = new StreamWriter(path + "dailyLogs-" + DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture) + "." + loggerHandler.getFormat().ToString()))
+                {
+                    streamWriter.Write(jsonString);
+                }
             }
         }
 
@@ -63,12 +115,24 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             List<StateLog>? stateLogs = new List<StateLog>();
             createLoggerFileIfNotExists();
-            using (StreamReader r = new StreamReader(path+"stateLogs.json"))
+            using (StreamReader r = new StreamReader(path + "stateLogs" + "." + loggerHandler.getFormat().ToString()))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")
                 {
-                    stateLogs = JsonConvert.DeserializeObject<List<StateLog>>(json);
+                    switch (loggerHandler.getFormat().ToString().ToLower())
+                    {
+                        case "json":
+                            stateLogs = JsonConvert.DeserializeObject<List<StateLog>>(json);
+                            break;
+                        case "xml":
+                            XmlSerializer serializer = new XmlSerializer(typeof(List<StateLog>), new XmlRootAttribute("root"));
+                            using (StringReader reader = new StringReader(json))
+                            {
+                                stateLogs = (List<StateLog>)serializer.Deserialize(reader);
+                            }
+                            break;
+                    }
                     stateLogs!.RemoveAll(x => x.getSaveName() == this.loggerHandler.getStateLog().getSaveName());
                 }
                 return stateLogs;
@@ -78,17 +142,41 @@ namespace easysave.Models
         public List<DailyLog> getAllDailyLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            List<DailyLog>? stateLogs = new List<DailyLog>();
+            List<DailyLog>? dailyLogs = new List<DailyLog>();
             createLoggerFileIfNotExists();
-            using (StreamReader r = new StreamReader(path+"dailyLogs-"+DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)+".json"))
+            switch (loggerHandler.getFormat().ToString().ToLower())
             {
-                string json = r.ReadToEnd();
-                if (json != null && json != "")
-                {
-                    stateLogs = JsonConvert.DeserializeObject<List<DailyLog>>(json);
-                }
-                return stateLogs;
+                case "json":
+                    using (StreamReader r = new StreamReader(path + "dailyLogs-" + DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture) + "." + loggerHandler.getFormat().ToString()))
+                    {
+                        string json = r.ReadToEnd();
+                        if (json != null && json != "")
+                        {
+                            dailyLogs = JsonConvert.DeserializeObject<List<DailyLog>>(json);
+                        }
+                        return dailyLogs;
+                    }
+                case "xml":
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<DailyLog>), new XmlRootAttribute("root"));
+                    using (StreamReader r = new StreamReader(path + "dailyLogs-" + DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture) + "." + loggerHandler.getFormat().ToString()))
+                    {
+                        dailyLogs = (List<DailyLog>)serializer.Deserialize(r);
+                        return dailyLogs;
+                    }
+                default:
+                    return dailyLogs;
             }
+        }
+
+        public ReturnHandler setLoggerExtension(string loggerExtension)
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            settings["configExtension"].Value = loggerExtension;
+            configFile.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            LanguageHandler languageHandler = LanguageHandler.Instance;
+            return new ReturnHandler(languageHandler.rm.GetString("config_extension_update"), ReturnHandler.ReturnTypeEnum.Success);
         }
     }
 }

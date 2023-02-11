@@ -1,4 +1,5 @@
 ﻿using easysave.ViewModels;
+using System.Configuration;
 using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Views
@@ -19,7 +20,7 @@ namespace easysave.Views
                 while (choice != "1" && choice != "2" && choice != "3")
                 {
                     Console.WriteLine("[1] "+language.GetString("settings_choice_language"));
-                    Console.WriteLine("[2] "+language.GetString("setting_choice_config_path"));
+                    Console.WriteLine("[2] "+language.GetString("setting_choice_change_extension"));
                     Console.WriteLine("[3] " + language.GetString("settings_choice_back"));
 
                     choice = Console.ReadLine();
@@ -29,7 +30,7 @@ namespace easysave.Views
                  }
                  else if (choice == "2")
                  {
-
+                    initExtensionSelection();
                  }
                  else if (choice == "3")
                  {
@@ -61,6 +62,35 @@ namespace easysave.Views
             LanguageHandlerViewModel languageHandlerViewModel = new LanguageHandlerViewModel();
             languageHandlerViewModel.setLanguage((Language)(s-1));
             languageHandlerViewModel.initLanguageSelection().Print();
+            mainMenu();
+        }
+
+        public void initExtensionSelection()
+        {
+            Console.WriteLine(language.GetString("setting_ask_extension"));
+            List<string> extensions = new List<string>();
+            extensions.Add("json");
+            extensions.Add("xml");
+            Console.WriteLine("[1] .json" + (ConfigurationManager.AppSettings["configExtension"]!.ToString() == "json" ? " ["+language.GetString("extension_current")+"]" : ""));
+            Console.WriteLine("[2] .xml" + (ConfigurationManager.AppSettings["configExtension"]!.ToString() == "xml" ? " ["+language.GetString("extension_current")+"]" : ""));
+
+            string s = "";
+            s = Console.ReadLine();
+            while (s == "" || s == null)
+            {
+                Console.WriteLine(language.GetString("setting_ask_extension"));
+                s = Console.ReadLine();
+            }
+            LoggerHandlerViewModel loggerHandlerViewModel = new LoggerHandlerViewModel();
+            switch (s)
+            {
+                case "1":
+                    loggerHandlerViewModel.setLoggerExtension("json").Print();
+                    break;
+                case "2":
+                    loggerHandlerViewModel.setLoggerExtension("xml").Print();
+                    break;
+            }
             mainMenu();
         }
     }

@@ -61,6 +61,15 @@ namespace easysave.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à L&apos;extension des fichiers de log a été changée avec succès !.
+        /// </summary>
+        internal static string config_extension_update {
+            get {
+                return ResourceManager.GetString("config_extension_update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Les fichiers ont bien été copiés !.
         /// </summary>
         internal static string copy_file {
@@ -75,6 +84,15 @@ namespace easysave.Ressources {
         internal static string delete_work {
             get {
                 return ResourceManager.GetString("delete-work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Extension actuelle.
+        /// </summary>
+        internal static string extension_current {
+            get {
+                return ResourceManager.GetString("extension_current", resourceCulture);
             }
         }
         
@@ -174,6 +192,24 @@ namespace easysave.Ressources {
         internal static string save_work {
             get {
                 return ResourceManager.GetString("save-work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Choisissez une extension pour les logs :.
+        /// </summary>
+        internal static string setting_ask_extension {
+            get {
+                return ResourceManager.GetString("setting_ask_extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Changer l&apos;extension des logs.
+        /// </summary>
+        internal static string setting_choice_change_extension {
+            get {
+                return ResourceManager.GetString("setting_choice_change_extension", resourceCulture);
             }
         }
         
