@@ -43,6 +43,7 @@ namespace easysave.Views
             {
                 RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
                 viewModel.initRegisteredSaveWork().Print();
+
             }
         }
 
