@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="LoadingViewGUI" Height="450" Width="800">
     <Grid>
-        <Canvas>
+        <Canvas Background="#FFE1E8FF">
             <ProgressBar x:Name="progressBar" HorizontalAlignment="Center" Height="48" VerticalAlignment="Top" Width="532" Canvas.Left="134" Canvas.Top="115" />
             <Label x:Name="percentText" Content="0%" Canvas.Left="348" Canvas.Top="159" HorizontalAlignment="Center" VerticalAlignment="Top" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <ListView x:Name="listView" Width="532" Height="222" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Canvas.Left="134" Canvas.Top="201" HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -18,6 +18,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <TextBlock Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
         </Canvas>
     </Grid>
 </Window>
