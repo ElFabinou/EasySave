@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,13 +38,15 @@ namespace easysave.Views
             listView.ItemsSource = registeredSaveViewModelList;
         }
 
-        private void initSaveWork_Click(object sender, RoutedEventArgs e)
+        private async void initSaveWork_Click(object sender, RoutedEventArgs e)
         {
             for(int i = 0; i<selected.Count;i++)
             {
-                RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
-                viewModel.initRegisteredSaveWork().Print();
-
+                await Task.Run(() =>
+                {
+                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
+                    viewModel.initRegisteredSaveWork();
+                });
             }
         }
 

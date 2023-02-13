@@ -10,10 +10,10 @@ namespace easysave.Objects
     public class Loader
     {
 
-        public double percentage;
-        public FileInfo fileInfo;
-        public DirectoryInfo directoryInfo;
-        public bool isFile;
+        public double percentage { get; set; }
+        public FileInfo fileInfo { get; set; }
+        public DirectoryInfo directoryInfo { get; set; }
+        public bool isFile { get; set; }
 
         public void setIsFile(bool isFile)
         {

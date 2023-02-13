@@ -1,8 +1,11 @@
 ﻿using easysave.Objects;
+using easysave.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,21 +24,30 @@ namespace easysave.Views
     public partial class LoadingViewGUI : Window
     {
 
+        private List<item> items = new List<item>();
+
+        private class item
+        {
+            public string path { get; set; }
+            public string size { get; set; }
+        }
+
         public LoadingViewGUI()
         {
             InitializeComponent();
         }
 
-        public void sendPercentage(Loader loader)
+        public void setPercentage(Loader loader)
         {
-            if (loader.getIsFile())
-            {
-                progressBar.Value = Math.Round(loader.getPercentage(), 0);
-            }
-            else
-            {
-                progressBar.Value = Math.Round(loader.getPercentage(), 0);
-            }
+            progressBar.Value = loader.getPercentage();
+            item item = new item();
+            item.path = (loader.getIsFile() ? loader.getFile().FullName : loader.getFolder().FullName);
+            item.size = (loader.getIsFile() ? loader.getFile().Length+" bytes" : "/");
+            percentText.Content = Math.Round(loader.getPercentage(),1)+"%";
+            items.Insert(0, item);
+            listView.ItemsSource = null;
+            listView.ItemsSource = items;
         }
+
     }
 }
