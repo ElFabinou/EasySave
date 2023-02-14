@@ -44,14 +44,13 @@ namespace easysave.Views
             {
                 sourcePath.Background = System.Windows.Media.Brushes.White;
             }
-            if(!pathExists(sourcePath.Text) || !pathExists(sourcePath.Text) || saveName.Text == "" || cbType == null)
+            if(!pathExists(sourcePath.Text) || !pathExists(sourcePath.Text) || saveName.Text == "" || cbType.SelectedItem == null)
             {
                 initSlotCreation.IsEnabled = false;
                 return;
 
             }
             initSlotCreation.IsEnabled = true;
-
         }
 
         public CreateSaveWorkViewGUI()
@@ -87,7 +86,12 @@ namespace easysave.Views
             registeredSaveWork.setSourcePath(sourcePath.Text);
             registeredSaveWork.setTargetPath(targetPath.Text);
             RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
-            viewModel.initSlotCreation().Print();
+            var result = viewModel.initSlotCreation();
+            if(result.GetReturnTypeEnum() == ReturnHandler.ReturnTypeEnum.Error)
+            {
+                MessageBox.Show("Erreur : la save existe déjà.");
+                return;
+            }
             NavigationService.Navigate(null);
         }
 
