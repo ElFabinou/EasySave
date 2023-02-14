@@ -228,4 +228,13 @@
   <data name="setting_choice_change_extension" xml:space="preserve">
     <value>Change log extension</value>
   </data>
+  <data name="gui-tabItemBlacklist" xml:space="preserve">
+    <value>Blacklist</value>
+  </data>
+  <data name="gui-tabItemFormat" xml:space="preserve">
+    <value>Logs file format</value>
+  </data>
+  <data name="gui-tabItemLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
 </root>

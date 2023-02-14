@@ -14,7 +14,7 @@
                     <TabItem Header="Language" Visibility="Collapsed">
                         <Canvas>
                             <TextBlock Margin="0,0,0,0" Canvas.Left="175px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Language choice"/>
+                                <Run Language="fr-fr" Text="Language choice" x:Name="tabItemLanguage"/>
                             </TextBlock>
                             <ComboBox x:Name="cbLanguage" HorizontalAlignment="Center" Canvas.Left="300px" Canvas.Top="200" SelectionChanged="cbLanguage_SelectionChanged">
                             </ComboBox>
@@ -23,14 +23,14 @@
                     <TabItem Header="Format" Visibility="Collapsed">
                         <Canvas>
                             <TextBlock Margin="0,0,0,0" Canvas.Left="175px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Logs format"/></TextBlock>
+                                <Run Language="fr-fr" Text="Logs format" x:Name="tabItemFormat"/></TextBlock>
                             <ComboBox x:Name="cbFormat" HorizontalAlignment="Center" Canvas.Left="300px" Canvas.Top="200" SelectionChanged="cbFormat_SelectionChanged"></ComboBox>
                         </Canvas>
                     </TabItem>
                     <TabItem Header="TabItem" Visibility="Collapsed">
                         <Canvas>
                             <TextBlock Margin="0,0,0,0" Canvas.Left="225px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Blacklist"/>
+                                <Run Language="fr-fr" Text="Blacklist" x:Name="tabItemBlacklist"/>
                             </TextBlock>
                         </Canvas>
                     </TabItem>
