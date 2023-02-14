@@ -1,0 +1,24 @@
+﻿<Window x:Class="easysave.Views.LoadingViewGUI"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:easysave.Views"
+        mc:Ignorable="d"
+        Title="LoadingViewGUI" Height="450" Width="800">
+    <Grid>
+        <Canvas Background="#FFE1E8FF">
+            <ProgressBar x:Name="progressBar" HorizontalAlignment="Center" Height="48" VerticalAlignment="Top" Width="532" Canvas.Left="134" Canvas.Top="115" />
+            <Label x:Name="percentText" Content="0%" Canvas.Left="348" Canvas.Top="159" HorizontalAlignment="Center" VerticalAlignment="Top" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <ListView x:Name="listView" Width="532" Height="222" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Canvas.Left="134" Canvas.Top="201" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Path" Width="266" DisplayMemberBinding="{Binding path}"/>
+                        <GridViewColumn Header="Size" Width="266" DisplayMemberBinding="{Binding size}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBlock Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
+        </Canvas>
+    </Grid>
+</Window>

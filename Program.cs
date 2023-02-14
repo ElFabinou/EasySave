@@ -1,12 +1,15 @@
-﻿using easysave.Views;
+﻿using easysave;
+using easysave.Views;
+using System;
 using System.Configuration;
 
 class Program
 {
+    [STAThread]
     static void Main(string[] args)
     {
-        Console.WriteLine(ConfigurationManager.AppSettings["configExtension"]!.ToString());
-        MainView mainView = new MainView();
-        mainView.mainMenu();
+        var app = new App();
+        app.InitializeComponent();
+        app.Run();
     }
 }

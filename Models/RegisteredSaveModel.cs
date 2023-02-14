@@ -9,6 +9,11 @@ using easysave.ViewModels;
 using System.Drawing;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Collections.Generic;
+using System.Linq;
+using easysave.Views;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace easysave.Models
 {
@@ -96,7 +101,7 @@ namespace easysave.Models
             return null;
         }
 
-        public ReturnHandler copyFilesToTarget()
+        public async Task<ReturnHandler> copyFilesToTarget()
         {
             try
             {
@@ -104,19 +109,39 @@ namespace easysave.Models
                 DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
+                LoadingViewGUI loadingViewGUI = null;
+                if (System.Threading.Thread.CurrentThread.ApartmentState != System.Threading.ApartmentState.STA)
+                {
+                    System.Threading.Thread thread = new System.Threading.Thread(() =>
+                    {
+                        loadingViewGUI = new LoadingViewGUI();
+                        loadingViewGUI.Show();
+                        System.Windows.Threading.Dispatcher.Run();
+                    });
+                    thread.SetApartmentState(System.Threading.ApartmentState.STA);
+                    thread.Start();
+                    System.Threading.Thread.Sleep(500);
+                }
+                else
+                {
+                    loadingViewGUI = new LoadingViewGUI();
+                    loadingViewGUI.Show();
+                    System.Windows.Threading.Dispatcher.Run();
+                }
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
-                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
+                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader, loadingViewGUI);
                 callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
             {
+                Console.WriteLine("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
                 return new ReturnHandler("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
             }
         }
 
-        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
+        public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader, LoadingViewGUI loadingViewGUI)
         {
             try
             {
@@ -137,7 +162,7 @@ namespace easysave.Models
                     loader.setPercentage(totalFile, doneFiles);
                     loader.setIsFile(false);
                     loader.setFolder(dir);
-                    registeredSaveViewModel.notifyViewPercentage(loader);
+                    registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                     callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
                 }
 
@@ -159,7 +184,7 @@ namespace easysave.Models
                             totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                             loader.setFile(file);
                             loader.setIsFile(true);
-                            registeredSaveViewModel.notifyViewPercentage(loader);
+                            registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                         }
                     }
@@ -171,7 +196,7 @@ namespace easysave.Models
                         totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                         loader.setFile(file);
                         loader.setIsFile(true);
-                        registeredSaveViewModel.notifyViewPercentage(loader);
+                        registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                         callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                     }
                 }
@@ -187,8 +212,8 @@ namespace easysave.Models
                         loader.setPercentage(totalFile, doneFiles);
                         loader.setIsFile(false);
                         loader.setFolder(subdir);
-                        registeredSaveViewModel.notifyViewPercentage(loader);
-                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
+                        registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
                         callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
                     }
                 }

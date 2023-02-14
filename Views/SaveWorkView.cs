@@ -135,7 +135,7 @@ namespace easysave.Views
                 if (choice == "1")
                 {
                     RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
-                    viewModel.initRegisteredSaveWork().Print();
+                    viewModel.initRegisteredSaveWork();
                     mainMenu();
                 }
                 if (choice == "2")
@@ -175,7 +175,7 @@ namespace easysave.Views
                 foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
                 {
                     RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel(registeredSaveWork);
-                    viewModel.initRegisteredSaveWork().Print();
+                    viewModel.initRegisteredSaveWork();
                     mainMenu();
                 }
             }
