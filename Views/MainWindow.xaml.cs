@@ -42,7 +42,7 @@ namespace easysave.Views
 
         private void initSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            MainMenu.Content = new SettingsViewGUI();
         }
 
         private void initLeave_Click(object sender, RoutedEventArgs e)
