@@ -47,6 +47,12 @@ namespace easysave.Views
 
         private void initLeave_Click(object sender, RoutedEventArgs e)
         {
+            //Application.Current.Shutdown();
+            Environment.Exit(0);
+        }
+
+        private void MainMenu_Navigated(object sender, NavigationEventArgs e)
+        {
 
         }
     }
