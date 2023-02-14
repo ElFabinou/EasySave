@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using easysave.ViewModels;
 
 namespace easysave.Views
 {
@@ -49,11 +50,18 @@ namespace easysave.Views
         {
             //Application.Current.Shutdown();
             Environment.Exit(0);
+
         }
 
         private void MainMenu_Navigated(object sender, NavigationEventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel MainViewModelobj = new MainViewModel();
+            MainViewModelobj.StartProcessMonitor();
         }
     }
 }
