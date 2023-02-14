@@ -21,26 +21,19 @@ namespace easysave.ViewModels
             // Ajoutez les autres noms de processus à surveiller ici...
         }
 
-        public void StartProcessMonitor()
+        public bool StartProcessMonitor()
         {
-            Task.Run(() =>
+            var runningProcesses = Process.GetProcesses();
+            foreach (var process in runningProcesses)
             {
-                while (true)
+                if (_blacklist.ContainsProcess(process.ProcessName))
                 {
-                    var runningProcesses = Process.GetProcesses();
-                    foreach (var process in runningProcesses)
-                    {
-                        if (_blacklist.ContainsProcess(process.ProcessName))
-                        {
-                            // Le processus est dans la liste noire, vous pouvez effectuer l'action appropriée ici...
-                            Console.WriteLine("BlackList detecté");
-                            break;
-                        }
-                    }
-                    Console.WriteLine("New thread");
-                    Thread.Sleep(5000); // Attendez 5 secondes avant de vérifier à nouveau les processus en cours d'exécution
+                    //Le processus est dans la liste noire, vous pouvez effectuer l'action appropriée ici...
+                    Console.WriteLine("BlackList detecté");
+                    return false;
                 }
-            });
+            }
+            return true;
         }
     }
 

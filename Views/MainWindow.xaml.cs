@@ -57,11 +57,5 @@ namespace easysave.Views
         {
 
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MainViewModel MainViewModelobj = new MainViewModel();
-            MainViewModelobj.StartProcessMonitor();
-        }
     }
 }
