@@ -30,5 +30,15 @@ namespace easysave.Objects
             Console.WriteLine(String);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
+
+        public string GetString()
+        {
+            return String;
+        }
+
+        public ReturnTypeEnum GetReturnTypeEnum()
+        {
+            return ReturnType;
+        }
     }
 }

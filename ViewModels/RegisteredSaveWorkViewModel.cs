@@ -36,16 +36,23 @@ namespace easysave.ViewModels
             return registeredSaveModel.deleteRegisteredWork();
         }
 
-        public ReturnHandler initRegisteredSaveWork()
+        public async Task<ReturnHandler> initRegisteredSaveWork()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
-            return registeredSaveModel.copyFilesToTarget();
+            return await registeredSaveModel.copyFilesToTarget();
         }
 
-        public void notifyViewPercentage(Loader loader)
+        public void notifyViewPercentage(Loader loader, LoadingViewGUI? loadingViewGUI = null)
         {
             SaveWorkView saveWorkView = new SaveWorkView();
             saveWorkView.sendPercentage(loader);
+            if(loadingViewGUI!= null)
+            {
+                loadingViewGUI.Dispatcher.Invoke(() =>
+                {
+                    loadingViewGUI.setPercentage(loader);
+                });
+            }
         }
     }
 }
