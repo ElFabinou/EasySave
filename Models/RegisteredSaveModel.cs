@@ -103,8 +103,11 @@ namespace easysave.Models
 
         public async Task<ReturnHandler> copyFilesToTarget()
         {
-            MainViewModel MainViewModelobj = new MainViewModel();
-            bool result = MainViewModelobj.StartProcessMonitor();
+
+            BlacklistModel Blacklistobj = new BlacklistModel();
+            Blacklistobj.RemoveProcessName("Hello");
+            bool result = Blacklistobj.StartProcessMonitor();
+            
 
             if (!result) {
                 return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
