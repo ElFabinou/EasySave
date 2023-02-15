@@ -13,12 +13,12 @@
             <ListView x:Name="listView" Width="532" Height="222" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Canvas.Left="134" Canvas.Top="201" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Path" Width="266" DisplayMemberBinding="{Binding path}"/>
-                        <GridViewColumn Header="Size" Width="266" DisplayMemberBinding="{Binding size}"/>
+                        <GridViewColumn x:Name="tabHeader_path" Header="Path" Width="266" DisplayMemberBinding="{Binding path}"/>
+                        <GridViewColumn x:Name="tabHeader_size" Header="Size" Width="266" DisplayMemberBinding="{Binding size}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <TextBlock Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
+            <TextBlock x:Name="title" Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
         </Canvas>
     </Grid>
 </Window>

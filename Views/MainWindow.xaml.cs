@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Views
 {
@@ -20,9 +22,13 @@ namespace easysave.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ResourceManager language;
+        
         public MainWindow()
         {
             InitializeComponent();
+            this.language = Instance.rm;
+            translateAllItems();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -48,6 +54,14 @@ namespace easysave.Views
         private void initLeave_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void translateAllItems()
+        {
+            initSaveWork.Content = language.GetString("gui_MainWindow_initSaveWork");
+            initSettings.Content = language.GetString("gui_MainWindow_initSettings");
+            initLeave.Content = language.GetString("gui_MainWindow_initLeave");
+            initSlotCreation.Content = language.GetString("gui_MainWindow_initSlotCreation");
         }
     }
 }

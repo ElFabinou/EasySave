@@ -15,6 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static easysave.Objects.LanguageHandler;
+using System.Resources;
 
 namespace easysave.Views
 {
@@ -26,6 +28,8 @@ namespace easysave.Views
 
         private List<item> items = new List<item>();
 
+        public ResourceManager language;
+
         private class item
         {
             public string path { get; set; }
@@ -35,6 +39,8 @@ namespace easysave.Views
         public LoadingViewGUI()
         {
             InitializeComponent();
+            this.language = Instance.rm;
+            translateAllItems();
         }
 
         public void setPercentage(Loader loader)
@@ -49,5 +55,11 @@ namespace easysave.Views
             listView.ItemsSource = items;
         }
 
+        private void translateAllItems()
+        {
+            title.Text = language.GetString("gui_LoadingViewGUI_title");
+            tabHeader_path.Header = language.GetString("gui_LoadingViewGUI_tabHeader_path");
+            tabHeader_size.Header = language.GetString("gui_LoadingViewGUI_tabHeader_size");
+        }
     }
 }

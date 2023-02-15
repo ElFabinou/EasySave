@@ -237,4 +237,49 @@
   <data name="gui-tabItemLanguage" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="gui_CreateSaveWorkViewGUI_initSlotCreation" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_mainMenu" xml:space="preserve">
+    <value>Back to main menu</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title" xml:space="preserve">
+    <value>Save work creation</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_folderToCopy" xml:space="preserve">
+    <value>Source folder</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_saveType" xml:space="preserve">
+    <value>Save type</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_targetPath" xml:space="preserve">
+    <value>Target path</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_workName" xml:space="preserve">
+    <value>Save work name</value>
+  </data>
+  <data name="gui_LoadingViewGUI_tabHeader_path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="gui_LoadingViewGUI_tabHeader_size" xml:space="preserve">
+    <value>Size (bytes)</value>
+  </data>
+  <data name="gui_LoadingViewGUI_title" xml:space="preserve">
+    <value>Save progression</value>
+  </data>
+  <data name="gui_MainWindow_initLeave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="gui_MainWindow_initSaveWork" xml:space="preserve">
+    <value>Save work list</value>
+  </data>
+  <data name="gui_MainWindow_initSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="gui_MainWindow_initSlotCreation" xml:space="preserve">
+    <value>Create save work</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_deleteSaveWork" xml:space="preserve">
+    <value>Delete save works</value>
+  </data>
 </root>

@@ -17,9 +17,9 @@
                 <ListView x:Name="listView" Width="Auto" Height="700" SelectionChanged="listView_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Save name" Width="Auto" DisplayMemberBinding="{Binding saveName}"/>
-                            <GridViewColumn Header="Source path" Width="Auto" DisplayMemberBinding="{Binding sourcePath}"/>
-                            <GridViewColumn Header="Target path" Width="Auto" DisplayMemberBinding="{Binding targetPath}"/>
+                            <GridViewColumn x:Name="tabHeader_saveName" Header="Save name" Width="Auto" DisplayMemberBinding="{Binding saveName}"/>
+                            <GridViewColumn x:Name="tabHeader_sourcePath" Header="Source path" Width="Auto" DisplayMemberBinding="{Binding sourcePath}"/>
+                            <GridViewColumn x:Name="tabHeader_targetPath" Header="Target path" Width="Auto" DisplayMemberBinding="{Binding targetPath}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
