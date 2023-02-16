@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Xml.Linq;
 using easysave.Objects;
 using easysave.ViewModels;
-using Microsoft.VisualBasic.Devices;
 using Ookii.Dialogs.Wpf;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Views
 {
@@ -25,6 +17,7 @@ namespace easysave.Views
     /// </summary>
     public partial class CreateSaveWorkViewGUI : Page
     {
+        public ResourceManager language;
 
         private void enableButton()
         {
@@ -57,6 +50,8 @@ namespace easysave.Views
         {
             InitializeComponent();
             cbType.ItemsSource = Enum.GetValues(typeof(RegisteredSaveWork.Type)).Cast<RegisteredSaveWork.Type>();
+            this.language = Instance.rm;
+            translateAllItems();
         }
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
@@ -129,6 +124,17 @@ namespace easysave.Views
         {
             Console.WriteLine(Directory.Exists(path));
             return Directory.Exists(path);
+        }
+
+        private void translateAllItems()
+        {
+            title.Text = language.GetString("gui_CreateSaveWorkViewGUI_title");
+            title_workName.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_workName");
+            title_folderToCopy.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_folderToCopy");
+            title_targetPath.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_targetPath");
+            title_saveType.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_saveType");
+            initSlotCreation.Content = language.GetString("gui_CreateSaveWorkViewGUI_title_saveType");
+            mainMenu.Content = language.GetString("gui_CreateSaveWorkViewGUI_mainMenu");
         }
     }
 }

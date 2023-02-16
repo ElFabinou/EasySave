@@ -103,6 +103,19 @@ namespace easysave.Models
 
         public async Task<ReturnHandler> copyFilesToTarget()
         {
+
+            //BlacklistModel Blacklistobj = new BlacklistModel();
+            //Blacklistobj.RemoveProcessName("Hello");
+            BlacklistModelView blacklist = new BlacklistModelView();
+            blacklist.CallRemoveBlacklist("Test");
+            bool result = blacklist.CallStartProcess();
+
+
+
+
+            if (!result) {
+                return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
+            }
             try
             {
                 this.language = Instance.rm;
@@ -110,7 +123,7 @@ namespace easysave.Models
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
                 LoadingViewGUI loadingViewGUI = null;
-                if (System.Threading.Thread.CurrentThread.ApartmentState != System.Threading.ApartmentState.STA)
+                if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     System.Threading.Thread thread = new System.Threading.Thread(() =>
                     {

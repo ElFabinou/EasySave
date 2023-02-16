@@ -16,6 +16,9 @@
     <Compile Update="Views\SaveWorkListViewGUI.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SettingsViewGUI.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\CreateSaveWorkViewGUI.xaml">
@@ -28,6 +31,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SaveWorkListViewGUI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SettingsViewGUI.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

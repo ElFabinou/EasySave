@@ -36,6 +36,7 @@ namespace easysave.Views
             RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
             List<RegisteredSaveWork>  registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
             listView.ItemsSource = registeredSaveViewModelList;
+            translateAllItems();
         }
 
         private async void initSaveWork_Click(object sender, RoutedEventArgs e)
@@ -72,6 +73,16 @@ namespace easysave.Views
                 List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
                 listView.ItemsSource = registeredSaveViewModelList;
             }
+        }
+
+        private void translateAllItems()
+        {
+            tabHeader_saveName.Header = language.GetString("gui_SaveWorkListViewGUI_tabHeader_saveName");
+            tabHeader_sourcePath.Header = language.GetString("gui_SaveWorkListViewGUI_tabHeader_sourcePath");
+            tabHeader_targetPath.Header = language.GetString("gui_SaveWorkListViewGUI_tabHeader_targetPath");
+            initSaveWork.Content = language.GetString("gui_SaveWorkListViewGUI_initSaveWork");
+            mainMenu.Content = language.GetString("gui_SaveWorkListViewGUI_mainMenu");
+            deleteSaveWork.Content = language.GetString("gui_SaveWorkListViewGUI_deleteSaveWork");
         }
     }
 }
