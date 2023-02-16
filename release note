@@ -10,4 +10,4 @@ This version of the application allows you to create saveworks in GUI (Graphic U
 1.	Replace console mode to GUI2.	Add CryptoSoft software for encryption
 3.	The logs show more information about the encryption time
 4.	Blacklist : When a blacklisted application is processing, a savework cannot be started
-5.    	Extension type : Allow to specify the type to encrypt 
+5.  Extension type : Allow to specify the type to encrypt 
