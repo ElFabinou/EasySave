@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 
 namespace easysave.Views
 {
