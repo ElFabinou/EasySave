@@ -1,11 +1,13 @@
-# Release Note for EASYSAVE 1.1
-16 February 2023 : 
+# Release Note for EASYSAVE 2.0
+February 2023 : 
 
 # About the Release Note 
 
-This version of the application allows you to create saveworks in console mode.
+This version of the application allows you to create saveworks in GUI (Graphic User Interface).
 
 # New Features
 
-1.	NEW FORMAT : XML format for the logs
-2.	Allows you to create an unlimited number of save works
+1.	Replace console mode to GUI2.	Add CryptoSoft software for encryption
+3.	The logs show more information about the encryption time
+4.	Blacklist : When a blacklisted application is processing, a savework cannot be started
+5.    	Extension type : Allow to specify the type to encrypt 
