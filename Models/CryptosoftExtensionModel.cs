@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace easysave.Models
 {
-    public class CryptosoftModel
+    public class CryptosoftExtensionModel
     {
 
         public List<string> _extensions;
 
-        public CryptosoftModel()
+        public CryptosoftExtensionModel()
         {   
-            _extension = new List<string>();
+            _extensions = new List<string>();
         }
 
         public BlacklistModel _blacklist;
