@@ -228,4 +228,73 @@
   <data name="setting_choice_change_extension" xml:space="preserve">
     <value>Changer l'extension des logs</value>
   </data>
+  <data name="gui-tabItemBlacklist" xml:space="preserve">
+    <value>Blacklist</value>
+  </data>
+  <data name="gui-tabItemFormat" xml:space="preserve">
+    <value>Format des fichiers de logs</value>
+  </data>
+  <data name="gui-tabItemLanguage" xml:space="preserve">
+    <value>Langage</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_initSlotCreation" xml:space="preserve">
+    <value>Valider</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_mainMenu" xml:space="preserve">
+    <value>Retour au menu principal</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title" xml:space="preserve">
+    <value>Création d’un travail de sauvegarde</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_folderToCopy" xml:space="preserve">
+    <value>Dossier à copier</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_saveType" xml:space="preserve">
+    <value>Type de sauvegarde</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_targetPath" xml:space="preserve">
+    <value>Dossier de destination</value>
+  </data>
+  <data name="gui_CreateSaveWorkViewGUI_title_workName" xml:space="preserve">
+    <value>Nom du travail</value>
+  </data>
+  <data name="gui_LoadingViewGUI_tabHeader_path" xml:space="preserve">
+    <value>Chemin d'accès</value>
+  </data>
+  <data name="gui_LoadingViewGUI_tabHeader_size" xml:space="preserve">
+    <value>Taille (bytes)</value>
+  </data>
+  <data name="gui_LoadingViewGUI_title" xml:space="preserve">
+    <value>Progression de la sauvegarde</value>
+  </data>
+  <data name="gui_MainWindow_initLeave" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="gui_MainWindow_initSaveWork" xml:space="preserve">
+    <value>Liste des travaux de sauvegarde</value>
+  </data>
+  <data name="gui_MainWindow_initSettings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="gui_MainWindow_initSlotCreation" xml:space="preserve">
+    <value>Créer un travail de sauvegarde</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_initSaveWork" xml:space="preserve">
+    <value>Démarrer les travaux de sauvegarde sélectionnés</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_mainMenu" xml:space="preserve">
+    <value>Menu principal</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_saveName" xml:space="preserve">
+    <value>Nom de la sauvegarde</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_sourcePath" xml:space="preserve">
+    <value>Dossier source</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_targetPath" xml:space="preserve">
+    <value>Dossier cible</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_deleteSaveWork" xml:space="preserve">
+    <value>Supprimer les travaux de sauvegarde sélectionnés</value>
+  </data>
 </root>
