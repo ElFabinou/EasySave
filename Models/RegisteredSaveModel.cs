@@ -119,7 +119,7 @@ namespace easysave.Models
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
                 LoadingViewGUI loadingViewGUI = null;
-                if (System.Threading.Thread.CurrentThread.ApartmentState != System.Threading.ApartmentState.STA)
+                if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     System.Threading.Thread thread = new System.Threading.Thread(() =>
                     {

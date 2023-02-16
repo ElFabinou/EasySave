@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Resources;
+using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
 
 namespace easysave.Views

@@ -16,6 +16,5 @@
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="108" FontSize="16" TextAlignment="Center" FontWeight="Bold" RenderTransformOrigin="0.519,-0.55" Canvas.Top="659"><Run Language="fr-fr" Text="Version 2.0"/></TextBlock>
             <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden"/>
         </Canvas>
-        <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
