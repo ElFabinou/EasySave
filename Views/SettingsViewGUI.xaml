@@ -32,13 +32,27 @@
                             <TextBlock Margin="0,0,0,0" Canvas.Left="225px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
                                 <Run Language="fr-fr" Text="Blacklist" x:Name="tabItemBlacklist"/>
                             </TextBlock>
+                            <ListView x:Name="ListViewBlacklist" Canvas.Left="250" Canvas.Top="140">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Blacklist processus"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <TextBox x:Name="textBoxBlacklist" TextWrapping="Wrap" Width="120" Canvas.Left="200" Canvas.Top="100"/>
+                            <Button x:Name="addBlacklistBtn" Content="Ajouter" Canvas.Left="330" Canvas.Top="100" Click="AddBlacklistBtn"/>
+                            <Button x:Name="removeBlacklistBtn" Content="Supprimer" Canvas.Left="380" Canvas.Top="100" Click="RemoveBlacklistBtn"/>
                         </Canvas>
                     </TabItem>
+
+
+
+
                 </TabControl>
                 <Button x:Name="changeLanguage" Content="Changer la langue" HorizontalAlignment="Left" Margin="87,44,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLanguage_Click"/>
                 <Button x:Name="changeLogsFormat" Content="Changer le format des logs" HorizontalAlignment="Left" Margin="87,172,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLogsFormat_Click"/>
                 <Button x:Name="blacklist" Content="Blacklist" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Center" Height="80" Width="483" Click="blacklist_Click"/>
-                <Button Content="Blacklist" HorizontalAlignment="Left" Margin="87,460,0,0" VerticalAlignment="Top" Height="80" Width="483"/>
+                <!--<Button HorizontalAlignment="Left" Margin="87,460,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="Button_Click"/>-->
             </Grid>
         </Canvas>
     </Grid>

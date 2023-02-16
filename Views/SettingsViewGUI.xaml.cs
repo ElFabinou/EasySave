@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static easysave.Objects.LanguageHandler;
 using System.Resources;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace easysave.Views
 {
@@ -29,6 +30,7 @@ namespace easysave.Views
         public SettingsViewGUI()
         {
             InitializeComponent();
+            LoadBlacklist();
             Array allLanguages = Enum.GetNames(typeof(Language));
             int languageIndex = 0;
             for (int i = 0; i<allLanguages.Length; i++)
@@ -98,6 +100,27 @@ namespace easysave.Views
             changeLanguage.Content = language.GetString("gui-tabItemLanguage");
             changeLogsFormat.Content = language.GetString("gui-tabItemFormat");
             blacklist.Content = language.GetString("gui-tabItemBlacklist");
+        }
+
+        private void AddBlacklistBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxBlacklist.Text;
+            BlacklistModelView blacklist = new BlacklistModelView();
+            blacklist.CallAddBlacklist(text);
+            LoadBlacklist();
+        }
+        private void RemoveBlacklistBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxBlacklist.Text;
+            BlacklistModelView blacklist = new BlacklistModelView();
+            blacklist.CallRemoveBlacklist(text);
+            LoadBlacklist();
+        }
+
+        private void LoadBlacklist()
+        {
+            BlacklistModelView blacklist = new BlacklistModelView();
+            ListViewBlacklist.ItemsSource = blacklist.GetBlacklist();
         }
     }
 }

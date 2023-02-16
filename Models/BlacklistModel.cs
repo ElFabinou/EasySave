@@ -18,9 +18,6 @@ namespace easysave.Models
         public BlacklistModel()
         {   
             _processNames = new List<string>();
-            //_processNames = LoadBlacklistFromFile();
-            //_blacklist = new BlacklistModel();
-            //Récuperer le nom des logiciel dans le fichier json
         }
 
         public BlacklistModel _blacklist;
@@ -28,16 +25,13 @@ namespace easysave.Models
 
         public bool StartProcessMonitor()
         {
-            //_processNames.Add("Calculator");
             var runningProcesses = Process.GetProcesses();
             foreach (var process in runningProcesses)
             {
-                Console.WriteLine(process.ProcessName);
-                Console.WriteLine(ContainsProcess(process.ProcessName));
+                //Console.WriteLine(process.ProcessName);
+                //Console.WriteLine(ContainsProcess(process.ProcessName));
                 if (ContainsProcess(process.ProcessName))
                 {
-                    //Le processus est dans la liste noire, vous pouvez effectuer l'action appropriée ici...
-                    Console.WriteLine("Blacklist detecté");
                     return false;
                 }
             }
