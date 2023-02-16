@@ -33,12 +33,12 @@ namespace easysave.ViewModels
             return list;
         }
 
-        public bool CallStartProcess()
-        {
-            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
-            //bool result = cryptosoftExtensionModel.StartCheckCryptosoft();
-            return result;
-        }
+        //public bool CallStartProcess()
+        //{
+        //    CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
+        //    //bool result = cryptosoftExtensionModel.StartCheckCryptosoft();
+        //    //return result;
+        //}
     }
 
 
