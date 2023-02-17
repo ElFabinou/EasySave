@@ -28,8 +28,6 @@ namespace easysave.Models
             var runningProcesses = Process.GetProcesses();
             foreach (var process in runningProcesses)
             {
-                //Console.WriteLine(process.ProcessName);
-                //Console.WriteLine(ContainsProcess(process.ProcessName));
                 if (ContainsProcess(process.ProcessName))
                 {
                     return false;
@@ -44,11 +42,18 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<string> processes = getAllProcesses();
-            processes.Add(processName);
-            string jsonString = JsonConvert.SerializeObject(processes, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path + "blacklist.json"))
+            if(processes.Contains(processName))
             {
-                streamWriter.Write(jsonString);
+                Console.WriteLine("Déjà ajouter");
+            }
+            else
+            {
+                processes.Add(processName);
+                string jsonString = JsonConvert.SerializeObject(processes, Newtonsoft.Json.Formatting.Indented);
+                using (var streamWriter = new StreamWriter(path + "blacklist.json"))
+                {
+                    streamWriter.Write(jsonString);
+                }
             }
         }
 
@@ -57,12 +62,20 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<string> processes = getAllProcesses();
-            processes.Remove(processName);
-            string jsonString = JsonConvert.SerializeObject(processes, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path + "blacklist.json"))
+            if (processes.Contains(processName))
             {
-                streamWriter.Write(jsonString);
+                processes.Remove(processName);
+                string jsonString = JsonConvert.SerializeObject(processes, Newtonsoft.Json.Formatting.Indented);
+                using (var streamWriter = new StreamWriter(path + "blacklist.json"))
+                {
+                    streamWriter.Write(jsonString);
+                }
             }
+            else
+            {
+                Console.WriteLine("Déjà supprimer");
+            }
+            
         }
 
         public List<string> getAllProcesses()
