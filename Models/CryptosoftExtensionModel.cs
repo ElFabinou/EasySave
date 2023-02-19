@@ -20,8 +20,12 @@ namespace easysave.Models
             _extensions = new List<string>();
         }
 
-        public BlacklistModel _blacklist;
+        public CryptosoftExtensionModel cryptosoftExtensionModel;
 
+        public bool CheckFileExtension(string extension)
+        {
+            return ContainsExtension(extension);
+        }
 
         public void AddCryptosoftExtension(string extension)
         {
@@ -65,7 +69,7 @@ namespace easysave.Models
             }
         }
 
-        public bool ContainsProcess(string extension)
+        public bool ContainsExtension(string extension)
         {
             return getExtensionList().Contains(extension);
         }

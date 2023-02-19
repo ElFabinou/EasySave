@@ -91,6 +91,12 @@ namespace easysave.Views
             tabSelector.SelectedIndex = 2;
         }
 
+        private void cryptosoft_extensions_Click(object sender, RoutedEventArgs e)
+        {
+            tabSelector.SelectedIndex = 3;
+        }
+
+
         private void translateAllItems()
         {
             tabItemLanguage.Text = language.GetString("gui-tabItemLanguage");
@@ -119,8 +125,34 @@ namespace easysave.Views
 
         private void LoadBlacklist()
         {
-            BlacklistModelView blacklist = new BlacklistModelView();
-            ListViewBlacklist.ItemsSource = blacklist.GetBlacklist();
+            BlacklistModelView extensionViewModel = new BlacklistModelView();
+            ListViewBlacklist.ItemsSource = extensionViewModel.GetBlacklist();
+        }
+
+        private void AddExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxExtensions.Text;
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            extensionViewModel.CallAddCryptosoftExtension(text);
+            LoadExtensionList();
+        }
+        private void RemoveExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxExtensions.Text;
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            extensionViewModel.CallRemoveCryptosoftExtension(text);
+            LoadExtensionList();
+        }
+
+        private void LoadExtensionList()
+        {
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            ListViewExtensions.ItemsSource = extensionViewModel.GetExtensionList();
+         }
+
+        private void mainMenu_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(null);
         }
     }
 }

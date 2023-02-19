@@ -10,35 +10,36 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using easysave.Models;
+using System.Windows.Markup;
 
 namespace easysave.ViewModels
 {
-    public class CryptosoftExtensionModelView
+    public class CryptosoftExtensionViewModel
     {
-        public void CallAddBlacklist(string extension) {
+        public void CallAddCryptosoftExtension(string extension) {
             CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
             cryptosoftExtensionModel.AddCryptosoftExtension(extension);
         }
 
-        public void CallRemoveBlacklist(string extension)
+        public void CallRemoveCryptosoftExtension(string extension)
         {
             CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
             cryptosoftExtensionModel.RemoveCryptosoftExtension(extension);
         }
 
-        public List<string> GetBlacklist()
+        public List<string> GetExtensionList()
         {
             CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
             List<string> list = cryptosoftExtensionModel.getExtensionList();
             return list;
         }
 
-        //public bool CallStartProcess()
-        //{
-        //    CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
-        //    //bool result = cryptosoftExtensionModel.StartCheckCryptosoft();
-        //    //return result;
-        //}
+        public bool CheckFileExtension(string extension)
+        {
+            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
+            bool result = cryptosoftExtensionModel.CheckFileExtension(extension);
+            return result;
+        }
     }
 
 
