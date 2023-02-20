@@ -17,6 +17,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static easysave.Objects.LanguageHandler;
 using System.Resources;
+using easysave.Models;
+using System.IO;
 
 namespace easysave.Views
 {
@@ -58,8 +60,17 @@ namespace easysave.Views
         private void translateAllItems()
         {
             title.Text = language.GetString("gui_LoadingViewGUI_title");
+            //encrypt.Content = language.GetString("gui_LoadingViewGUI_encrypt");
             tabHeader_path.Header = language.GetString("gui_LoadingViewGUI_tabHeader_path");
             tabHeader_size.Header = language.GetString("gui_LoadingViewGUI_tabHeader_size");
         }
+
+        /*private void TextBox_TextChanged(object sender,  TextChangedEventArgs e)
+        {
+            RegisteredSaveModel cryptosoft = new RegisteredSaveModel();
+            CryptosoftExtensionModel hasExtension = new CryptosoftExtensionModel();
+                encryptTime.Text = $"{cryptosoft.cryptosoft(cryptosoft.sourcePath, cryptosoft.destFile)} ms";
+        }
+        */
     }
 }

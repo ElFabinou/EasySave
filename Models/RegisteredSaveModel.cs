@@ -14,6 +14,9 @@ using System.Linq;
 using easysave.Views;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Windows.Shell;
 
 namespace easysave.Models
 {
@@ -22,11 +25,16 @@ namespace easysave.Models
         public RegisteredSaveWork? registeredSaveWork;
 
         private int doneFiles = 0;
+        public string sourcePath;
+        public FileInfo destFile;
+        long encryptTime = 0;
 
 
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
             this.registeredSaveWork = registeredSaveWork;
+            this.sourcePath = "";
+            this.destFile = null;
         }
 
         public ResourceManager language;
@@ -110,8 +118,7 @@ namespace easysave.Models
             blacklist.CallRemoveBlacklist("Test");
             bool result = blacklist.CallStartProcess();
 
-
-
+            Process process = new Process();
 
             if (!result) {
                 return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
@@ -141,10 +148,12 @@ namespace easysave.Models
                     loadingViewGUI.Show();
                     System.Windows.Threading.Dispatcher.Run();
                 }
+
+ 
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader, loadingViewGUI);
-                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
+                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath(), encryptTime);
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
@@ -176,7 +185,7 @@ namespace easysave.Models
                     loader.setIsFile(false);
                     loader.setFolder(dir);
                     registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
+                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName, encryptTime);
                 }
 
                 // Get the files in the directory and copy them to the new location.
@@ -186,7 +195,10 @@ namespace easysave.Models
                     ++doneFiles;
                     string temppath = Path.Combine(destDirName, file.Name);
                     string sourcepath = Path.Combine(sourceDirName, file.Name);
+                    this.sourcePath= sourcepath;
                     FileInfo destFile = new FileInfo(temppath);
+                    this.destFile = destFile;
+
                     if ((int)type == 1)
                     {
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
@@ -198,7 +210,7 @@ namespace easysave.Models
                             loader.setFile(file);
                             loader.setIsFile(true);
                             registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
                         }
                     }
                     else
@@ -210,8 +222,31 @@ namespace easysave.Models
                         loader.setFile(file);
                         loader.setIsFile(true);
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
                     }
+
+                    //encrypt files
+                    CryptosoftExtensionModel hasExtension = new CryptosoftExtensionModel();
+                    string extension = Path.GetExtension(Path.GetFullPath(file.FullName));
+                    if (hasExtension.CheckFileExtension(extension))
+                    {
+                        string key = "DQmCDq0RlUU=";
+                        string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
+                        using (Process CryptoSoft = new Process())
+                        {
+                            var encryptionTime = new Stopwatch();
+                            CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
+                            CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
+                            CryptoSoft.StartInfo.CreateNoWindow = true;
+                            CryptoSoft.Start();
+                            encryptionTime.Start();
+                            CryptoSoft.WaitForExit();
+                            encryptionTime.Stop();
+                            this.encryptTime = encryptionTime.ElapsedMilliseconds;
+                        }
+                    }
+
                 }
 
                 // If copying subdirectories, copy them and their contents to new location.
@@ -227,7 +262,7 @@ namespace easysave.Models
                         loader.setFolder(subdir);
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
-                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
+                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
                     }
                 }
             }
@@ -237,7 +272,7 @@ namespace easysave.Models
             }
         }
 
-        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath)
+        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime)
         {
             StateLog stateLog = new StateLog();
             stateLog!.setProgression(progression);
@@ -253,6 +288,7 @@ namespace easysave.Models
             dailyLog.setDuration(duration);
             dailyLog.setSource(sourcePath);
             dailyLog.setDestPath(destPath);
+            dailyLog.setEncryptTime(encryptTime);
             LoggerHandler loggerHandler = new LoggerHandler(stateLog, dailyLog);
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
             loggerModel.updateStateLog();

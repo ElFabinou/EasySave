@@ -282,4 +282,7 @@
   <data name="gui_SaveWorkListViewGUI_deleteSaveWork" xml:space="preserve">
     <value>Delete save works</value>
   </data>
+  <data name="gui_LoadingViewGUI_encrypt" xml:space="preserve">
+    <value>Encryption Time : </value>
+  </data>
 </root>
