@@ -16,6 +16,7 @@ using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Threading;
 
 namespace easysave.Views
 {
@@ -24,13 +25,31 @@ namespace easysave.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string UniqueName = "EasySave";
+        private static Mutex mutex;
+
         public ResourceManager language;
-        
+
         public MainWindow()
         {
+            mutex = new Mutex(true, UniqueName, out bool createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show("L'application est déjà en cours d'exécution", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                mutex.Dispose();
+                Application.Current.Shutdown();
+                return;
+            }
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
+        }
+
+        //Méthode appelé automatiquement quand l'utilisateur ferme l'application
+        protected override void OnClosed(EventArgs e)
+        {
+            mutex?.Dispose();//Si le mutex n'est pas null, on le libère (pour éviter l'erreur s'il est null)
+            base.OnClosed(e);//Call la méthode de la class base. Permet de bien gérer la fermeture
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
