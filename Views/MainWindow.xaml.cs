@@ -16,22 +16,67 @@ using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
 
 namespace easysave.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public ResourceManager language;
-        
+        private Socket serverSocket;
+        private Thread serverThread;
+
         public MainWindow()
         {
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket.Bind(new IPEndPoint(IPAddress.Any, 12345));
+            serverThread = new Thread(new ThreadStart(Listen));
+            serverThread.Start();
         }
+
+        private void Listen()
+        {
+            serverSocket.Listen(5);
+            while (true)
+            {
+                Socket clientSocket = serverSocket.Accept();
+                Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClient));
+                clientThread.Start(clientSocket);
+            }
+        }
+
+        private void HandleClient(object client)
+        {
+            Socket clientSocket = (Socket)client;
+            byte[] buffer = new byte[1024];
+            int bytesReceived = 0;
+            while (true)
+            {
+                try
+                {
+                    bytesReceived = clientSocket.Receive(buffer);
+                    if (bytesReceived == 0)
+                    {
+                        break;
+                    }
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+                    //Dispatcher.Invoke(() => messagesList.Items.Add(message));
+                    Dispatcher.Invoke(() => Console.WriteLine(message));
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            clientSocket.Shutdown(SocketShutdown.Both);
+            clientSocket.Close();
+        }
+
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
