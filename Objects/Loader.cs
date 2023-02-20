@@ -1,4 +1,5 @@
-﻿using System;
+﻿using easysave.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,10 +11,21 @@ namespace easysave.Objects
     public class Loader
     {
 
+        public RegisteredSaveModel registeredSaveModel;
         public double percentage { get; set; }
         public FileInfo fileInfo { get; set; }
         public DirectoryInfo directoryInfo { get; set; }
         public bool isFile { get; set; }
+
+        public RegisteredSaveModel getSaveModel()
+        {
+            return registeredSaveModel;
+        }
+
+        public void setSaveModel(RegisteredSaveModel saveModel)
+        {
+            this.registeredSaveModel = saveModel;
+        }
 
         public void setIsFile(bool isFile)
         {

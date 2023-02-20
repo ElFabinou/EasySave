@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Resources;
+using System.Threading;
 
 namespace easysave.Models
 {
@@ -15,7 +16,7 @@ namespace easysave.Models
     {
 
         public LoggerHandler loggerHandler;
-
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         public LoggerHandlerModel(LoggerHandler loggerHandler)
         {
@@ -64,6 +65,7 @@ namespace easysave.Models
 
         public void updateStateLog()
         {
+            _semaphore.Wait();
             List<StateLog> stateLogs = getAllStateLog();
             stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -88,10 +90,12 @@ namespace easysave.Models
                     }
                     break;
             }
+            _semaphore.Release();
         }
 
         public void updateDailyLog()
         {
+            _semaphore.Wait();
             List<DailyLog> dailyLogs = getAllDailyLog();
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -111,6 +115,7 @@ namespace easysave.Models
                     streamWriter.Write(jsonString);
                 }
             }
+            _semaphore.Release();
         }
 
         public List<StateLog> getAllStateLog()

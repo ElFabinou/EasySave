@@ -29,16 +29,17 @@ namespace easysave.Views
         private List<item> items = new List<item>();
 
         public ResourceManager language;
-
+        public RegisteredSaveViewModel registeredSaveViewModel;
         private class item
         {
             public string path { get; set; }
             public string size { get; set; }
         }
 
-        public LoadingViewGUI()
+        public LoadingViewGUI(RegisteredSaveViewModel? registeredSaveViewModel = null)
         {
             InitializeComponent();
+            this.registeredSaveViewModel = registeredSaveViewModel;
             this.language = Instance.rm;
             translateAllItems();
         }

@@ -12,33 +12,41 @@ namespace easysave.ViewModels
     public class RegisteredSaveViewModel
     {
         public RegisteredSaveWork? registeredSaveWork;
+        public RegisteredSaveModel? registeredSaveModel;
 
         public RegisteredSaveViewModel(RegisteredSaveWork? registeredSaveWork = null)
         {
                 this.registeredSaveWork = registeredSaveWork;
+                this.registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+        }
+
+        public void initPause()
+        {
+            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            registeredSaveModel.Pause();
         }
 
         public ReturnHandler initSlotCreation()
         {
-            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
             return registeredSaveModel.addRegisteredSaveWork();
         }
 
         public List<RegisteredSaveWork> initSlotSelection()
         {
-            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel();
+            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
             return registeredSaveModel.getAllRegisteredSaveWork();
         }
 
         public ReturnHandler initSlotDeletion()
         {
-            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
             return registeredSaveModel.deleteRegisteredWork();
         }
 
         public async Task<ReturnHandler> initRegisteredSaveWork()
         {
-            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
+            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
             return await registeredSaveModel.copyFilesToTarget();
         }
 

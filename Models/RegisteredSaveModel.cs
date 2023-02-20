@@ -14,6 +14,7 @@ using System.Linq;
 using easysave.Views;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace easysave.Models
 {
@@ -27,6 +28,22 @@ namespace easysave.Models
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
             this.registeredSaveWork = registeredSaveWork;
+        }
+
+        private bool isPaused = false;
+
+        public void Pause()
+        {
+            isPaused = true;
+        }
+
+        public void Resume()
+        {
+            isPaused = false;
+            lock (this)
+            {
+                Monitor.PulseAll(this);
+            }
         }
 
         public ResourceManager language;
@@ -103,16 +120,8 @@ namespace easysave.Models
 
         public async Task<ReturnHandler> copyFilesToTarget()
         {
-
-            //BlacklistModel Blacklistobj = new BlacklistModel();
-            //Blacklistobj.RemoveProcessName("Hello");
             BlacklistModelView blacklist = new BlacklistModelView();
-            blacklist.CallRemoveBlacklist("Test");
             bool result = blacklist.CallStartProcess();
-
-
-
-
             if (!result) {
                 return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
             }
@@ -228,6 +237,13 @@ namespace easysave.Models
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
                         callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
+                    }
+                }
+                lock (this)
+                {
+                    while (isPaused)
+                    {
+                        Monitor.Wait(this);
                     }
                 }
             }
