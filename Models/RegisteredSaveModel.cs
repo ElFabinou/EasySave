@@ -34,16 +34,16 @@ namespace easysave.Models
 
         public void Pause()
         {
-            isPaused = true;
-        }
-
-        public void Resume()
-        {
-            isPaused = false;
-            lock (this)
+            if(isPaused)
             {
-                Monitor.PulseAll(this);
+                isPaused = false;
+                lock (this)
+                {
+                    Monitor.PulseAll(this);
+                }
+                return;
             }
+            isPaused = true;
         }
 
         public ResourceManager language;
@@ -131,12 +131,13 @@ namespace easysave.Models
                 DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
                 Loader loader = new Loader();
+                loader.setSaveModel(this);
                 LoadingViewGUI loadingViewGUI = null;
                 if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     System.Threading.Thread thread = new System.Threading.Thread(() =>
                     {
-                        loadingViewGUI = new LoadingViewGUI();
+                        loadingViewGUI = new LoadingViewGUI(loader);
                         loadingViewGUI.Show();
                         System.Windows.Threading.Dispatcher.Run();
                     });
@@ -146,7 +147,7 @@ namespace easysave.Models
                 }
                 else
                 {
-                    loadingViewGUI = new LoadingViewGUI();
+                    loadingViewGUI = new LoadingViewGUI(loader);
                     loadingViewGUI.Show();
                     System.Windows.Threading.Dispatcher.Run();
                 }
@@ -167,6 +168,13 @@ namespace easysave.Models
         {
             try
             {
+                lock (this)
+                {
+                    while (isPaused)
+                    {
+                        Monitor.Wait(this);
+                    }
+                }
                 RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
                 // Get the subdirectories for the specified directory.
                 DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -184,6 +192,7 @@ namespace easysave.Models
                     loader.setPercentage(totalFile, doneFiles);
                     loader.setIsFile(false);
                     loader.setFolder(dir);
+                    loader.setSaveModel(this);
                     registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                     callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
                 }
@@ -206,6 +215,7 @@ namespace easysave.Models
                             totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                             loader.setFile(file);
                             loader.setIsFile(true);
+                            loader.setSaveModel(this);
                             registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                         }
@@ -218,8 +228,16 @@ namespace easysave.Models
                         totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                         loader.setFile(file);
                         loader.setIsFile(true);
+                        loader.setSaveModel(this);
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                         callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                    }
+                    lock (this)
+                    {
+                        while (isPaused)
+                        {
+                            Monitor.Wait(this);
+                        }
                     }
                 }
 
@@ -234,16 +252,17 @@ namespace easysave.Models
                         loader.setPercentage(totalFile, doneFiles);
                         loader.setIsFile(false);
                         loader.setFolder(subdir);
+                        loader.setSaveModel(this);
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
                         callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
-                    }
-                }
-                lock (this)
-                {
-                    while (isPaused)
-                    {
-                        Monitor.Wait(this);
+                        lock (this)
+                        {
+                            while (isPaused)
+                            {
+                                Monitor.Wait(this);
+                            }
+                        }
+                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
                     }
                 }
             }

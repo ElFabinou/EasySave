@@ -17,36 +17,35 @@ namespace easysave.ViewModels
         public RegisteredSaveViewModel(RegisteredSaveWork? registeredSaveWork = null)
         {
                 this.registeredSaveWork = registeredSaveWork;
-                this.registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
         }
 
         public void initPause()
         {
-            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             registeredSaveModel.Pause();
         }
 
         public ReturnHandler initSlotCreation()
         {
-            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             return registeredSaveModel.addRegisteredSaveWork();
         }
 
         public List<RegisteredSaveWork> initSlotSelection()
         {
-            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             return registeredSaveModel.getAllRegisteredSaveWork();
         }
 
         public ReturnHandler initSlotDeletion()
         {
-            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             return registeredSaveModel.deleteRegisteredWork();
         }
 
         public async Task<ReturnHandler> initRegisteredSaveWork()
         {
-            RegisteredSaveModel registeredSaveModel = this.registeredSaveModel;
+            RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
             return await registeredSaveModel.copyFilesToTarget();
         }
 
@@ -61,6 +60,12 @@ namespace easysave.ViewModels
                     loadingViewGUI.setPercentage(loader);
                 });
             }
+        }
+
+        public void initPause(RegisteredSaveModel _registeredSaveModel)
+        {
+            RegisteredSaveModel registeredSaveModel = _registeredSaveModel;
+            registeredSaveModel.Pause();
         }
     }
 }
