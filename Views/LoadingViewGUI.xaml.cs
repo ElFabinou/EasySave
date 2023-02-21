@@ -154,5 +154,16 @@ namespace easysave.Views
                 this.Close();
             }
         }
+
+        public void displayInterruptBlacklist()
+        {
+            MessageBoxResult result = MessageBox.Show("Blacklisted process has been started.", "Close it and continue", MessageBoxButton.OK, MessageBoxImage.Question);
+            if (result == MessageBoxResult.OK)
+            {
+                RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                registeredSaveViewModel.initPause(loader.getSaveModel());
+                // Close the form
+            }
+        }
     }
 }

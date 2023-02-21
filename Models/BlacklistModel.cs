@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace easysave.Models
 {
@@ -25,10 +26,12 @@ namespace easysave.Models
 
         public bool StartProcessMonitor()
         {
-            var runningProcesses = Process.GetProcesses();
-            foreach (var process in runningProcesses)
+            foreach (var process in getAllProcesses())
             {
-                if (ContainsProcess(process.ProcessName))
+                var test = Process.GetProcessesByName(process).Length;
+                var test2 = process;
+                Console.WriteLine(test2+ " " + test);
+                if (Process.GetProcessesByName(process).Length > 0)
                 {
                     return false;
                 }

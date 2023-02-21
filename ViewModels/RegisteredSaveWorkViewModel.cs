@@ -53,6 +53,7 @@ namespace easysave.ViewModels
         {
             SaveWorkView saveWorkView = new SaveWorkView();
             saveWorkView.sendPercentage(loader);
+            loadingViewGUI = loader.loadingViewGUI;
             if(loadingViewGUI!= null)
             {
                 loadingViewGUI.Dispatcher.Invoke(() =>
@@ -73,5 +74,15 @@ namespace easysave.ViewModels
             RegisteredSaveModel registeredSaveModel = _registeredSaveModel;
             registeredSaveModel.Stop();
         }
+
+        public void blacklistInterrupt(Loader loader)
+        {
+            LoadingViewGUI loadingViewGUI = loader.loadingViewGUI;
+            loadingViewGUI.Dispatcher.Invoke(() =>
+            {
+                loadingViewGUI.displayInterruptBlacklist();
+            });
+        }
+
     }
 }

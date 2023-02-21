@@ -15,6 +15,8 @@ using easysave.Views;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace easysave.Models
 {
@@ -58,6 +60,8 @@ namespace easysave.Models
         }
 
         public ResourceManager language;
+
+
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -132,8 +136,8 @@ namespace easysave.Models
         public async Task<ReturnHandler> copyFilesToTarget()
         {
             BlacklistModelView blacklist = new BlacklistModelView();
-            bool result = blacklist.CallStartProcess();
-            if (!result) {
+            bool resultBl = blacklist.CallStartProcess();
+            if (!resultBl) {
                 return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
             }
             try
@@ -141,15 +145,14 @@ namespace easysave.Models
                 this.language = Instance.rm;
                 DirectoryInfo root = new DirectoryInfo(registeredSaveWork!.getSourcePath());
                 var fileCount = System.IO.Directory.GetDirectories(registeredSaveWork.getSourcePath(), "*", SearchOption.AllDirectories).Count() + System.IO.Directory.GetFiles(registeredSaveWork.getSourcePath(), "*.*", SearchOption.AllDirectories).Count(); ;
-                Loader loader = new Loader();
-                loader.setSaveModel(this);
-                LoadingViewGUI loadingViewGUI = null;
+                Loader loader = null;
                 if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     System.Threading.Thread thread = new System.Threading.Thread(() =>
                     {
-                        loadingViewGUI = new LoadingViewGUI(loader);
-                        loadingViewGUI.Show();
+                        // Remove "Loader" type from this line
+                        loader = new Loader();
+                        loader.setSaveModel(this);
                         System.Windows.Threading.Dispatcher.Run();
                     });
                     thread.SetApartmentState(System.Threading.ApartmentState.STA);
@@ -158,13 +161,15 @@ namespace easysave.Models
                 }
                 else
                 {
-                    loadingViewGUI = new LoadingViewGUI(loader);
-                    loadingViewGUI.Show();
+                    loader = new Loader();
+                    loader.setSaveModel(this);
                     System.Windows.Threading.Dispatcher.Run();
                 }
+
+                // Now the "loader" variable is defined in both branches of the if statement
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
-                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader, loadingViewGUI);
+                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
                 callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
@@ -175,8 +180,9 @@ namespace easysave.Models
             }
         }
 
-        public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader, LoadingViewGUI loadingViewGUI)
+        public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
         {
+            BlacklistModelView blacklist = new BlacklistModelView();
             try
             {
                 lock (this)
@@ -197,6 +203,12 @@ namespace easysave.Models
                 }
                 DirectoryInfo[] dirs = dir.GetDirectories();
                 // If the destination directory doesn't exist, create it.
+                bool resultBl = blacklist.CallStartProcess();
+                if (!resultBl)
+                {
+                    Pause();
+                    registeredSaveViewModel.blacklistInterrupt(loader);
+                }
                 if (!Directory.Exists(destDirName))
                 {
                     Directory.CreateDirectory(destDirName);
@@ -204,14 +216,19 @@ namespace easysave.Models
                     loader.setIsFile(false);
                     loader.setFolder(dir);
                     loader.setSaveModel(this);
-                    registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                    registeredSaveViewModel.notifyViewPercentage(loader);
                     callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
                 }
-
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
                 foreach (FileInfo file in files)
                 {
+                    resultBl = blacklist.CallStartProcess();
+                    if (!resultBl)
+                    {
+                        Pause();
+                        registeredSaveViewModel.blacklistInterrupt(loader);
+                    }
                     ++doneFiles;
                     string temppath = Path.Combine(destDirName, file.Name);
                     string sourcepath = Path.Combine(sourceDirName, file.Name);
@@ -251,11 +268,17 @@ namespace easysave.Models
 
                             if (!isStopped)
                             {
+                                resultBl = blacklist.CallStartProcess();
+                                if (!resultBl)
+                                {
+                                    Pause();
+                                    registeredSaveViewModel.blacklistInterrupt(loader);
+                                }
                                 totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                                 loader.setFile(file);
                                 loader.setIsFile(true);
                                 loader.setSaveModel(this);
-                                registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                                registeredSaveViewModel.notifyViewPercentage(loader);
                                 callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                             }
                         }
@@ -264,7 +287,12 @@ namespace easysave.Models
                     {
                         bool stopCopy = false;
                         double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-
+                        resultBl = blacklist.CallStartProcess();
+                        if (!resultBl)
+                        {
+                            Pause();
+                            registeredSaveViewModel.blacklistInterrupt(loader);
+                        }
                         try
                         {
                             using (var fileStream = new FileStream(sourcepath, FileMode.Open, FileAccess.Read))
@@ -294,11 +322,17 @@ namespace easysave.Models
 
                         if (!isStopped)
                         {
+                            resultBl = blacklist.CallStartProcess();
+                            if (!resultBl)
+                            {
+                                Pause();
+                                registeredSaveViewModel.blacklistInterrupt(loader);
+                            }
                             totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                             loader.setFile(file);
                             loader.setIsFile(true);
                             loader.setSaveModel(this);
-                            registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                            registeredSaveViewModel.notifyViewPercentage(loader);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                         }
                     }
@@ -310,12 +344,16 @@ namespace easysave.Models
                         }
                     }
                 }
-
                 // If copying subdirectories, copy them and their contents to new location.
                 if (copySubDirs)
                 {
                     foreach (DirectoryInfo subdir in dirs)
                     {
+                        resultBl = blacklist.CallStartProcess();
+                        if (!resultBl)
+                        {
+                            Pause();
+                        }
                         ++doneFiles;
                         string temppath = Path.Combine(destDirName, subdir.Name);
                         string sourcepath = Path.Combine(sourceDirName, subdir.Name);
@@ -323,7 +361,7 @@ namespace easysave.Models
                         loader.setIsFile(false);
                         loader.setFolder(subdir);
                         loader.setSaveModel(this);
-                        registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                        registeredSaveViewModel.notifyViewPercentage(loader);
                         callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
                         lock (this)
                         {
@@ -332,7 +370,7 @@ namespace easysave.Models
                                 Monitor.Wait(this);
                             }
                         }
-                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader, loadingViewGUI);
+                        DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
                     }
                 }
             }
