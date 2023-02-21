@@ -17,6 +17,8 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Shell;
+using System.Runtime.InteropServices;
+
 
 namespace easysave.Models
 {
@@ -25,16 +27,12 @@ namespace easysave.Models
         public RegisteredSaveWork? registeredSaveWork;
 
         private int doneFiles = 0;
-        public string sourcePath;
-        public FileInfo destFile;
         long encryptTime = 0;
 
 
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
             this.registeredSaveWork = registeredSaveWork;
-            this.sourcePath = "";
-            this.destFile = null;
         }
 
         public ResourceManager language;
@@ -190,14 +188,14 @@ namespace easysave.Models
 
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
+                CryptosoftExtensionModel hasExtension = new CryptosoftExtensionModel();
                 foreach (FileInfo file in files)
                 {
                     ++doneFiles;
                     string temppath = Path.Combine(destDirName, file.Name);
                     string sourcepath = Path.Combine(sourceDirName, file.Name);
-                    this.sourcePath= sourcepath;
                     FileInfo destFile = new FileInfo(temppath);
-                    this.destFile = destFile;
+                    string extension = Path.GetExtension(Path.GetFullPath(file.FullName));
 
                     if ((int)type == 1)
                     {
@@ -210,7 +208,20 @@ namespace easysave.Models
                             loader.setFile(file);
                             loader.setIsFile(true);
                             registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                            //encrypt files if extension is defined in settings
+                            if (hasExtension.CheckFileExtension(extension))
+                            {
+                                var encryptionTime = new Stopwatch();
+                                encryptionTime.Start();
+                                Cryptosoft(sourcepath, temppath);
+                                encryptionTime.Stop();
+                                this.encryptTime = encryptionTime.ElapsedMilliseconds;
+                                callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                            }
+                            else
+                            {
+                                callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                            }
                         }
                     }
                     else
@@ -222,28 +233,19 @@ namespace easysave.Models
                         loader.setFile(file);
                         loader.setIsFile(true);
                         registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
-                    }
-
-                    //encrypt files
-                    CryptosoftExtensionModel hasExtension = new CryptosoftExtensionModel();
-                    string extension = Path.GetExtension(Path.GetFullPath(file.FullName));
-                    if (hasExtension.CheckFileExtension(extension))
-                    {
-                        string key = "DQmCDq0RlUU=";
-                        string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-
-                        using (Process CryptoSoft = new Process())
+                        //encrypt files if extension is defined in settings
+                        if (hasExtension.CheckFileExtension(extension))
                         {
                             var encryptionTime = new Stopwatch();
-                            CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
-                            CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
-                            CryptoSoft.StartInfo.CreateNoWindow = true;
-                            CryptoSoft.Start();
                             encryptionTime.Start();
-                            CryptoSoft.WaitForExit();
+                            Cryptosoft(sourcepath, temppath);
                             encryptionTime.Stop();
                             this.encryptTime = encryptionTime.ElapsedMilliseconds;
+                            callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                        }
+                        else
+                        {
+                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
                         }
                     }
 
@@ -270,6 +272,21 @@ namespace easysave.Models
             {
                 throw new Exception(ex.ToString());
             }
+        }
+
+        public void Cryptosoft(string sourcepath, string destFile)
+        {
+                string key = "DQmCDq0RlUU=";
+                string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
+                using (Process CryptoSoft = new Process())
+                {
+                    CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
+                    CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
+                    CryptoSoft.StartInfo.CreateNoWindow = true;
+                    CryptoSoft.Start();
+                    CryptoSoft.WaitForExit();
+                }
         }
 
         public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime)
