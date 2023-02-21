@@ -26,6 +26,7 @@ namespace easysave.Models
 
         private int doneFiles = 0;
 
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
@@ -211,6 +212,7 @@ namespace easysave.Models
                 }
                 if (!Directory.Exists(destDirName))
                 {
+                    _semaphore.Wait();
                     Directory.CreateDirectory(destDirName);
                     loader.setPercentage(totalFile, doneFiles);
                     loader.setIsFile(false);
@@ -218,6 +220,7 @@ namespace easysave.Models
                     loader.setSaveModel(this);
                     registeredSaveViewModel.notifyViewPercentage(loader);
                     callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
+                    _semaphore.Release();
                 }
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
@@ -238,8 +241,11 @@ namespace easysave.Models
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
                         {
                             double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-
-                            try
+                            if (file.Length > 100000000)
+                            {
+                                _semaphore.Wait();
+                            }
+                                try
                             {
                                 using (var fileStream = new FileStream(sourcepath, FileMode.Open, FileAccess.Read))
                                 {
@@ -251,7 +257,7 @@ namespace easysave.Models
                                             {
                                                 while (!isStopped && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
                                                 {
-                                                    if (isStopped) { return; }
+                                                    if (isStopped) { _semaphore.Release(); return; }
                                                     byte[] buffer = streamReader.ReadBytes(1024);
                                                     streamWriter.Write(buffer);
                                                     loader.setPercentage(totalFile, doneFiles);
@@ -265,9 +271,13 @@ namespace easysave.Models
                             {
                                 // Handle any exceptions here
                             }
-
+                            _semaphore.Release();
                             if (!isStopped)
                             {
+                                if (file.Length > 100000000)
+                                {
+                                    _semaphore.Wait();
+                                }
                                 resultBl = blacklist.CallStartProcess();
                                 if (!resultBl)
                                 {
@@ -280,11 +290,13 @@ namespace easysave.Models
                                 loader.setSaveModel(this);
                                 registeredSaveViewModel.notifyViewPercentage(loader);
                                 callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                                _semaphore.Release();
                             }
                         }
                     }
                     else
                     {
+                        _semaphore.Wait();
                         bool stopCopy = false;
                         double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
                         resultBl = blacklist.CallStartProcess();
@@ -319,9 +331,10 @@ namespace easysave.Models
                         {
                             // Handle any exceptions here
                         }
-
+                        _semaphore.Release();
                         if (!isStopped)
                         {
+                            _semaphore.Wait();
                             resultBl = blacklist.CallStartProcess();
                             if (!resultBl)
                             {
@@ -334,6 +347,7 @@ namespace easysave.Models
                             loader.setSaveModel(this);
                             registeredSaveViewModel.notifyViewPercentage(loader);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                            _semaphore.Release();
                         }
                     }
                     lock (this)
@@ -349,6 +363,7 @@ namespace easysave.Models
                 {
                     foreach (DirectoryInfo subdir in dirs)
                     {
+                        _semaphore.Wait();
                         resultBl = blacklist.CallStartProcess();
                         if (!resultBl)
                         {
@@ -370,6 +385,7 @@ namespace easysave.Models
                                 Monitor.Wait(this);
                             }
                         }
+                        _semaphore.Release();
                         DirectoryCopy(subdir.FullName, temppath, copySubDirs, type, totalFile, loader);
                     }
                 }

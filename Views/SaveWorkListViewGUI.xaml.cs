@@ -28,13 +28,13 @@ namespace easysave.Views
     {
         private IList selected;
         public ResourceManager language;
-
+        private RegisteredSaveViewModel viewModel;
         public SaveWorkListViewGUI()
         {
             InitializeComponent();
             language = Instance.rm;
-            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-            List<RegisteredSaveWork>  registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+            viewModel = new RegisteredSaveViewModel();
+            List<RegisteredSaveWork>  registeredSaveViewModelList = viewModel.initSlotSelection();
             listView.ItemsSource = registeredSaveViewModelList;
             translateAllItems();
         }
@@ -43,7 +43,7 @@ namespace easysave.Views
         {
             Parallel.ForEach((IEnumerable<object>)selected, item =>
             {
-                RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)item);
+                viewModel.setSaveWork((RegisteredSaveWork?)item);
                 viewModel.initRegisteredSaveWork();
             });
         }

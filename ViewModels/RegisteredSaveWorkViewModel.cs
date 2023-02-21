@@ -19,6 +19,16 @@ namespace easysave.ViewModels
                 this.registeredSaveWork = registeredSaveWork;
         }
 
+        public void setSaveWork(RegisteredSaveWork registeredSaveWork)
+        {
+            this.registeredSaveWork = registeredSaveWork;
+        }
+
+        public RegisteredSaveWork? getSaveWork()
+        {
+            return this.registeredSaveWork;
+        }
+
         public void initPause()
         {
             RegisteredSaveModel registeredSaveModel = new RegisteredSaveModel(registeredSaveWork);
