@@ -39,9 +39,9 @@ namespace easysave.Models
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            if (File.Exists(path+"saveWorks.json")) return false;
+            if (File.Exists(path + "saveWorks.json")) return false;
             System.IO.Directory.CreateDirectory(@path);
-            var file = File.Create(@path+"saveWorks.json");
+            var file = File.Create(@path + "saveWorks.json");
             file.Close();
             return true;
         }
@@ -55,7 +55,7 @@ namespace easysave.Models
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
             registeredSaveWorksList.Add(registeredSaveWork);
             string jsonString = JsonConvert.SerializeObject(registeredSaveWorksList, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"saveWorks.json"))
+            using (var streamWriter = new StreamWriter(path + "saveWorks.json"))
             {
                 streamWriter.Write(jsonString);
             }
@@ -71,7 +71,7 @@ namespace easysave.Models
             List<RegisteredSaveWork> registeredSaveWorksList = getAllRegisteredSaveWork();
             registeredSaveWorksList.RemoveAll(tempRegisteredSaveWork => tempRegisteredSaveWork.getSaveName() == registeredSaveWork!.getSaveName());
             string jsonString = JsonConvert.SerializeObject(registeredSaveWorksList, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path+"saveWorks.json"))
+            using (var streamWriter = new StreamWriter(path + "saveWorks.json"))
             {
                 streamWriter.Write(jsonString);
             }
@@ -83,7 +83,7 @@ namespace easysave.Models
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             List<RegisteredSaveWork>? registeredSaveWorksList = new List<RegisteredSaveWork>();
             createConfigFileIfNotExists();
-            using (StreamReader r = new StreamReader(path+"saveWorks.json"))
+            using (StreamReader r = new StreamReader(path + "saveWorks.json"))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")
@@ -118,7 +118,8 @@ namespace easysave.Models
 
             Process process = new Process();
 
-            if (!result) {
+            if (!result)
+            {
                 return new ReturnHandler("Error : Blacklist", ReturnHandler.ReturnTypeEnum.Error);
             }
             try
@@ -147,17 +148,17 @@ namespace easysave.Models
                     System.Windows.Threading.Dispatcher.Run();
                 }
 
- 
+
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
-                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader, loadingViewGUI);
+                DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath() + "\\" + registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader, loadingViewGUI);
                 callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath(), encryptTime);
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
-                return new ReturnHandler("Error : "+e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
+                Console.WriteLine("Error : " + e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
+                return new ReturnHandler("Error : " + e.ToString(), ReturnHandler.ReturnTypeEnum.Error);
             }
         }
 
@@ -276,17 +277,17 @@ namespace easysave.Models
 
         public void Cryptosoft(string sourcepath, string destFile)
         {
-                string key = "DQmCDq0RlUU=";
-                string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            string key = "DQmCDq0RlUU=";
+            string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
 
-                using (Process CryptoSoft = new Process())
-                {
-                    CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
-                    CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
-                    CryptoSoft.StartInfo.CreateNoWindow = true;
-                    CryptoSoft.Start();
-                    CryptoSoft.WaitForExit();
-                }
+            using (Process CryptoSoft = new Process())
+            {
+                CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
+                CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
+                CryptoSoft.StartInfo.CreateNoWindow = true;
+                CryptoSoft.Start();
+                CryptoSoft.WaitForExit();
+            }
         }
 
         public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime)
@@ -294,7 +295,7 @@ namespace easysave.Models
             StateLog stateLog = new StateLog();
             stateLog!.setProgression(progression);
             stateLog.setTotalFilesToCopy(totalFiles);
-            stateLog.setRemainingFiles(totalFiles-doneFiles);
+            stateLog.setRemainingFiles(totalFiles - doneFiles);
             stateLog.setState(state);
             stateLog.setTotalFileSize(fileSize);
             DailyLog dailyLog = new DailyLog();
