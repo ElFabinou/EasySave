@@ -29,7 +29,7 @@ namespace easysave.Views
     {
 
         private List<item> items = new List<item>();
-
+        private bool closeAllowed;
         public ResourceManager language;
         public Loader loader;
         public RegisteredSaveViewModel registeredSaveViewModel;
@@ -43,7 +43,10 @@ namespace easysave.Views
 
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true; // this will prevent to close
+            if (!closeAllowed)
+            {
+                e.Cancel = true; // this will prevent to close
+            }
         }
 
 
@@ -100,7 +103,7 @@ namespace easysave.Views
             }
             else if (msg == WM_CLOSE)
             {
-                handled = true;
+                handled = false;
             }
             return IntPtr.Zero;
         }
@@ -137,6 +140,19 @@ namespace easysave.Views
         {
             RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
             registeredSaveViewModel.initPause(loader.getSaveModel());
+        }
+
+        private void stop_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to stop?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                registeredSaveViewModel.initStop(loader.getSaveModel());
+                // Close the form
+                closeAllowed = true;
+                this.Close();
+            }
         }
     }
 }

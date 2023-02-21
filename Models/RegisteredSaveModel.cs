@@ -31,6 +31,7 @@ namespace easysave.Models
         }
 
         private bool isPaused = false;
+        private bool isStopped = false;
 
         public void Pause()
         {
@@ -44,6 +45,16 @@ namespace easysave.Models
                 return;
             }
             isPaused = true;
+        }
+
+        public void Stop()
+        {
+            if (isStopped)
+            {
+                isStopped = true;
+                return;
+            }
+            isStopped = true;
         }
 
         public ResourceManager language;
@@ -210,8 +221,79 @@ namespace easysave.Models
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
                         {
                             double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-                            file.CopyTo(temppath, true);
-                            loader.setPercentage(totalFile, doneFiles);
+
+                            try
+                            {
+                                using (var fileStream = new FileStream(sourcepath, FileMode.Open, FileAccess.Read))
+                                {
+                                    using (var streamReader = new BinaryReader(fileStream))
+                                    {
+                                        using (var fileN = new FileStream(temppath, FileMode.Create, FileAccess.Write))
+                                        {
+                                            using (var streamWriter = new BinaryWriter(fileN))
+                                            {
+                                                while (!isStopped && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
+                                                {
+                                                    if (isStopped) { return; }
+                                                    byte[] buffer = streamReader.ReadBytes(1024);
+                                                    streamWriter.Write(buffer);
+                                                    loader.setPercentage(totalFile, doneFiles);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Handle any exceptions here
+                            }
+
+                            if (!isStopped)
+                            {
+                                totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
+                                loader.setFile(file);
+                                loader.setIsFile(true);
+                                loader.setSaveModel(this);
+                                registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
+                                callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        bool stopCopy = false;
+                        double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+
+                        try
+                        {
+                            using (var fileStream = new FileStream(sourcepath, FileMode.Open, FileAccess.Read))
+                            {
+                                using (var streamReader = new BinaryReader(fileStream))
+                                {
+                                    using (var fileN = new FileStream(temppath, FileMode.Create, FileAccess.Write))
+                                    {
+                                        using (var streamWriter = new BinaryWriter(fileN))
+                                        {
+                                            while (!stopCopy && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
+                                            {
+                                                if (isStopped) { return;  }
+                                                byte[] buffer = streamReader.ReadBytes(1024);
+                                                streamWriter.Write(buffer);
+                                                loader.setPercentage(totalFile, doneFiles);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle any exceptions here
+                        }
+
+                        if (!isStopped)
+                        {
                             totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
                             loader.setFile(file);
                             loader.setIsFile(true);
@@ -219,18 +301,6 @@ namespace easysave.Models
                             registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                         }
-                    }
-                    else
-                    {
-                        double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-                        file.CopyTo(temppath, true);
-                        loader.setPercentage(totalFile, doneFiles);
-                        totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - totalTime;
-                        loader.setFile(file);
-                        loader.setIsFile(true);
-                        loader.setSaveModel(this);
-                        registeredSaveViewModel.notifyViewPercentage(loader, loadingViewGUI);
-                        callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                     }
                     lock (this)
                     {

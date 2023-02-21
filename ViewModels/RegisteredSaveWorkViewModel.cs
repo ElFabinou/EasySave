@@ -67,5 +67,11 @@ namespace easysave.ViewModels
             RegisteredSaveModel registeredSaveModel = _registeredSaveModel;
             registeredSaveModel.Pause();
         }
+
+        public void initStop(RegisteredSaveModel _registeredSaveModel)
+        {
+            RegisteredSaveModel registeredSaveModel = _registeredSaveModel;
+            registeredSaveModel.Stop();
+        }
     }
 }

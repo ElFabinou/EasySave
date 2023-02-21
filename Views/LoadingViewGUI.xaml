@@ -20,7 +20,8 @@
                 </ListView.View>
             </ListView>
             <TextBlock x:Name="title" Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
-            <Button x:Name="pause" Content="Pause" Canvas.Left="693" Canvas.Top="129" Click="pause_Click"/>
+            <Button x:Name="pause" Content="Pause" Canvas.Left="671" Canvas.Top="115" Click="pause_Click"/>
+            <Button x:Name="stop" Content="Stop" Canvas.Left="671" Canvas.Top="143" Click="stop_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Width="35"/>
         </Canvas>
     </Grid>
 </Window>
