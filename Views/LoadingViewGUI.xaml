@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:easysave.Views"
         mc:Ignorable="d"
-        Title="LoadingViewGUI" Height="450" Width="800">
+        Title="LoadingViewGUI" Height="450" Width="800"
+        Closing="OnClosing">
     <Grid>
         <Canvas Background="#FFE1E8FF">
-            <ProgressBar x:Name="progressBar" HorizontalAlignment="Center" Height="48" VerticalAlignment="Top" Width="532" Canvas.Left="134" Canvas.Top="115" />
+            <ProgressBar x:Name="progressBar" Value="0" HorizontalAlignment="Center" Height="48" VerticalAlignment="Top" Width="532" Canvas.Left="134" Canvas.Top="115" />
             <Label x:Name="percentText" Content="0%" Canvas.Left="348" Canvas.Top="159" HorizontalAlignment="Center" VerticalAlignment="Top" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <ListView x:Name="listView" Width="532" Height="222" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Canvas.Left="134" Canvas.Top="201" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <ListView.View>
@@ -19,6 +20,8 @@
                 </ListView.View>
             </ListView>
             <TextBlock x:Name="title" Canvas.Left="304" TextWrapping="Wrap" Canvas.Top="35" Text="Progression de la sauvegarde" FontWeight="Bold" FontSize="14"/>
+            <Button x:Name="pause" Content="Pause" Canvas.Left="671" Canvas.Top="115" Click="pause_Click"/>
+            <Button x:Name="stop" Content="Stop" Canvas.Left="671" Canvas.Top="143" Click="stop_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Width="35"/>
         </Canvas>
     </Grid>
 </Window>
