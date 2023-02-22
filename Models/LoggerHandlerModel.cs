@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Resources;
+using System.Threading;
 
 namespace easysave.Models
 {
@@ -15,7 +16,7 @@ namespace easysave.Models
     {
 
         public LoggerHandler loggerHandler;
-
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         public LoggerHandlerModel(LoggerHandler loggerHandler)
         {
@@ -24,6 +25,7 @@ namespace easysave.Models
 
         public ResourceManager language;
 
+        //Créer fichier de logs
         public bool createLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
@@ -62,8 +64,10 @@ namespace easysave.Models
             return true;
         }
 
+        //Mise à jour des state logs
         public void updateStateLog()
         {
+            _semaphore.Wait();
             List<StateLog> stateLogs = getAllStateLog();
             stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -88,10 +92,13 @@ namespace easysave.Models
                     }
                     break;
             }
+            _semaphore.Release();
         }
 
+        //Mise à jour des daily logs
         public void updateDailyLog()
         {
+            _semaphore.Wait();
             List<DailyLog> dailyLogs = getAllDailyLog();
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -111,8 +118,10 @@ namespace easysave.Models
                     streamWriter.Write(jsonString);
                 }
             }
+            _semaphore.Release();
         }
 
+        //Récupération des logs d'état
         public List<StateLog> getAllStateLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -142,6 +151,7 @@ namespace easysave.Models
             }
         }
 
+        //Récupération des logs journaliers
         public List<DailyLog> getAllDailyLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -171,6 +181,7 @@ namespace easysave.Models
             }
         }
 
+        //Définition de l'extension du logger
         public ReturnHandler setLoggerExtension(string loggerExtension)
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
