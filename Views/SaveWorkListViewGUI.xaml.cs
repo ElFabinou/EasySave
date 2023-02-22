@@ -69,15 +69,12 @@ namespace easysave.Views
         {
             for (int i = 0; i<selected.Count; i++)
             {
-                System.Threading.Thread thread = new System.Threading.Thread(() =>
-                {
-                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
-                    viewModel.initSlotDeletion().Print();
-                    RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-                    List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                    listView.ItemsSource = registeredSaveViewModelList;
-                });
+                RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
+                viewModel.initSlotDeletion().Print();
             }
+            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+            List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+            listView.ItemsSource = registeredSaveViewModelList;
         }
 
         private void translateAllItems()

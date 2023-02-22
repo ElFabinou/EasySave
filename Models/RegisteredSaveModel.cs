@@ -184,6 +184,7 @@ namespace easysave.Models
         public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
         {
             BlacklistModelView blacklist = new BlacklistModelView();
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
             try
             {
                 lock (this)
@@ -212,6 +213,7 @@ namespace easysave.Models
                 }
                 if (!Directory.Exists(destDirName))
                 {
+                    if (isStopped) { _semaphore.Release(); return; }
                     _semaphore.Wait();
                     Directory.CreateDirectory(destDirName);
                     loader.setPercentage(totalFile, doneFiles);
@@ -224,8 +226,10 @@ namespace easysave.Models
                 }
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
+                orderFilesBy(files);
                 foreach (FileInfo file in files)
                 {
+                    if (isStopped) { _semaphore.Release(); return; }
                     resultBl = blacklist.CallStartProcess();
                     if (!resultBl)
                     {
@@ -271,6 +275,7 @@ namespace easysave.Models
                             {
                                 // Handle any exceptions here
                             }
+                            if (isStopped) { _semaphore.Release(); return; }
                             _semaphore.Release();
                             if (!isStopped)
                             {
@@ -296,8 +301,8 @@ namespace easysave.Models
                     }
                     else
                     {
+                        if (isStopped) { _semaphore.Release(); return; }
                         _semaphore.Wait();
-                        bool stopCopy = false;
                         double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
                         resultBl = blacklist.CallStartProcess();
                         if (!resultBl)
@@ -315,9 +320,9 @@ namespace easysave.Models
                                     {
                                         using (var streamWriter = new BinaryWriter(fileN))
                                         {
-                                            while (!stopCopy && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
+                                            while (!isStopped && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
                                             {
-                                                if (isStopped) { return;  }
+                                                if (isStopped) { _semaphore.Release(); return;  }
                                                 byte[] buffer = streamReader.ReadBytes(1024);
                                                 streamWriter.Write(buffer);
                                                 loader.setPercentage(totalFile, doneFiles);
@@ -332,6 +337,7 @@ namespace easysave.Models
                             // Handle any exceptions here
                         }
                         _semaphore.Release();
+                        if (isStopped) { _semaphore.Release(); return; }
                         if (!isStopped)
                         {
                             _semaphore.Wait();
@@ -363,6 +369,7 @@ namespace easysave.Models
                 {
                     foreach (DirectoryInfo subdir in dirs)
                     {
+                        if (isStopped) { _semaphore.Release(); return; }
                         _semaphore.Wait();
                         resultBl = blacklist.CallStartProcess();
                         if (!resultBl)
@@ -416,6 +423,41 @@ namespace easysave.Models
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
             loggerModel.updateStateLog();
             loggerModel.updateDailyLog();
+        }
+
+        public FileInfo[] orderFilesBy(FileInfo[] files)
+        {
+            // Extensions à trier en premier
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            List<string> preferredExtensions = prioExtensionViewModel.GetExtensionList();
+            // Trier les fichiers en fonction de leur extension (extensions préférées en premier)
+            Array.Sort(files, (a, b) =>
+            {
+                // Récupérer les extensions des deux fichiers
+                string extA = a.Extension.ToLower();
+                string extB = b.Extension.ToLower();
+
+                // Si les deux fichiers ont la même extension, les trier par ordre alphabétique
+                if (extA == extB)
+                {
+                    return string.Compare(a.Name, b.Name);
+                }
+
+                // Sinon, trier les fichiers avec les extensions préférées en premier
+                if (preferredExtensions.Contains(extA))
+                {
+                    return -1;
+                }
+                else if (preferredExtensions.Contains(extB))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return string.Compare(a.Name, b.Name);
+                }
+            });
+            return files;
         }
     }
 }

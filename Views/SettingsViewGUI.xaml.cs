@@ -96,6 +96,11 @@ namespace easysave.Views
             tabSelector.SelectedIndex = 3;
         }
 
+        private void prio_extensions_Click(object sender, RoutedEventArgs e)
+        {
+            tabSelector.SelectedIndex = 4;
+        }
+
 
         private void translateAllItems()
         {
@@ -148,7 +153,28 @@ namespace easysave.Views
         {
             CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
             ListViewExtensions.ItemsSource = extensionViewModel.GetExtensionList();
-         }
+        }
+
+        private void AddPrioExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxPrioExtensions.Text;
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            prioExtensionViewModel.CallAddPrioExtension(text);
+            LoadPrioExtensionList();
+        }
+        private void RemovePrioExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxPrioExtensions.Text;
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            prioExtensionViewModel.CallRemovePrioExtension(text);
+            LoadPrioExtensionList();
+        }
+
+        private void LoadPrioExtensionList()
+        {
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            ListViewPrioExtensions.ItemsSource = prioExtensionViewModel.GetExtensionList();
+        }
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
         {
