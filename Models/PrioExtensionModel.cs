@@ -22,11 +22,13 @@ namespace easysave.Models
 
         public PrioExtensionModel prioExtensionModel;
 
+        //Vérifier l'extension du fichier
         public bool CheckFileExtension(string prioExtension)
         {
             return ContainsExtension(prioExtension);
         }
 
+        //Ajouter une extension dans la liste des extensions
         public void AddPrioExtension(string prioExtension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -40,6 +42,7 @@ namespace easysave.Models
             }
         }
 
+        //Retirer une extension de la liste des extensions
         public void RemovePrioExtension(string prioExtension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -53,6 +56,7 @@ namespace easysave.Models
             }
         }
 
+        //Liste des extensions
         public List<string> getExtensionList()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -74,6 +78,7 @@ namespace easysave.Models
             return getExtensionList().Contains(prioExtension);
         }
 
+        //Charger les extensions
         public List<string> LoadExtensionsFromFile()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -92,6 +97,7 @@ namespace easysave.Models
             }
         }
 
+        //Sauvegarder les extensions
         public void SaveExtensionsToFile(string[] prioExtensions)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);

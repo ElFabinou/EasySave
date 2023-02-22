@@ -25,6 +25,7 @@ namespace easysave.Models
 
         public ResourceManager language;
 
+        //Créer fichier de logs
         public bool createLoggerFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%",Environment.UserName);
@@ -63,6 +64,7 @@ namespace easysave.Models
             return true;
         }
 
+        //Mise à jour des state logs
         public void updateStateLog()
         {
             _semaphore.Wait();
@@ -93,6 +95,7 @@ namespace easysave.Models
             _semaphore.Release();
         }
 
+        //Mise à jour des daily logs
         public void updateDailyLog()
         {
             _semaphore.Wait();
@@ -118,6 +121,7 @@ namespace easysave.Models
             _semaphore.Release();
         }
 
+        //Récupération des logs d'état
         public List<StateLog> getAllStateLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -147,6 +151,7 @@ namespace easysave.Models
             }
         }
 
+        //Récupération des logs journaliers
         public List<DailyLog> getAllDailyLog()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -176,6 +181,7 @@ namespace easysave.Models
             }
         }
 
+        //Définition de l'extension du logger
         public ReturnHandler setLoggerExtension(string loggerExtension)
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

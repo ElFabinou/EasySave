@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
+//Cette classe permet d'ajouter/retirer des éléments à la blacklist
+
 namespace easysave.Models
 {
     public class BlacklistModel
@@ -23,7 +25,7 @@ namespace easysave.Models
 
         public BlacklistModel _blacklist;
 
-
+        //Fonction qui vérifie si un processus est en cours
         public bool StartProcessMonitor()
         {
             foreach (var process in getAllProcesses())
@@ -39,7 +41,7 @@ namespace easysave.Models
             return true;
         }
 
-
+        //Fonction qui permet d'ajouter au fichier de config un élément en blacklist
         public void AddProcessName(string processName)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -59,7 +61,7 @@ namespace easysave.Models
                 }
             }
         }
-
+        //Fonction qui permet de retirer au fichier de config un élément en blacklist
         public void RemoveProcessName(string processName)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -80,7 +82,7 @@ namespace easysave.Models
             }
             
         }
-
+        //Fonction qui permet de récupérer un élément en blacklist
         public List<string> getAllProcesses()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -102,6 +104,7 @@ namespace easysave.Models
             return getAllProcesses().Contains(processName);
         }
 
+        //Désérialisation du fichier
         public List<string> LoadBlacklistFromFile()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -120,6 +123,7 @@ namespace easysave.Models
             }
         }
 
+        //Sauvegarde de la blacklist
         public void SaveBlacklistToFile(string[] processNames)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -127,6 +131,7 @@ namespace easysave.Models
             File.WriteAllText(path + "blacklist.json", json);
         }
 
+        //Créer le fichier de configuration
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);

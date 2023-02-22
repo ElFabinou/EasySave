@@ -36,6 +36,8 @@ namespace easysave.Models
         private bool isPaused = false;
         private bool isStopped = false;
 
+
+        //Mettre en pause le save work
         public void Pause()
         {
             if(isPaused)
@@ -50,6 +52,7 @@ namespace easysave.Models
             isPaused = true;
         }
 
+        //Arrêter le save work
         public void Stop()
         {
             if (isStopped)
@@ -62,7 +65,7 @@ namespace easysave.Models
 
         public ResourceManager language;
 
-
+        //Créer le fichier de configuration
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -73,6 +76,7 @@ namespace easysave.Models
             return true;
         }
 
+        //Créer un save work
         public ReturnHandler addRegisteredSaveWork()
         {
             this.language = Instance.rm;
@@ -90,6 +94,7 @@ namespace easysave.Models
 
         }
 
+        //Supprimer un save work
         public ReturnHandler deleteRegisteredWork()
         {
             this.language = Instance.rm;
@@ -134,6 +139,7 @@ namespace easysave.Models
             return null;
         }
 
+        //Lancer la copie des fichiers
         public async Task<ReturnHandler> copyFilesToTarget()
         {
             BlacklistModelView blacklist = new BlacklistModelView();
@@ -181,6 +187,7 @@ namespace easysave.Models
             }
         }
 
+        //Copie des fichiers
         public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
         {
             BlacklistModelView blacklist = new BlacklistModelView();
@@ -403,6 +410,7 @@ namespace easysave.Models
             }
         }
 
+        //Appeler le logger pour enregistrer dans les fichiers
         public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath)
         {
             StateLog stateLog = new StateLog();
@@ -411,6 +419,7 @@ namespace easysave.Models
             stateLog.setRemainingFiles(totalFiles-doneFiles);
             stateLog.setState(state);
             stateLog.setTotalFileSize(fileSize);
+            stateLog.setSaveName(saveName);
             DailyLog dailyLog = new DailyLog();
             dailyLog.setSaveName(saveName);
             dailyLog.setDuration(0);
@@ -419,6 +428,7 @@ namespace easysave.Models
             dailyLog.setDuration(duration);
             dailyLog.setSource(sourcePath);
             dailyLog.setDestPath(destPath);
+            dailyLog.setDateTime(DateTime.Now);
             LoggerHandler loggerHandler = new LoggerHandler(stateLog, dailyLog);
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
             loggerModel.updateStateLog();

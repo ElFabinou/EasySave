@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Cette classe permet d'ajouter/retirer des éléments à la config d'extensions crypto
+
+
 namespace easysave.Models
 {
     public class CryptosoftExtensionModel
@@ -22,11 +25,13 @@ namespace easysave.Models
 
         public CryptosoftExtensionModel cryptosoftExtensionModel;
 
+        //Fonction qui vérifie si le fichier est en extension
         public bool CheckFileExtension(string extension)
         {
             return ContainsExtension(extension);
         }
 
+        //Fonction qui permet d'ajouter au fichier de config un élément en config crypto
         public void AddCryptosoftExtension(string extension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -39,7 +44,7 @@ namespace easysave.Models
                 streamWriter.Write(jsonString);
             }
         }
-
+        //Fonction qui permet de retirer du fichier de config un élément en config crypto
         public void RemoveCryptosoftExtension(string extension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -68,7 +73,7 @@ namespace easysave.Models
                 return extensions;
             }
         }
-
+        //Fonction qui permet de récupérer un élément en crypto extension
         public bool ContainsExtension(string extension)
         {
             return getExtensionList().Contains(extension);
@@ -92,6 +97,7 @@ namespace easysave.Models
             }
         }
 
+        //Sauvegarde de la blacklist
         public void SaveExtensionsToFile(string[] extensions)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -99,6 +105,7 @@ namespace easysave.Models
             File.WriteAllText(path + "extensions.json", json);
         }
 
+        //Créer le fichier de configuration
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
