@@ -19,64 +19,106 @@ using static easysave.Objects.LanguageHandler;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace easysave.Views
 {
     public partial class MainWindow : Window
     {
         public ResourceManager language;
-        private Socket serverSocket;
-        private Thread serverThread;
+        private string ipAdress = "127.0.0.1";
+        private int port = 12345;
 
         public MainWindow()
         {
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(new IPEndPoint(IPAddress.Any, 12345));
-            serverThread = new Thread(new ThreadStart(Listen));
-            serverThread.Start();
+
+
+            Thread socketServerThread = new Thread(() => {
+                Socket server = Initialize();
+                server = AcceptConnexion(server);
+
+                EcouteRéseau(server);
+            });
+            socketServerThread.Start();
+
+            
+;
         }
 
-        private void Listen()
+        public Socket Initialize()
         {
-            serverSocket.Listen(5);
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            IPAddress iPAddress = IPAddress.Parse(ipAdress);
+
+            IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, port);
+            socket.Bind(iPEndPoint);
+
+            socket.Listen(1);
+            Console.WriteLine($"Serveur en écoute sur {iPEndPoint}");
+
+            return socket;
+        }
+
+        public Socket AcceptConnexion(Socket socketServ)
+        {
+            Socket socketClient = socketServ.Accept();
+            Console.WriteLine($"Nouvelle connexion : {socketClient.RemoteEndPoint.ToString()}");
+
+            return socketClient;
+        }
+
+
+        public void EnvoyerMessage(Socket serv, string message)
+        {
+            string messageReponse = message;
+            byte[] bufferReponse = Encoding.ASCII.GetBytes(messageReponse);
+            serv.Send(bufferReponse);
+        }
+
+
+        public void EcouteRéseau(Socket serv)
+        {
+            int bytesRead;
             while (true)
             {
-                Socket clientSocket = serverSocket.Accept();
-                Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClient));
-                clientThread.Start(clientSocket);
-            }
-        }
-
-        private void HandleClient(object client)
-        {
-            Socket clientSocket = (Socket)client;
-            byte[] buffer = new byte[1024];
-            int bytesReceived = 0;
-            while (true)
-            {
-                try
+                byte[] buffer = new byte[8192];
+                bytesRead = serv.Receive(buffer);
+                if (bytesRead > 0)
                 {
-                    bytesReceived = clientSocket.Receive(buffer);
-                    if (bytesReceived == 0)
-                    {
-                        break;
-                    }
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
-                    //Dispatcher.Invoke(() => messagesList.Items.Add(message));
-                    Dispatcher.Invoke(() => Console.WriteLine(message));
-                }
-                catch
-                {
-                    break;
+                    string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    Console.WriteLine(messageRead);
+                    EnvoyerMessage(serv, messageRead);
                 }
             }
-            clientSocket.Shutdown(SocketShutdown.Both);
-            clientSocket.Close();
+
         }
 
+        //public void ConnexionChannel(Socket serv)
+        //{
+        //    byte[] buffer = new byte[8192];
+        //    int bytesRead;
+        //    try
+        //    {
+        //        bytesRead = serv.Receive(buffer);
+        //        if (bytesRead > 0)
+        //        {
+        //            string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        //            Console.WriteLine("Client : " + messageRead);
+        //            string msgtosend = "Hello";
+        //            byte[] bufferReponse = Encoding.ASCII.GetBytes(msgtosend);
+        //            serv.Send(bufferReponse);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
+        //}
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
