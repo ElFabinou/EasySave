@@ -30,9 +30,6 @@ namespace easysave.Models
         {
             foreach (var process in getAllProcesses())
             {
-                var test = Process.GetProcessesByName(process).Length;
-                var test2 = process;
-                Console.WriteLine(test2+ " " + test);
                 if (Process.GetProcessesByName(process).Length > 0)
                 {
                     return false;

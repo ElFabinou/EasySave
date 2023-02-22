@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace easysave.Models
 {
@@ -40,7 +41,7 @@ namespace easysave.Models
         //Mettre en pause le save work
         public void Pause()
         {
-            if(isPaused)
+            if (isPaused)
             {
                 isPaused = false;
                 lock (this)
@@ -178,6 +179,9 @@ namespace easysave.Models
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
                 callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
+                LoggerHandler loggerHandler = new LoggerHandler();
+                LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
+                loggerModel.updateDailyLog(dailyLogs);
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
@@ -188,10 +192,10 @@ namespace easysave.Models
         }
 
         //Copie des fichiers
-        public async void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
+        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, RegisteredSaveWork.Type type, int totalFile, Loader loader)
         {
             BlacklistModelView blacklist = new BlacklistModelView();
-            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            var watch = new System.Diagnostics.Stopwatch();
             try
             {
                 lock (this)
@@ -230,12 +234,14 @@ namespace easysave.Models
                     registeredSaveViewModel.notifyViewPercentage(loader);
                     callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
                     _semaphore.Release();
+                    addDailyLog(registeredSaveWork.getSaveName(), 0, 0, sourceDirName, destDirName);
                 }
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
                 orderFilesBy(files);
                 foreach (FileInfo file in files)
                 {
+                    watch.Start();
                     if (isStopped) { _semaphore.Release(); return; }
                     resultBl = blacklist.CallStartProcess();
                     if (!resultBl)
@@ -256,7 +262,7 @@ namespace easysave.Models
                             {
                                 _semaphore.Wait();
                             }
-                                try
+                            try
                             {
                                 using (var fileStream = new FileStream(sourcepath, FileMode.Open, FileAccess.Read))
                                 {
@@ -269,7 +275,7 @@ namespace easysave.Models
                                                 while (!isStopped && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
                                                 {
                                                     if (isStopped) { _semaphore.Release(); return; }
-                                                    byte[] buffer = streamReader.ReadBytes(1024);
+                                                    byte[] buffer = streamReader.ReadBytes(2048);
                                                     streamWriter.Write(buffer);
                                                     loader.setPercentage(totalFile, doneFiles);
                                                 }
@@ -302,6 +308,7 @@ namespace easysave.Models
                                 loader.setSaveModel(this);
                                 registeredSaveViewModel.notifyViewPercentage(loader);
                                 callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                                addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName);
                                 _semaphore.Release();
                             }
                         }
@@ -311,7 +318,6 @@ namespace easysave.Models
                         if (isStopped) { _semaphore.Release(); return; }
                         _semaphore.Wait();
                         double totalTime = DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-                        resultBl = blacklist.CallStartProcess();
                         if (!resultBl)
                         {
                             Pause();
@@ -329,8 +335,8 @@ namespace easysave.Models
                                         {
                                             while (!isStopped && streamReader.BaseStream.Position < streamReader.BaseStream.Length)
                                             {
-                                                if (isStopped) { _semaphore.Release(); return;  }
-                                                byte[] buffer = streamReader.ReadBytes(1024);
+                                                if (isStopped) { _semaphore.Release(); return; }
+                                                byte[] buffer = streamReader.ReadBytes(2048);
                                                 streamWriter.Write(buffer);
                                                 loader.setPercentage(totalFile, doneFiles);
                                             }
@@ -348,7 +354,6 @@ namespace easysave.Models
                         if (!isStopped)
                         {
                             _semaphore.Wait();
-                            resultBl = blacklist.CallStartProcess();
                             if (!resultBl)
                             {
                                 Pause();
@@ -359,6 +364,7 @@ namespace easysave.Models
                             loader.setIsFile(true);
                             loader.setSaveModel(this);
                             registeredSaveViewModel.notifyViewPercentage(loader);
+                            addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName);
                             callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
                             _semaphore.Release();
                         }
@@ -410,8 +416,10 @@ namespace easysave.Models
             }
         }
 
+        private List<DailyLog>? dailyLogs = new List<DailyLog>();
+        private List<StateLog>? stateLogs = null;
         //Appeler le logger pour enregistrer dans les fichiers
-        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath)
+        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime = 0)
         {
             StateLog stateLog = new StateLog();
             stateLog!.setProgression(progression);
@@ -431,8 +439,20 @@ namespace easysave.Models
             dailyLog.setDateTime(DateTime.Now);
             LoggerHandler loggerHandler = new LoggerHandler(stateLog, dailyLog);
             LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
-            loggerModel.updateStateLog();
-            loggerModel.updateDailyLog();
+            stateLogs = loggerModel.updateStateLog(stateLogs);
+        }
+
+        public void addDailyLog(string saveName, int duration, long fileSize, string sourcePath, string destPath) {
+            DailyLog dailyLog = new DailyLog();
+            dailyLog.setSaveName(saveName);
+            dailyLog.setDuration(0);
+            dailyLog.setfileSize(fileSize);
+            dailyLog.setSaveName(saveName);
+            dailyLog.setDuration(duration);
+            dailyLog.setSource(sourcePath);
+            dailyLog.setDestPath(destPath);
+            dailyLog.setDateTime(DateTime.Now);
+            dailyLogs.Add(dailyLog);
         }
 
         public FileInfo[] orderFilesBy(FileInfo[] files)

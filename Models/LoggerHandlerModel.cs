@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Resources;
 using System.Threading;
+using System.Reflection.Metadata.Ecma335;
 
 namespace easysave.Models
 {
@@ -65,11 +66,13 @@ namespace easysave.Models
         }
 
         //Mise à jour des state logs
-        public void updateStateLog()
+        public List<StateLog> updateStateLog(List<StateLog>? stateLogs = null)
         {
             _semaphore.Wait();
-            List<StateLog> stateLogs = getAllStateLog();
-            stateLogs.Add(loggerHandler.getStateLog());
+            if (stateLogs==null) { 
+                stateLogs = getAllStateLog();
+                stateLogs.Add(loggerHandler.getStateLog());
+            }
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             switch (loggerHandler.getFormat().ToString().ToLower())
             {
@@ -93,13 +96,14 @@ namespace easysave.Models
                     break;
             }
             _semaphore.Release();
+            return stateLogs;
         }
 
         //Mise à jour des daily logs
-        public void updateDailyLog()
+        public List<DailyLog> updateDailyLog(List<DailyLog>? dailyLogs = null)
         {
             _semaphore.Wait();
-            List<DailyLog> dailyLogs = getAllDailyLog();
+            if (dailyLogs==null) dailyLogs = getAllDailyLog();
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             if (loggerHandler.getFormat().ToString().ToLower() == "xml")
@@ -119,6 +123,7 @@ namespace easysave.Models
                 }
             }
             _semaphore.Release();
+            return dailyLogs;
         }
 
         //Récupération des logs d'état
