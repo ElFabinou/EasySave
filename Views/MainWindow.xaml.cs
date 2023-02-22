@@ -44,8 +44,6 @@ namespace easysave.Views
             });
             socketServerThread.Start();
 
-
-            
 ;
         }
 
@@ -68,7 +66,6 @@ namespace easysave.Views
         {
             Socket socketClient = socketServ.Accept();
             Console.WriteLine($"Nouvelle connexion : {socketClient.RemoteEndPoint.ToString()}");
-
             return socketClient;
         }
 
