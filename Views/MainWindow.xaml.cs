@@ -40,10 +40,10 @@ namespace easysave.Views
             Thread socketServerThread = new Thread(() => {
                 Socket server = Initialize();
                 server = AcceptConnexion(server);
-
-                EcouteRéseau(server);
+                EcouteReseau(server);
             });
             socketServerThread.Start();
+
 
             
 ;
@@ -81,7 +81,7 @@ namespace easysave.Views
         }
 
 
-        public void EcouteRéseau(Socket serv)
+        public void EcouteReseau(Socket serv)
         {
             int bytesRead;
             while (true)
