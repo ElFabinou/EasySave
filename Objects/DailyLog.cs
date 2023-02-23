@@ -15,6 +15,7 @@ namespace easysave.Objects
         public long fileSize;
         public DateTime dateTime;
         public double duration;
+        public long encryptTime;
 
         public string getSaveName()
         {
@@ -85,5 +86,16 @@ namespace easysave.Objects
         {
             this.duration = duration;
         }
+
+        public long getEncryptTime()
+        {
+            return encryptTime;
+        }
+
+        public void setEncryptTime(long encryptTime)
+        {
+            this.encryptTime = encryptTime;
+        }
+
     }
 }
