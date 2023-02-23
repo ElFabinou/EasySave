@@ -9,12 +9,12 @@
       Title="SaveWorkListViewGUI">
     <Grid Margin="0,0,0,0" Height="Auto" Width="1300" VerticalAlignment="Top" HorizontalAlignment="Left">
         <Canvas>
-            <Grid Background="White" HorizontalAlignment="Left" VerticalAlignment="Center" Width="1300" Panel.ZIndex="1000"> 
+            <Grid Background="#FFE1E8FF" HorizontalAlignment="Left" VerticalAlignment="Center" Width="1300" Panel.ZIndex="1000" Canvas.Left="-24">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="271*"/>
                     <ColumnDefinition Width="379*"/>
                 </Grid.ColumnDefinitions>
-                <ListView x:Name="listView" Width="Auto" Height="700" SelectionChanged="listView_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <ListView x:Name="listView" Width="Auto" SelectionChanged="listView_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="42,81,716,97" Grid.ColumnSpan="2">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="tabHeader_saveName" Header="Save name" Width="Auto" DisplayMemberBinding="{Binding saveName}"/>
@@ -23,9 +23,13 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Button x:Name="initSaveWork" Grid.Column="1" Content="Start save work" HorizontalAlignment="Left" Margin="59,42,0,0" VerticalAlignment="Top" Height="66" Width="273" Background="#FFEBEBEB" BorderBrush="#FF489A00" BorderThickness="10,0,0,0" IsEnabled="False" Click="initSaveWork_Click"/>
-                <Button x:Name="deleteSaveWork" Grid.Column="1" Content="Delete save work" HorizontalAlignment="Left" Margin="59,133,0,0" VerticalAlignment="Top" Height="66" Width="273" Background="#FFEBEBEB" BorderBrush="#FF9A0000" BorderThickness="10,0,0,0" IsEnabled="False" Click="deleteSaveWork_Click"/>
-                <Button x:Name="mainMenu" Grid.Column="1" Content="Go to main menu" HorizontalAlignment="Left" Margin="444,583,0,0" VerticalAlignment="Top" Height="66" Width="273" Background="#FFEBEBEB" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click"/>
+                <TabControl Grid.Column="1" HorizontalAlignment="Left" Height="568" VerticalAlignment="Center" Width="602" Margin="108,0,0,0"/>
+                <Button x:Name="initSaveWork" Grid.Column="1" Content="Start save work" HorizontalAlignment="Left" Margin="272,125,0,0" VerticalAlignment="Top" Height="66" Width="274" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF489A00" BorderThickness="10,0,0,0" IsEnabled="False" Click="initSaveWork_Click"/>
+                <Button x:Name="deleteSaveWork" Grid.Column="1" Content="Delete save work" HorizontalAlignment="Left" Margin="272,259,0,0" VerticalAlignment="Top" Height="66" Width="274" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF9A0000" BorderThickness="10,0,0,0" IsEnabled="False" Click="deleteSaveWork_Click"/>
+                <Button x:Name="mainMenu" Content="Go to main menu" HorizontalAlignment="Left" Margin="42,538,0,0" VerticalAlignment="Top" Height="66" Width="242" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click"/>
+                <Button Content="Button" HorizontalAlignment="Left" Margin="342,540,0,0" VerticalAlignment="Top" Background="WhiteSmoke" Width="242" Height="66" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="title"  HorizontalAlignment="Left" Margin="0,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="602" FontSize="30" FontWeight="Bold" TextAlignment="Center" Grid.ColumnSpan="2"><Run Language="fr-fr" Text="Liste des travaux de sauvegarde :"/></TextBlock>
+                <TextBlock x:Name="title_Copy"  HorizontalAlignment="Left" Margin="108,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="602" FontSize="30" FontWeight="Bold" TextAlignment="Center" Grid.Column="1"><Run Language="fr-fr" Text="Nom du travail sélectionné"/></TextBlock>
             </Grid>
         </Canvas>
     </Grid>
