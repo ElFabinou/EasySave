@@ -18,6 +18,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Diagnostics;
 
 namespace easysave.Models
 {
@@ -28,6 +29,8 @@ namespace easysave.Models
         private int doneFiles = 0;
 
         private static SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+
+        long encryptTime = 0;
 
         public RegisteredSaveModel(RegisteredSaveWork? registeredSaveWork = null)
         {
@@ -178,7 +181,7 @@ namespace easysave.Models
                 loader.setPercentage(fileCount, 0);
                 this.doneFiles = 0;
                 DirectoryCopy(registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath()+"\\"+registeredSaveWork.getSaveName(), true, registeredSaveWork.getType(), fileCount, loader);
-                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath());
+                callLogger(100, 0, 0, 0, registeredSaveWork.getSaveName(), 0, StateLog.State.END, registeredSaveWork.getSourcePath(), registeredSaveWork.getTargetPath(),0);
                 LoggerHandler loggerHandler = new LoggerHandler();
                 LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
                 loggerModel.updateDailyLog(dailyLogs);
@@ -232,13 +235,14 @@ namespace easysave.Models
                     loader.setFolder(dir);
                     loader.setSaveModel(this);
                     registeredSaveViewModel.notifyViewPercentage(loader);
-                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName);
+                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourceDirName, destDirName,0);
                     _semaphore.Release();
-                    addDailyLog(registeredSaveWork.getSaveName(), 0, 0, sourceDirName, destDirName);
+                    addDailyLog(registeredSaveWork.getSaveName(), 0, 0, sourceDirName, destDirName,0);
                 }
                 // Get the files in the directory and copy them to the new location.
                 FileInfo[] files = dir.GetFiles();
                 orderFilesBy(files);
+                CryptosoftExtensionModel hasExtension = new CryptosoftExtensionModel();
                 foreach (FileInfo file in files)
                 {
                     watch.Start();
@@ -253,6 +257,7 @@ namespace easysave.Models
                     string temppath = Path.Combine(destDirName, file.Name);
                     string sourcepath = Path.Combine(sourceDirName, file.Name);
                     FileInfo destFile = new FileInfo(temppath);
+                    string extension = Path.GetExtension(Path.GetFullPath(file.FullName));
                     if ((int)type == 1)
                     {
                         if (!destFile.Exists || file.LastWriteTime > destFile.LastWriteTime)
@@ -307,8 +312,22 @@ namespace easysave.Models
                                 loader.setIsFile(true);
                                 loader.setSaveModel(this);
                                 registeredSaveViewModel.notifyViewPercentage(loader);
-                                callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
-                                addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName);
+                                //encrypt files if extension is defined in settings
+                                if (hasExtension.CheckFileExtension(extension))
+                                {
+                                    var encryptionTime = new Stopwatch();
+                                    encryptionTime.Start();
+                                    Cryptosoft(sourcepath, temppath);
+                                    encryptionTime.Stop();
+                                    this.encryptTime = encryptionTime.ElapsedMilliseconds;
+                                    callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                                    addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName, encryptTime);
+                                }
+                                else
+                                {
+                                    callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, 0);
+                                    addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName,0);
+                                }
                                 _semaphore.Release();
                             }
                         }
@@ -364,8 +383,20 @@ namespace easysave.Models
                             loader.setIsFile(true);
                             loader.setSaveModel(this);
                             registeredSaveViewModel.notifyViewPercentage(loader);
-                            addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName);
-                            callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath);
+                            addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName,0);
+                            if (hasExtension.CheckFileExtension(extension))
+                            {
+                                var encryptionTime = new Stopwatch();
+                                encryptionTime.Start();
+                                Cryptosoft(sourcepath, temppath);
+                                encryptionTime.Stop();
+                                this.encryptTime = encryptionTime.ElapsedMilliseconds;
+                                callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                            }
+                            else
+                            {
+                                callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, 0);
+                            }
                             _semaphore.Release();
                         }
                     }
@@ -397,7 +428,7 @@ namespace easysave.Models
                         loader.setFolder(subdir);
                         loader.setSaveModel(this);
                         registeredSaveViewModel.notifyViewPercentage(loader);
-                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath);
+                        callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, 0);
                         lock (this)
                         {
                             while (isPaused)
@@ -416,10 +447,25 @@ namespace easysave.Models
             }
         }
 
+        public void Cryptosoft(string sourcepath, string destFile)
+        {
+            string key = "DQmCDq0RlUU=";
+            string cryptoPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
+            using (Process CryptoSoft = new Process())
+            {
+                CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
+                CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
+                CryptoSoft.StartInfo.CreateNoWindow = true;
+                CryptoSoft.Start();
+                CryptoSoft.WaitForExit();
+            }
+        }
+
         private List<DailyLog>? dailyLogs = new List<DailyLog>();
         private List<StateLog>? stateLogs = null;
         //Appeler le logger pour enregistrer dans les fichiers
-        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime = 0)
+        public void callLogger(double progression, long fileSize, int totalFiles, int doneFiles, string saveName, double duration, StateLog.State state, string sourcePath, string destPath, long encryptTime)
         {
             StateLog stateLog = new StateLog();
             stateLog!.setProgression(progression);
@@ -442,7 +488,7 @@ namespace easysave.Models
             stateLogs = loggerModel.updateStateLog(stateLogs);
         }
 
-        public void addDailyLog(string saveName, int duration, long fileSize, string sourcePath, string destPath) {
+        public void addDailyLog(string saveName, int duration, long fileSize, string sourcePath, string destPath, long encryptTime) {
             DailyLog dailyLog = new DailyLog();
             dailyLog.setSaveName(saveName);
             dailyLog.setDuration(0);
@@ -452,6 +498,7 @@ namespace easysave.Models
             dailyLog.setSource(sourcePath);
             dailyLog.setDestPath(destPath);
             dailyLog.setDateTime(DateTime.Now);
+            dailyLog.setEncryptTime(encryptTime);
             dailyLogs.Add(dailyLog);
         }
 
