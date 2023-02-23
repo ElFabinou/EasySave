@@ -8,7 +8,7 @@
         Title="MainWindow" Height="700" Width="1300">
     <Grid Background="#FFE1E8FF">
         <Canvas>
-            <Image x:Name="Logo" HorizontalAlignment="Center" Height="266" VerticalAlignment="Top" Width="260" Source="/Assets/image 1.png" Canvas.Left="520" Canvas.Top="76"/>
+            <Image Height="354" Canvas.Left="450" Source="/Assets/easysave.png" Stretch="Fill" Canvas.Top="25" Width="400" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             <Button x:Name="initSaveWork" Content="Liste des travaux de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Canvas.Left="476" Canvas.Top="384" Click="initSaveWork_Click"/>
             <Button x:Name="initSlotCreation" Content="Créer un travail de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSlotCreation_Click" Canvas.Left="476" Canvas.Top="434"/>
             <Button x:Name="initSettings" Content="Paramètres" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSettings_Click" Canvas.Left="476" Canvas.Top="484"/>
