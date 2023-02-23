@@ -68,11 +68,8 @@ namespace easysave.Models
         //Mise à jour des state logs
         public List<StateLog> updateStateLog(List<StateLog>? stateLogs = null)
         {
-            _semaphore.Wait();
-            if (stateLogs==null) { 
-                stateLogs = getAllStateLog();
-                stateLogs.Add(loggerHandler.getStateLog());
-            }
+            stateLogs = getAllStateLog();
+            stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             switch (loggerHandler.getFormat().ToString().ToLower())
             {
