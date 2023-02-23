@@ -21,79 +21,24 @@ using System.Net;
 using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using easysave.ViewModels;
 
 namespace easysave.Views
 {
     public partial class MainWindow : Window
     {
         public ResourceManager language;
-        private string ipAdress = "127.0.0.1";
-        private int port = 12345;
-
+        
+       
         public MainWindow()
         {
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
 
-
-            Thread socketServerThread = new Thread(() => {
-                Socket server = Initialize();
-                server = AcceptConnexion(server);
-                EcouteReseau(server);
-            });
-            socketServerThread.Start();
-
-;
+            SocketViewModel socketViewModel = new SocketViewModel();
         }
 
-        public Socket Initialize()
-        {
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            IPAddress iPAddress = IPAddress.Parse(ipAdress);
-
-            IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, port);
-            socket.Bind(iPEndPoint);
-
-            socket.Listen(1);
-            Console.WriteLine($"Serveur en écoute sur {iPEndPoint}");
-
-            return socket;
-        }
-
-        public Socket AcceptConnexion(Socket socketServ)
-        {
-            Socket socketClient = socketServ.Accept();
-            Console.WriteLine($"Nouvelle connexion : {socketClient.RemoteEndPoint.ToString()}");
-            return socketClient;
-        }
-
-
-        public void EnvoyerMessage(Socket serv, string message)
-        {
-            string messageReponse = message;
-            byte[] bufferReponse = Encoding.ASCII.GetBytes(messageReponse);
-            serv.Send(bufferReponse);
-        }
-
-
-        public void EcouteReseau(Socket serv)
-        {
-            int bytesRead;
-            while (true)
-            {
-                byte[] buffer = new byte[8192];
-                bytesRead = serv.Receive(buffer);
-                if (bytesRead > 0)
-                {
-                    string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine(messageRead);
-                    EnvoyerMessage(serv, messageRead);
-                }
-            }
-
-        }
 
         //public void ConnexionChannel(Socket serv)
         //{
