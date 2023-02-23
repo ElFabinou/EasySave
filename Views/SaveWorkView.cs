@@ -162,13 +162,13 @@ namespace easysave.Views
                     Console.WriteLine(loader.getPercentage()); 
 
                 }
-                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " " + loader.getFile().Name + " " + loader.getFile().Length + " bytes");
+                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% " + " " + loader.getFile().Name + " " + loader.getFile().Length + " bytes");
 
                 Console.WriteLine(Math.Round(loader.getPercentage(),1) + "% " + loader.percentageToChar() + " "+loader.getFile().Name +" "+loader.getFile().Length+" bytes");
             }
             else
             {
-                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " " + loader.getFolder().Name);
+                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% "  + " " + loader.getFolder().Name);
                Console.WriteLine(Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " "+loader.getFolder().Name);
             }
         }
