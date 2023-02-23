@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using easysave.Objects;
+using easysave.ViewModels;
+using easysave.Views;
 
 namespace easysave.Models
 {
@@ -118,7 +121,65 @@ namespace easysave.Models
                 {
                     string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
                     Console.WriteLine(messageRead);
-                    EnvoyerMessage(serv, messageRead);
+                    if (messageRead.StartsWith("/start "))
+                    {
+                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                        {
+                            if(registeredSaveWork.getSaveName() == saveWorkName)
+                            {
+                                registeredSaveViewModel.setSaveWork(registeredSaveWork);
+                                registeredSaveViewModel.initRegisteredSaveWork();
+                            }
+                        }
+                    }else if(messageRead.StartsWith("/pause "))
+                    {
+                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                        {
+                            if (registeredSaveWork.getSaveName() == saveWorkName)
+                            {
+                                foreach(Loader loader in Loader.loaders)
+                                {
+                                    if(loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
+                                    {
+                                        loader.getSaveModel().Pause();
+                                    }
+                                }
+                                EnvoyerMessage(serv, "Ce save work n'est pas en cours");
+                            }
+                        }
+                        EnvoyerMessage(serv, "Ce save work n'existe pas");
+                    }else if (messageRead.StartsWith("/stop "))
+                    {
+                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                        {
+                            if (registeredSaveWork.getSaveName() == saveWorkName)
+                            {
+                                foreach (Loader loader in Loader.loaders)
+                                {
+                                    if (loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
+                                    {
+                                        loader.getSaveModel().Stop();
+                                        loader.loadingViewGUI.Dispatcher.Invoke(() =>
+                                        {
+                                            loader.loadingViewGUI.closeAllowed = true;
+                                            loader.loadingViewGUI.Close();
+                                        });
+                                    }
+                                }
+                                EnvoyerMessage(serv, "Ce save work n'est pas en cours");
+                            }
+                        }
+                        EnvoyerMessage(serv, "Ce save work n'existe pas");
+                    }
                 }
             }
 

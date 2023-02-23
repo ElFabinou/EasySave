@@ -29,7 +29,7 @@ namespace easysave.Views
     {
 
         private List<item> items = new List<item>();
-        private bool closeAllowed;
+        public bool closeAllowed;
         public ResourceManager language;
         public Loader loader;
         public RegisteredSaveViewModel registeredSaveViewModel;

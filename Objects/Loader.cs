@@ -13,7 +13,7 @@ namespace easysave.Objects
 {
     public class Loader : INotifyPropertyChanged
     {
-
+        public static List<Loader> loaders = new List<Loader>();
         public RegisteredSaveModel registeredSaveModel;
         public double percentage { get; set; }
         public FileInfo fileInfo { get; set; }

@@ -163,6 +163,7 @@ namespace easysave.Models
                     {
                         // Remove "Loader" type from this line
                         loader = new Loader();
+                        Loader.loaders.Add(loader);
                         loader.setSaveModel(this);
                         System.Windows.Threading.Dispatcher.Run();
                     });
@@ -185,6 +186,7 @@ namespace easysave.Models
                 LoggerHandler loggerHandler = new LoggerHandler();
                 LoggerHandlerModel loggerModel = new LoggerHandlerModel(loggerHandler);
                 loggerModel.updateDailyLog(dailyLogs);
+                Loader.loaders.Remove(loader);
                 return new ReturnHandler(language.GetString("copy-file"), ReturnHandler.ReturnTypeEnum.Success);
             }
             catch (Exception e)
