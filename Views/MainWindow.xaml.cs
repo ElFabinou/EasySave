@@ -16,22 +16,51 @@ using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
+using System.Diagnostics;
+using Newtonsoft.Json;
+using easysave.ViewModels;
 
 namespace easysave.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public ResourceManager language;
         
+       
         public MainWindow()
         {
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
+
+            SocketViewModel socketViewModel = new SocketViewModel();
         }
+
+
+        //public void ConnexionChannel(Socket serv)
+        //{
+        //    byte[] buffer = new byte[8192];
+        //    int bytesRead;
+        //    try
+        //    {
+        //        bytesRead = serv.Receive(buffer);
+        //        if (bytesRead > 0)
+        //        {
+        //            string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        //            Console.WriteLine("Client : " + messageRead);
+        //            string msgtosend = "Hello";
+        //            byte[] bufferReponse = Encoding.ASCII.GetBytes(msgtosend);
+        //            serv.Send(bufferReponse);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
+        //}
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {

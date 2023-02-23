@@ -7,11 +7,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using static easysave.Objects.LanguageHandler;
+using easysave.Models;
 
 namespace easysave.Views
 {
     internal class SaveWorkView : MainView
     {
+
 
         public SaveWorkView(mode selectedMode = mode.Console)
         {
@@ -157,12 +159,17 @@ namespace easysave.Views
             if (loader.getIsFile())
             {
                 if(loader.getPercentage() > 100) { 
-                    Console.WriteLine(loader.getPercentage()); }
+                    Console.WriteLine(loader.getPercentage()); 
+
+                }
+                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " " + loader.getFile().Name + " " + loader.getFile().Length + " bytes");
+
                 Console.WriteLine(Math.Round(loader.getPercentage(),1) + "% " + loader.percentageToChar() + " "+loader.getFile().Name +" "+loader.getFile().Length+" bytes");
             }
             else
             {
-                Console.WriteLine(Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " "+loader.getFolder().Name);
+                SocketModel.GetInstance().EnvoyerMessage(SocketModel.GetInstance().GetServer(), Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " " + loader.getFolder().Name);
+               Console.WriteLine(Math.Round(loader.getPercentage(), 1) + "% " + loader.percentageToChar() + " "+loader.getFolder().Name);
             }
         }
 
