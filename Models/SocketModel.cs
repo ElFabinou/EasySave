@@ -68,10 +68,11 @@ namespace easysave.Models
         public Socket Initialize()
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+            LingerOption lingerOption = new LingerOption(true, 0);
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Linger, lingerOption);
             IPAddress iPAddress = IPAddress.Parse(ipAdress);
 
-            IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, port);
+            IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, port++);
             socket.Bind(iPEndPoint);
 
             socket.Listen(1);
@@ -130,7 +131,14 @@ namespace easysave.Models
                                 if (registeredSaveWork.getSaveName() == saveWorkName)
                                 {
                                     registeredSaveViewModel.setSaveWork(registeredSaveWork);
-                                    registeredSaveViewModel.initRegisteredSaveWork();
+                                    Thread newThread = new Thread(() =>
+                                    {
+                                        // Appeler la fonction dans le nouveau thread
+                                        registeredSaveViewModel.initRegisteredSaveWork();
+                                    });
+
+                                    // Démarrer le nouveau thread
+                                    newThread.Start();
                                 }
                             }
                         }
@@ -185,7 +193,11 @@ namespace easysave.Models
                 }
                 catch(Exception ex)
                 {
-                    //Relancer la connexion ici
+                    Console.WriteLine("Erreur de socket : {0}", ex.Message);
+                    serv.Close();
+                    server = Initialize();
+                    server = AcceptConnexion(server);
+                    EcouteReseau(server);
                 }
                 
             }
