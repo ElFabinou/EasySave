@@ -31,6 +31,8 @@ namespace easysave.Views
         {
             InitializeComponent();
             LoadBlacklist();
+            LoadPrioExtensionList();
+            LoadExtensionList();
             Array allLanguages = Enum.GetNames(typeof(Language));
             int languageIndex = 0;
             for (int i = 0; i<allLanguages.Length; i++)
