@@ -61,30 +61,12 @@
                             <Button x:Name="removeExtensionBtn" Content="Supprimer" Canvas.Left="380" Canvas.Top="100" Click="RemoveExtensionBtn"/>
                         </Canvas>
                     </TabItem>
-                    <TabItem Header="TabItem" Visibility="Collapsed">
-                        <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="225px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Prio extensions" x:Name="tabItemPrioExtension"/>
-                            </TextBlock>
-                            <ListView x:Name="ListViewPrioExtensions" Canvas.Left="250" Canvas.Top="140">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Prio extensions"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <TextBox x:Name="textBoxPrioExtensions" TextWrapping="Wrap" Width="120" Canvas.Left="200" Canvas.Top="100"/>
-                            <Button x:Name="addPrioExtensionBtn" Content="Ajouter" Canvas.Left="330" Canvas.Top="100" Click="AddPrioExtensionBtn"/>
-                            <Button x:Name="removePrioExtensionBtn" Content="Supprimer" Canvas.Left="380" Canvas.Top="100" Click="RemovePrioExtensionBtn"/>
-                        </Canvas>
-                    </TabItem>
                 </TabControl>
                 <Button x:Name="changeLanguage" Content="Changer la langue" HorizontalAlignment="Left" Margin="87,44,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLanguage_Click"/>
-                <Button x:Name="changeLogsFormat" Content="Changer le format des logs" HorizontalAlignment="Left" Margin="87,139,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLogsFormat_Click"/>
-                <Button x:Name="blacklist" Content="Blacklist" HorizontalAlignment="Left" Margin="87,234,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="blacklist_Click"/>
-                <Button x:Name="extension" Content="Cryptosoft extensions" HorizontalAlignment="Left" Margin="87,330,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="cryptosoft_extensions_Click"/>
+                <Button x:Name="changeLogsFormat" Content="Changer le format des logs" HorizontalAlignment="Left" Margin="87,172,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLogsFormat_Click"/>
+                <Button x:Name="blacklist" Content="Blacklist" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Center" Height="80" Width="483" Click="blacklist_Click"/>
+                <Button x:Name="extension" Content="Cryptosoft extensions" HorizontalAlignment="Left" Margin="87,446,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="cryptosoft_extensions_Click"/>
                 <Button x:Name="mainMenu" Content="Back to main menu" HorizontalAlignment="Left" Margin="87,576,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="mainMenu_Click"/>
-                <Button x:Name="prioExtension" Content="Prio extensions" HorizontalAlignment="Left" Margin="87,426,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="prio_extensions_Click"/>
             </Grid>
         </Canvas>
     </Grid>

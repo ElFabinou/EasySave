@@ -18,7 +18,6 @@ namespace easysave.Models
 
         public LanguageHandler.Language language;
 
-        //Fonction de changement de langage
         public ReturnHandler changeLanguage()
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

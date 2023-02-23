@@ -28,29 +28,27 @@ namespace easysave.Views
     {
         private IList selected;
         public ResourceManager language;
-        private RegisteredSaveViewModel viewModel;
+
         public SaveWorkListViewGUI()
         {
             InitializeComponent();
             language = Instance.rm;
-            viewModel = new RegisteredSaveViewModel();
-            List<RegisteredSaveWork>  registeredSaveViewModelList = viewModel.initSlotSelection();
+            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+            List<RegisteredSaveWork>  registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
             listView.ItemsSource = registeredSaveViewModelList;
             translateAllItems();
         }
 
-        private void ParallelInitSaveWork()
-        {
-            Parallel.ForEach((IEnumerable<object>)selected, item =>
-            {
-                viewModel.setSaveWork((RegisteredSaveWork?)item);
-                viewModel.initRegisteredSaveWork();
-            });
-        }
-
         private async void initSaveWork_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => ParallelInitSaveWork());
+            for(int i = 0; i<selected.Count;i++)
+            {
+                await Task.Run(() =>
+                {
+                    RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
+                    viewModel.initRegisteredSaveWork();
+                });
+            }
         }
 
         private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -71,10 +69,10 @@ namespace easysave.Views
             {
                 RegisteredSaveViewModel viewModel = new RegisteredSaveViewModel((RegisteredSaveWork?)selected[i]);
                 viewModel.initSlotDeletion().Print();
+                RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                listView.ItemsSource = registeredSaveViewModelList;
             }
-            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-            List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-            listView.ItemsSource = registeredSaveViewModelList;
         }
 
         private void translateAllItems()

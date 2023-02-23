@@ -1,49 +1,19 @@
-﻿using easysave.Models;
-using easysave.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace easysave.Objects
 {
-    public class Loader : INotifyPropertyChanged
+    public class Loader
     {
 
-        public RegisteredSaveModel registeredSaveModel;
         public double percentage { get; set; }
         public FileInfo fileInfo { get; set; }
         public DirectoryInfo directoryInfo { get; set; }
         public bool isFile { get; set; }
-
-        public LoadingViewGUI loadingViewGUI { get; set; }
-
-        public Loader()
-        {
-            loadingViewGUI = new LoadingViewGUI(this);
-            loadingViewGUI.Show();
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public RegisteredSaveModel getSaveModel()
-        {
-            return registeredSaveModel;
-        }
-
-        public void setSaveModel(RegisteredSaveModel saveModel)
-        {
-            this.registeredSaveModel = saveModel;
-        }
 
         public void setIsFile(bool isFile)
         {
@@ -56,8 +26,7 @@ namespace easysave.Objects
         }
 
         public void setPercentage(double totalFile, double currentFile) {
-            percentage = (currentFile/totalFile)*100;
-            NotifyPropertyChanged();
+            percentage = (currentFile/totalFile)*100; 
         }
         
         public double getPercentage() { return percentage; }
