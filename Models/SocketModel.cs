@@ -18,19 +18,6 @@ namespace easysave.Models
         private string ipAdress = "127.0.0.1";
         private int port = 12345;
 
-        //public SocketModel() {
-
-
-        //    Thread socketServerThread = new Thread(() =>
-        //    {
-        //        Socket server = Initialize();
-        //        server = AcceptConnexion(server);
-        //        EcouteReseau(server);
-        //    });
-        //    socketServerThread.Start();
-
-        //}
-
         private static SocketModel instance;
         private static readonly object lockObject = new object();
         private Thread socketServerThread;

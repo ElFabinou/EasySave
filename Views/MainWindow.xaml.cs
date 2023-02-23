@@ -22,16 +22,26 @@ using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using easysave.ViewModels;
+using System.Diagnostics.Metrics;
 
 namespace easysave.Views
 {
     public partial class MainWindow : Window
     {
         public ResourceManager language;
-        
-       
+        private const string UniqueName = "EasySave";
+        private static Mutex mutex;
+
         public MainWindow()
         {
+            mutex = new Mutex(true, UniqueName, out bool createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show("L'application est déjà en cours d'exécution", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                mutex.Dispose();
+                Application.Current.Shutdown();
+                return;
+            }
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
@@ -39,6 +49,12 @@ namespace easysave.Views
             SocketViewModel socketViewModel = new SocketViewModel();
         }
 
+        //Méthode appelé automatiquement quand l'utilisateur ferme l'application
+        protected override void OnClosed(EventArgs e)
+        {
+            mutex?.Dispose();//Si le mutex n'est pas null, on le libère (pour éviter l'erreur s'il est null)
+            base.OnClosed(e);//Call la méthode de la class base. Permet de bien gérer la fermeture
+        }
 
         //public void ConnexionChannel(Socket serv)
         //{
