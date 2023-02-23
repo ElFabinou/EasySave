@@ -383,7 +383,6 @@ namespace easysave.Models
                             loader.setIsFile(true);
                             loader.setSaveModel(this);
                             registeredSaveViewModel.notifyViewPercentage(loader);
-                            addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName,0);
                             if (hasExtension.CheckFileExtension(extension))
                             {
                                 var encryptionTime = new Stopwatch();
@@ -392,10 +391,12 @@ namespace easysave.Models
                                 encryptionTime.Stop();
                                 this.encryptTime = encryptionTime.ElapsedMilliseconds;
                                 callLogger(loader.getPercentage(), 0, totalFile, doneFiles, registeredSaveWork.getSaveName(), 0, StateLog.State.ACTIVE, sourcepath, temppath, encryptTime);
+                                addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName, encryptTime);
                             }
                             else
                             {
                                 callLogger(loader.getPercentage(), file.Length, totalFile, doneFiles, registeredSaveWork.getSaveName(), totalTime, StateLog.State.ACTIVE, sourcepath, temppath, 0);
+                                addDailyLog(registeredSaveWork.getSaveName(), totalFile, file.Length, sourceDirName, destDirName, 0);
                             }
                             _semaphore.Release();
                         }
