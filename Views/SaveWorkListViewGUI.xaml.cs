@@ -85,6 +85,9 @@ namespace easysave.Views
             initSaveWork.Content = language.GetString("gui_SaveWorkListViewGUI_initSaveWork");
             mainMenu.Content = language.GetString("gui_SaveWorkListViewGUI_mainMenu");
             deleteSaveWork.Content = language.GetString("gui_SaveWorkListViewGUI_deleteSaveWork");
+            title.Text = language.GetString("gui_MainWindow_initSaveWork");
+            title_Copy.Text = language.GetString("slotinteraction_ask_operation");
+
         }
     }
 }

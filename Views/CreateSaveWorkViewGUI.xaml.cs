@@ -133,7 +133,7 @@ namespace easysave.Views
             title_folderToCopy.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_folderToCopy");
             title_targetPath.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_targetPath");
             title_saveType.Text = language.GetString("gui_CreateSaveWorkViewGUI_title_saveType");
-            initSlotCreation.Content = language.GetString("gui_CreateSaveWorkViewGUI_title_saveType");
+            initSlotCreation.Content = language.GetString("gui_CreateSaveWorkViewGUI_initSlotCreation");
             mainMenu.Content = language.GetString("gui_CreateSaveWorkViewGUI_mainMenu");
         }
     }

@@ -107,10 +107,17 @@ namespace easysave.Views
             tabItemLanguage.Text = language.GetString("gui-tabItemLanguage");
             tabItemFormat.Text = language.GetString("gui-tabItemFormat");
             tabItemBlacklist.Text = language.GetString("gui-tabItemBlacklist");
-
             changeLanguage.Content = language.GetString("gui-tabItemLanguage");
             changeLogsFormat.Content = language.GetString("gui-tabItemFormat");
             blacklist.Content = language.GetString("gui-tabItemBlacklist");
+            prioExtensions.Content = language.GetString("gui-tabItemPrio");
+            mainMenu.Content = language.GetString("settings_choice_back");
+            addBlacklistBtn.Content = language.GetString("settings_choice_add");
+            removeBlacklistBtn.Content = language.GetString("settings_choice_delete");
+            addExtensionBtn.Content = language.GetString("settings_choice_add");
+            removeExtensionBtn.Content = language.GetString("settings_choice_delete");
+            addPrioExtensionBtn.Content = language.GetString("settings_choice_add");
+            removePrioExtensionBtn.Content = language.GetString("settings_choice_delete");
         }
 
         private void AddBlacklistBtn(object sender, RoutedEventArgs e)

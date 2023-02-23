@@ -154,10 +154,10 @@
     <value>Differential</value>
   </data>
   <data name="slotinteraction_ask_operation" xml:space="preserve">
-    <value>Interaction with the save slot:</value>
+    <value>Interactions with the save slot:</value>
   </data>
   <data name="slotinteraction_choice_delete_save_work" xml:space="preserve">
-    <value>Supprimer cette sauvegarde</value>
+    <value>Delete this savework</value>
   </data>
   <data name="slotinteraction_choice_run_save_work" xml:space="preserve">
     <value>Delete this backup</value>
@@ -296,5 +296,14 @@
   </data>
   <data name="gui_SaveWorkListViewGUI_tabHeader_targetPath" xml:space="preserve">
     <value>Target path</value>
+  </data>
+  <data name="gui-tabItemPrio" xml:space="preserve">
+    <value>Priority files</value>
+  </data>
+  <data name="settings_choice_add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="settings_choice_delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>
