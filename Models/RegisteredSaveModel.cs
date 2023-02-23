@@ -456,7 +456,7 @@ namespace easysave.Models
             using (Process CryptoSoft = new Process())
             {
                 CryptoSoft.StartInfo.FileName = cryptoPath + @"\Cryptosoft\cryptosoft.exe";
-                CryptoSoft.StartInfo.Arguments = $"encrypt {sourcepath} {destFile} {key}";
+                CryptoSoft.StartInfo.Arguments = $"encrypt \"{sourcepath}\" \"{destFile}\" {key}";
                 CryptoSoft.StartInfo.CreateNoWindow = true;
                 CryptoSoft.Start();
                 CryptoSoft.WaitForExit();
