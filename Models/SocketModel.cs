@@ -104,9 +104,19 @@ namespace easysave.Models
 
         public void EnvoyerMessage(Socket serv, string message)
         {
-            string messageReponse = message;
-            byte[] bufferReponse = Encoding.ASCII.GetBytes(messageReponse);
-            serv.Send(bufferReponse);
+            try
+            {
+                string messageReponse = message;
+                byte[] bufferReponse = Encoding.ASCII.GetBytes(messageReponse);
+                serv.Send(bufferReponse);
+            }
+            catch(Exception ex)
+            {
+                
+            }
+                
+            
+            
         }
 
 
@@ -116,73 +126,85 @@ namespace easysave.Models
             while (true)
             {
                 byte[] buffer = new byte[8192];
-                bytesRead = serv.Receive(buffer);
-                if (bytesRead > 0)
+                try
                 {
-                    string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine(messageRead);
-                    if (messageRead.StartsWith("/start "))
+                    bytesRead = serv.Receive(buffer);
+                    if (bytesRead > 0)
                     {
-                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
-                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                        string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        Console.WriteLine(messageRead);
+                        if (messageRead.StartsWith("/start "))
                         {
-                            if(registeredSaveWork.getSaveName() == saveWorkName)
+                            var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                            List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                            foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
                             {
-                                registeredSaveViewModel.setSaveWork(registeredSaveWork);
-                                registeredSaveViewModel.initRegisteredSaveWork();
-                            }
-                        }
-                    }else if(messageRead.StartsWith("/pause "))
-                    {
-                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
-                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
-                        {
-                            if (registeredSaveWork.getSaveName() == saveWorkName)
-                            {
-                                foreach(Loader loader in Loader.loaders)
+                                if (registeredSaveWork.getSaveName() == saveWorkName)
                                 {
-                                    if(loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
-                                    {
-                                        loader.getSaveModel().Pause();
-                                    }
+                                    registeredSaveViewModel.setSaveWork(registeredSaveWork);
+                                    registeredSaveViewModel.initRegisteredSaveWork();
                                 }
-                                EnvoyerMessage(serv, "Ce save work n'est pas en cours");
                             }
                         }
-                        EnvoyerMessage(serv, "Ce save work n'existe pas");
-                    }else if (messageRead.StartsWith("/stop "))
-                    {
-                        var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
-                        RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
-                        List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
-                        foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                        else if (messageRead.StartsWith("/pause "))
                         {
-                            if (registeredSaveWork.getSaveName() == saveWorkName)
+                            var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                            List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                            foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
                             {
-                                foreach (Loader loader in Loader.loaders)
+                                if (registeredSaveWork.getSaveName() == saveWorkName)
                                 {
-                                    if (loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
+                                    foreach (Loader loader in Loader.loaders)
                                     {
-                                        loader.getSaveModel().Stop();
-                                        loader.loadingViewGUI.Dispatcher.Invoke(() =>
+                                        if (loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
                                         {
-                                            loader.loadingViewGUI.closeAllowed = true;
-                                            loader.loadingViewGUI.Close();
-                                        });
+                                            loader.getSaveModel().Pause();
+                                        }
                                     }
+                                    EnvoyerMessage(serv, "Ce save work n'est pas en cours");
                                 }
-                                EnvoyerMessage(serv, "Ce save work n'est pas en cours");
                             }
+                            EnvoyerMessage(serv, "Ce save work n'existe pas");
                         }
-                        EnvoyerMessage(serv, "Ce save work n'existe pas");
+                        else if (messageRead.StartsWith("/stop "))
+                        {
+                            var saveWorkName = messageRead.Split(' ').Skip(1).FirstOrDefault();
+                            RegisteredSaveViewModel registeredSaveViewModel = new RegisteredSaveViewModel();
+                            List<RegisteredSaveWork> registeredSaveViewModelList = registeredSaveViewModel.initSlotSelection();
+                            foreach (RegisteredSaveWork registeredSaveWork in registeredSaveViewModelList)
+                            {
+                                if (registeredSaveWork.getSaveName() == saveWorkName)
+                                {
+                                    foreach (Loader loader in Loader.loaders)
+                                    {
+                                        if (loader.getSaveModel().registeredSaveWork.saveName == registeredSaveWork.saveName)
+                                        {
+                                            loader.getSaveModel().Stop();
+                                            loader.loadingViewGUI.Dispatcher.Invoke(() =>
+                                            {
+                                                loader.loadingViewGUI.closeAllowed = true;
+                                                loader.loadingViewGUI.Close();
+                                            });
+                                        }
+                                    }
+                                    EnvoyerMessage(serv, "Ce save work n'est pas en cours");
+                                }
+                            }
+                            EnvoyerMessage(serv, "Ce save work n'existe pas");
+                        }
                     }
                 }
+                catch(Exception ex)
+                {
+                    //Relancer la connexion ici
+                }
+                
             }
 
         }
+
+        
     }
 }
