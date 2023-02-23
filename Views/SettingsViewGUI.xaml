@@ -33,14 +33,14 @@
                 <TabControl x:Name="tabSelector" Margin="614,10,52,54" Background="AliceBlue" SelectionChanged="tabSelector_SelectionChanged">
                     <TabItem Header="Language" Visibility="Collapsed">
                         <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="230px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px" ><Run Language="fr-fr" Text="Language" x:Name="tabItemLanguage"/></TextBlock>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="175px" Width="300" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="40px" ><Run Language="fr-fr" Text="Language" x:Name="tabItemLanguage"/></TextBlock>
                             <ComboBox x:Name="cbLanguage" HorizontalAlignment="Center" Canvas.Left="220px" Canvas.Top="100" Height="30" Width="200" SelectionChanged="cbLanguage_SelectionChanged"/>
                         </Canvas>
                     </TabItem>
                     <TabItem Header="Format" Visibility="Collapsed">
                         <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="180px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px"><Run Language="fr-fr" Text="Logs file extensions" x:Name="tabItemFormat"/></TextBlock>
-                            <ComboBox x:Name="cbFormat" HorizontalAlignment="Center" Canvas.Left="220px" Canvas.Top="100" SelectionChanged="cbFormat_SelectionChanged" Height="30" Width="200"/>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="165px" Width="300" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="40px"><Run Language="fr-fr" Text="Logs file extensions" x:Name="tabItemFormat"/></TextBlock>
+                            <ComboBox x:Name="cbFormat" HorizontalAlignment="Center" Canvas.Left="220px" Canvas.Top="120" SelectionChanged="cbFormat_SelectionChanged" Height="30" Width="200"/>
                         </Canvas>
                     </TabItem>
                     <TabItem Header="TabItem" Visibility="Collapsed">
@@ -78,16 +78,16 @@
                             <TextBlock Margin="0,0,0,0" Canvas.Left="190px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
                                 <Run Language="fr-fr" Text="Prio extensions" x:Name="tabItemPrioExtension"/>
                             </TextBlock>
-                            <ListView x:Name="ListViewPrioExtensions" Canvas.Left="250" Canvas.Top="140">
+                            <ListView x:Name="ListViewPrioExtensions" Canvas.Left="260" Canvas.Top="160">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Prio extensions"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <TextBox x:Name="textBoxPrioExtensions" TextWrapping="Wrap" Width="120" Canvas.Left="200" Canvas.Top="100"/>
-                            <Button x:Name="addPrioExtensionBtn" Content="Ajouter" Canvas.Left="330" Canvas.Top="100" Click="AddPrioExtensionBtn"/>
-                            <Button x:Name="removePrioExtensionBtn" Content="Supprimer" Canvas.Left="380" Canvas.Top="100" Click="RemovePrioExtensionBtn"/>
+                            <TextBox x:Name="textBoxPrioExtensions" TextAlignment="Center" TextWrapping="Wrap" Height="30" Width="200" Canvas.Left="210" Canvas.Top="112"/>
+                            <Button x:Name="addPrioExtensionBtn" Content="Ajouter" Canvas.Left="430" Canvas.Top="117" Click="AddPrioExtensionBtn"/>
+                            <Button x:Name="removePrioExtensionBtn" Content="Supprimer" Canvas.Left="490" Canvas.Top="117" Click="RemovePrioExtensionBtn"/>
                         </Canvas>
                     </TabItem>
                 </TabControl>
