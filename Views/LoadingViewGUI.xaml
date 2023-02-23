@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="LoadingViewGUI" Height="450" Width="800"
         Closing="OnClosing">
+    
     <Grid>
         <Canvas Background="#FFE1E8FF">
             <ProgressBar x:Name="progressBar" Value="0" HorizontalAlignment="Center" Height="48" VerticalAlignment="Top" Width="532" Canvas.Left="134" Canvas.Top="115" />

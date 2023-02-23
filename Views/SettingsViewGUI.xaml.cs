@@ -187,5 +187,10 @@ namespace easysave.Views
         {
             NavigationService.Navigate(null);
         }
+
+        private void tabSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

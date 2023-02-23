@@ -7,14 +7,34 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1300"
       Title="SaveWorkListViewGUI">
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseDirectlyOver" Value="True">
+                        <Setter Property="BorderBrush" Value="Green"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid Margin="0,0,0,0" Height="Auto" Width="1300" VerticalAlignment="Top" HorizontalAlignment="Left">
         <Canvas>
-            <Grid Background="#FFE1E8FF" HorizontalAlignment="Left" VerticalAlignment="Center" Width="1300" Panel.ZIndex="1000" Canvas.Left="-24">
+            <Grid Background="#FFE1E8FF" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1300" Panel.ZIndex="1000" Canvas.Left="-9" Canvas.Top="10" Height="665">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="271*"/>
                     <ColumnDefinition Width="379*"/>
                 </Grid.ColumnDefinitions>
-                <ListView x:Name="listView" Width="Auto" SelectionChanged="listView_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="42,81,716,97" Grid.ColumnSpan="2">
+                <ListView x:Name="listView" Width="Auto" SelectionChanged="listView_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="42,81,716,135" Grid.ColumnSpan="2">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="tabHeader_saveName" Header="Save name" Width="Auto" DisplayMemberBinding="{Binding saveName}"/>
@@ -23,12 +43,21 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <TabControl Grid.Column="1" HorizontalAlignment="Left" Height="568" VerticalAlignment="Center" Width="602" Margin="108,0,0,0"/>
-                <Button x:Name="initSaveWork" Grid.Column="1" Content="Start save work" HorizontalAlignment="Left" Margin="272,125,0,0" VerticalAlignment="Top" Height="66" Width="274" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF489A00" BorderThickness="10,0,0,0" IsEnabled="False" Click="initSaveWork_Click"/>
-                <Button x:Name="deleteSaveWork" Grid.Column="1" Content="Delete save work" HorizontalAlignment="Left" Margin="272,259,0,0" VerticalAlignment="Top" Height="66" Width="274" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF9A0000" BorderThickness="10,0,0,0" IsEnabled="False" Click="deleteSaveWork_Click"/>
-                <Button x:Name="mainMenu" Content="Go to main menu" HorizontalAlignment="Left" Margin="42,538,0,0" VerticalAlignment="Top" Height="66" Width="242" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click"/>
+                <TabControl Grid.Column="1" HorizontalAlignment="Left" Height="464" VerticalAlignment="Top" Width="602" Margin="108,81,0,0"/>
+                <Button x:Name="initSaveWork" Grid.Column="1" Content="Start save work" HorizontalAlignment="Left" Margin="206,181,0,0" VerticalAlignment="Top" Height="66" Width="406" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF489A00" BorderThickness="10,0,0,0" IsEnabled="False" Click="initSaveWork_Click" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="0"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+                <Button x:Name="deleteSaveWork" Grid.Column="1" Content="Delete save work" HorizontalAlignment="Left" Margin="206,0,0,0" VerticalAlignment="Center" Height="66" Width="407" FontSize="16" Background="WhiteSmoke" BorderBrush="#FF9A0000" BorderThickness="10,0,0,0" IsEnabled="False" Click="deleteSaveWork_Click"/>
+                <Button x:Name="mainMenu" Content="Go to main menu" HorizontalAlignment="Center" Margin="0,562,0,0" VerticalAlignment="Top" Height="66" Width="242" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click"/>
                 <TextBlock x:Name="title"  HorizontalAlignment="Left" Margin="0,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="602" FontSize="30" FontWeight="Bold" TextAlignment="Center" Grid.ColumnSpan="2"><Run Language="fr-fr" Text="Liste des travaux de sauvegarde :"/></TextBlock>
-                <TextBlock x:Name="title_Copy"  HorizontalAlignment="Left" Margin="108,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="602" FontSize="30" FontWeight="Bold" TextAlignment="Center" Grid.Column="1"><Run Language="fr-fr" Text="Nom du travail sélectionné"/></TextBlock>
+                <TextBlock x:Name="title_Copy"  HorizontalAlignment="Left" Margin="108,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="602" FontSize="30" FontWeight="Bold" TextAlignment="Center" Grid.Column="1"><Run Language="fr-fr" Text="Nom du travail sélectionné"/></TextBlock>
             </Grid>
         </Canvas>
     </Grid>
