@@ -232,7 +232,7 @@
     <value>Blacklist</value>
   </data>
   <data name="gui-tabItemFormat" xml:space="preserve">
-    <value>Format des fichiers de logs</value>
+    <value> Format des logs</value>
   </data>
   <data name="gui-tabItemLanguage" xml:space="preserve">
     <value>Langage</value>

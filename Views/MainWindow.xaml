@@ -6,13 +6,35 @@
         xmlns:local="clr-namespace:easysave"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1300">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="DarkBlue" BorderThickness="1" CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseDirectlyOver" Value="True">
+                        <Setter Property="BorderBrush" Value="Green"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid Background="#FFE1E8FF">
         <Canvas>
+
             <Image Height="354" Canvas.Left="450" Source="/Assets/easysave.png" Stretch="Fill" Canvas.Top="25" Width="400" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Button x:Name="initSaveWork" Content="Liste des travaux de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Canvas.Left="476" Canvas.Top="384" Click="initSaveWork_Click"/>
-            <Button x:Name="initSlotCreation" Content="Créer un travail de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSlotCreation_Click" Canvas.Left="476" Canvas.Top="434"/>
-            <Button x:Name="initSettings" Content="Paramètres" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSettings_Click" Canvas.Left="476" Canvas.Top="484"/>
-            <Button x:Name="initLeave" Content="Quitter" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initLeave_Click" Canvas.Left="476" Canvas.Top="534"/>
+            <Button x:Name="initSaveWork" Content="Liste des travaux de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="464" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Canvas.Left="418" Canvas.Top="382" Click="initSaveWork_Click" />
+            <Button x:Name="initSlotCreation" Content="Créer un travail de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="464" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSlotCreation_Click" Canvas.Left="418" Canvas.Top="449"/>
+            <Button x:Name="initSettings" Content="Paramètres" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="464" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSettings_Click" Canvas.Left="418" Canvas.Top="519"/>
+            <Button x:Name="initLeave" Content="Quitter" HorizontalAlignment="Left" VerticalAlignment="Top" Height="42" Width="174" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initLeave_Click" Canvas.Left="563" Canvas.Top="595"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="108" FontSize="16" TextAlignment="Center" FontWeight="Bold" RenderTransformOrigin="0.519,-0.55" Canvas.Top="659"><Run Language="fr-fr" Text="Version 3.0"/></TextBlock>
             <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden"/>
         </Canvas>

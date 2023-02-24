@@ -7,20 +7,34 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1300"
       Title="CreateSaveWorkGUI">
-
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid x:Name="grid" Margin="0,0,0,0" Height="700" Width="1300" VerticalAlignment="Top" HorizontalAlignment="Left">
-        <Grid Background="#FFE1E8FF" Margin="-8,0,8,0">
+        <Grid Background="#FFE1E8FF" Margin="-8,0,8,10">
             <Canvas Panel.ZIndex="1000">
                 <ComboBox x:Name="cbType" Canvas.Left="801" Canvas.Top="405" Width="300" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionChanged="cbType_SelectionChanged" Height="30"/>
                 <Button x:Name="fileExplorerSource" Content="..." Canvas.Left="1067" Canvas.Top="280" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Click="fileExplorerSource_Click" Width="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0,-2,1,0" Panel.ZIndex="1"/>
                 <Button x:Name="fileExplorerTarget" Content="..." Canvas.Left="1067" Canvas.Top="345" Height="18" HorizontalAlignment="Center" VerticalAlignment="Top" Click="fileExplorerTarget_Click" Width="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0,-2,1,0" Panel.ZIndex="1"/>
-                <Button x:Name="initSlotCreation" Content="Valider" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="849" Canvas.Top="521" FontSize="30" Click="initSlotCreation_Click" IsEnabled="False" Width="204" Height="40" Background="WhiteSmoke" Foreground="Black"/>
+                <Button x:Name="initSlotCreation" Content="Valider" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="858" Canvas.Top="521" FontSize="30" Click="initSlotCreation_Click" IsEnabled="False" Width="181" Height="46" Background="WhiteSmoke" Foreground="Black"/>
                 <TextBlock x:Name="title_folderToCopy" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Canvas.Left="200" Canvas.Top="268" FontSize="30" Text="Dossier à copier"/>
                 <TextBlock x:Name="title_targetPath" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Traget path" VerticalAlignment="Top" Canvas.Left="200" FontSize="30" Canvas.Top="331"/>
                 <TextBlock x:Name="title_saveType" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Canvas.Left="200" Canvas.Top="395" FontSize="30" Text="Type de sauvegarde"/>
                 <TextBox x:Name="sourcePath" TextWrapping="NoWrap" Width="300" Canvas.Left="801" Canvas.Top="270" HorizontalAlignment="Center" VerticalAlignment="Top" TextChanged="sourcePath_TextChanged" Height="40" VerticalContentAlignment="Center"/>
                 <TextBox x:Name="targetPath" TextWrapping="NoWrap" Width="300" Canvas.Left="801" Canvas.Top="335" HorizontalAlignment="Center" VerticalAlignment="Top" TextChanged="targetPath_TextChanged" Height="40" VerticalContentAlignment="Center"/>
-                <Button x:Name="mainMenu" Grid.Column="1" Content="Retour au menu principal" HorizontalAlignment="Center" VerticalAlignment="Top" Height="66" Width="258" Background="WhiteSmoke" FontWeight="Bold" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click" Canvas.Left="37" Canvas.Top="606" FontSize="16"/>
+                <Button x:Name="mainMenu" Grid.Column="1" Content="Retour au menu principal" HorizontalAlignment="Center" VerticalAlignment="Top" Height="66" Width="258" Background="WhiteSmoke" FontWeight="Bold" BorderBrush="#FF9A0000" BorderThickness="0,0,0,0" Click="mainMenu_Click" Canvas.Left="37" Canvas.Top="588" FontSize="16"/>
                 <TextBlock x:Name="title_workName" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Canvas.Left="198" Canvas.Top="206" FontSize="30" Text="Nom du travail"/>
                 <TextBox x:Name="saveName" HorizontalAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Top" Width="300" Canvas.Left="801" Canvas.Top="206" Height="40" VerticalContentAlignment="Center"/>
             </Canvas>
