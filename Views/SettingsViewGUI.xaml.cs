@@ -53,6 +53,9 @@ namespace easysave.Views
             cbFormat.ItemsSource = extensions;
             this.language = Instance.rm;
             translateAllItems();
+            LoadExtensionList();
+            LoadPrioExtensionList();
+            LoadBlacklist();
         }
 
         private void cbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
