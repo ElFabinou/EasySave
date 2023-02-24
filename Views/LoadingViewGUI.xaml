@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:easysave.Views"
         mc:Ignorable="d"
         Title="LoadingViewGUI" Height="450" Width="800"
-        Closing="OnClosing">
+        Closing="OnClosing"
+        ResizeMode="NoResize">
     
     <Grid>
         <Canvas Background="#FFE1E8FF">
