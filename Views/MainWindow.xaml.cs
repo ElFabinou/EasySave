@@ -34,8 +34,10 @@ namespace easysave.Views
 
         public MainWindow()
         {
-            mutex = new Mutex(true, UniqueName, out bool createdNew);
-            if (!createdNew)
+            mutex = new Mutex(true, UniqueName, out bool createdNew);//Si un mutex a le même nom = false
+
+            //Verif le true ou false du mutex
+            if (!createdNew)//Si le Mutex existe déjà, la valeur de createdNew sera false
             {
                 MessageBox.Show("L'application est déjà en cours d'exécution", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 mutex.Dispose();
