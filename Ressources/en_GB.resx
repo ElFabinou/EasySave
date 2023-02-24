@@ -154,10 +154,10 @@
     <value>Differential</value>
   </data>
   <data name="slotinteraction_ask_operation" xml:space="preserve">
-    <value>Interaction with the save slot:</value>
+    <value>Interactions with the save slot:</value>
   </data>
   <data name="slotinteraction_choice_delete_save_work" xml:space="preserve">
-    <value>Supprimer cette sauvegarde</value>
+    <value>Delete this savework</value>
   </data>
   <data name="slotinteraction_choice_run_save_work" xml:space="preserve">
     <value>Delete this backup</value>
@@ -232,7 +232,7 @@
     <value>Blacklist</value>
   </data>
   <data name="gui-tabItemFormat" xml:space="preserve">
-    <value>Logs file format</value>
+    <value>Logs file extension</value>
   </data>
   <data name="gui-tabItemLanguage" xml:space="preserve">
     <value>Language</value>
@@ -241,13 +241,13 @@
     <value>Confirm</value>
   </data>
   <data name="gui_CreateSaveWorkViewGUI_mainMenu" xml:space="preserve">
-    <value>Back to main menu</value>
+    <value>Main menu</value>
   </data>
   <data name="gui_CreateSaveWorkViewGUI_title" xml:space="preserve">
     <value>Save work creation</value>
   </data>
   <data name="gui_CreateSaveWorkViewGUI_title_folderToCopy" xml:space="preserve">
-    <value>Source folder</value>
+    <value>Source path</value>
   </data>
   <data name="gui_CreateSaveWorkViewGUI_title_saveType" xml:space="preserve">
     <value>Save type</value>
@@ -265,7 +265,7 @@
     <value>Size (bytes)</value>
   </data>
   <data name="gui_LoadingViewGUI_title" xml:space="preserve">
-    <value>Save progression</value>
+    <value>Save progress</value>
   </data>
   <data name="gui_MainWindow_initLeave" xml:space="preserve">
     <value>Leave</value>
@@ -280,6 +280,30 @@
     <value>Create save work</value>
   </data>
   <data name="gui_SaveWorkListViewGUI_deleteSaveWork" xml:space="preserve">
-    <value>Delete save works</value>
+    <value>Delete selected save works</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_initSaveWork" xml:space="preserve">
+    <value>Start selected save works</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_mainMenu" xml:space="preserve">
+    <value>Main menu</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_saveName" xml:space="preserve">
+    <value>Save work name</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_sourcePath" xml:space="preserve">
+    <value>Source path</value>
+  </data>
+  <data name="gui_SaveWorkListViewGUI_tabHeader_targetPath" xml:space="preserve">
+    <value>Target path</value>
+  </data>
+  <data name="gui-tabItemPrio" xml:space="preserve">
+    <value>Priority files</value>
+  </data>
+  <data name="settings_choice_add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="settings_choice_delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>

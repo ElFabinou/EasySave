@@ -7,52 +7,96 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1300"
       Title="SettingsViewGUI">
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseDirectlyOver" Value="True">
+                        <Setter Property="BorderBrush" Value="Green"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid Margin="0,0,0,0" Height="Auto" Width="1300" VerticalAlignment="Top" HorizontalAlignment="Left">
         <Canvas>
-            <Grid Background="White" HorizontalAlignment="Left" VerticalAlignment="Center" Width="1300" Height="700" Panel.ZIndex="1000">
-                <TabControl x:Name="tabSelector" Margin="650,10,10,10" Background="AliceBlue">
+            <Grid Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1300" Height="758" Panel.ZIndex="1000" Canvas.Left="-4">
+                <TabControl x:Name="tabSelector" Margin="614,10,52,54" Background="AliceBlue" SelectionChanged="tabSelector_SelectionChanged">
                     <TabItem Header="Language" Visibility="Collapsed">
                         <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="175px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Language choice" x:Name="tabItemLanguage"/>
-                            </TextBlock>
-                            <ComboBox x:Name="cbLanguage" HorizontalAlignment="Center" Canvas.Left="300px" Canvas.Top="200" SelectionChanged="cbLanguage_SelectionChanged">
-                            </ComboBox>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="175px" Width="300" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="40px" ><Run Language="fr-fr" Text="Language" x:Name="tabItemLanguage"/></TextBlock>
+                            <ComboBox x:Name="cbLanguage" HorizontalAlignment="Center" Canvas.Left="220px" Canvas.Top="100" Height="30" Width="200" SelectionChanged="cbLanguage_SelectionChanged"/>
                         </Canvas>
                     </TabItem>
                     <TabItem Header="Format" Visibility="Collapsed">
                         <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="175px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Logs format" x:Name="tabItemFormat"/></TextBlock>
-                            <ComboBox x:Name="cbFormat" HorizontalAlignment="Center" Canvas.Left="300px" Canvas.Top="200" SelectionChanged="cbFormat_SelectionChanged"></ComboBox>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="165px" Width="300" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="40px"><Run Language="fr-fr" Text="Logs file extensions" x:Name="tabItemFormat"/></TextBlock>
+                            <ComboBox x:Name="cbFormat" HorizontalAlignment="Center" Canvas.Left="220px" Canvas.Top="120" SelectionChanged="cbFormat_SelectionChanged" Height="30" Width="200"/>
                         </Canvas>
                     </TabItem>
                     <TabItem Header="TabItem" Visibility="Collapsed">
                         <Canvas>
-                            <TextBlock Margin="0,0,0,0" Canvas.Left="225px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
-                                <Run Language="fr-fr" Text="Blacklist" x:Name="tabItemBlacklist"/>
-                            </TextBlock>
-                            <ListView x:Name="ListViewBlacklist" Canvas.Left="250" Canvas.Top="140">
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="240px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px"><Run Language="fr-fr" Text="Blacklist" x:Name="tabItemBlacklist"/></TextBlock>
+                            <ListView x:Name="ListViewBlacklist" Canvas.Left="255" Canvas.Top="160">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Blacklist processus"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <TextBox x:Name="textBoxBlacklist" TextWrapping="Wrap" Width="120" Canvas.Left="200" Canvas.Top="100"/>
-                            <Button x:Name="addBlacklistBtn" Content="Ajouter" Canvas.Left="330" Canvas.Top="100" Click="AddBlacklistBtn"/>
-                            <Button x:Name="removeBlacklistBtn" Content="Supprimer" Canvas.Left="380" Canvas.Top="100" Click="RemoveBlacklistBtn"/>
+                            <TextBox x:Name="textBoxBlacklist" TextWrapping="Wrap" Height="30" Width="200" Canvas.Left="210" Canvas.Top="112"/>
+                            <Button x:Name="addBlacklistBtn" Content="Ajouter" Canvas.Left="430" Canvas.Top="117" Click="AddBlacklistBtn"/>
+                            <Button x:Name="removeBlacklistBtn" Content="Supprimer" Canvas.Left="490" Canvas.Top="117" Click="RemoveBlacklistBtn"/>
                         </Canvas>
                     </TabItem>
-
-
-
-
+                    <TabItem Header="TabItem" Visibility="Collapsed">
+                        <Canvas>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="130px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px"><Run Language="fr-fr" Text="Cryptosoft extensions" x:Name="tabItemExtension"/></TextBlock>
+                            <ListView x:Name="ListViewExtensions" Canvas.Left="245" Canvas.Top="160">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Cryptosoft extensions"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <TextBox x:Name="textBoxExtensions" TextWrapping="Wrap" Height="30" Width="200" Canvas.Left="210" Canvas.Top="112"/>
+                            <Button x:Name="addExtensionBtn" Content="Ajouter" Canvas.Left="430" Canvas.Top="117" Click="AddExtensionBtn"/>
+                            <Button x:Name="removeExtensionBtn" Content="Supprimer" Canvas.Left="490" Canvas.Top="117" Click="RemoveExtensionBtn"/>
+                        </Canvas>
+                    </TabItem>
+                    <TabItem Header="TabItem" Visibility="Collapsed">
+                        <Canvas>
+                            <TextBlock Margin="0,0,0,0" Canvas.Left="190px" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="40px">
+                                <Run Language="fr-fr" Text="Prio extensions" x:Name="tabItemPrioExtension"/>
+                            </TextBlock>
+                            <ListView x:Name="ListViewPrioExtensions" Canvas.Left="260" Canvas.Top="160">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Prio extensions"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <TextBox x:Name="textBoxPrioExtensions" TextAlignment="Center" TextWrapping="Wrap" Height="30" Width="200" Canvas.Left="210" Canvas.Top="112"/>
+                            <Button x:Name="addPrioExtensionBtn" Content="Ajouter" Canvas.Left="430" Canvas.Top="117" Click="AddPrioExtensionBtn"/>
+                            <Button x:Name="removePrioExtensionBtn" Content="Supprimer" Canvas.Left="490" Canvas.Top="117" Click="RemovePrioExtensionBtn"/>
+                        </Canvas>
+                    </TabItem>
                 </TabControl>
-                <Button x:Name="changeLanguage" Content="Changer la langue" HorizontalAlignment="Left" Margin="87,44,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLanguage_Click"/>
-                <Button x:Name="changeLogsFormat" Content="Changer le format des logs" HorizontalAlignment="Left" Margin="87,172,0,0" VerticalAlignment="Top" Height="79" Width="483" Click="changeLogsFormat_Click"/>
-                <Button x:Name="blacklist" Content="Blacklist" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Center" Height="80" Width="483" Click="blacklist_Click"/>
-                <!--<Button HorizontalAlignment="Left" Margin="87,460,0,0" VerticalAlignment="Top" Height="80" Width="483" Click="Button_Click"/>-->
+                <Button x:Name="changeLanguage" Content="Changer la langue" HorizontalAlignment="Left" Margin="87,28,0,0" VerticalAlignment="Top" Height="66" Width="400" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="changeLanguage_Click"/>
+                <Button x:Name="changeLogsFormat" Content="Changer le format des logs" HorizontalAlignment="Left" Margin="87,142,0,0" VerticalAlignment="Top" Height="66" Width="400" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="changeLogsFormat_Click"/>
+                <Button x:Name="blacklist" Content="Blacklist" HorizontalAlignment="Left" Margin="87,258,0,0" VerticalAlignment="Top" Height="66" Width="400" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="blacklist_Click"/>
+                <Button x:Name="extension" Content="Cryptosoft extensions" HorizontalAlignment="Left" Margin="87,374,0,0" VerticalAlignment="Top" Height="66" Width="400" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="cryptosoft_extensions_Click"/>
+                <Button x:Name="mainMenu" Content="Back to main menu" HorizontalAlignment="Left" Margin="166,586,0,0" VerticalAlignment="Top" Height="66" Width="242" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="mainMenu_Click"/>
+                <Button x:Name="prioExtensions" Content="Priority files" HorizontalAlignment="Left" Margin="87,488,0,0" VerticalAlignment="Top" Height="66" Width="400" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="prio_extensions_Click" />
             </Grid>
         </Canvas>
     </Grid>

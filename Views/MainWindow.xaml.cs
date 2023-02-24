@@ -16,22 +16,69 @@ using static easysave.Objects.LanguageHandler;
 using System.Windows.Shapes;
 using System.Resources;
 using static easysave.Objects.LanguageHandler;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
+using System.Diagnostics;
+using Newtonsoft.Json;
+using easysave.ViewModels;
+using System.Diagnostics.Metrics;
 
 namespace easysave.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public ResourceManager language;
-        
+        private const string UniqueName = "EasySave";
+        private static Mutex mutex;
+
         public MainWindow()
         {
+            mutex = new Mutex(true, UniqueName, out bool createdNew);//Si un mutex a le même nom = false
+
+            //Verif le true ou false du mutex
+            if (!createdNew)//Si le Mutex existe déjà, la valeur de createdNew sera false
+            {
+                MessageBox.Show("L'application est déjà en cours d'exécution", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                mutex.Dispose();
+                Application.Current.Shutdown();
+                return;
+            }
             InitializeComponent();
             this.language = Instance.rm;
             translateAllItems();
+
+            SocketViewModel socketViewModel = new SocketViewModel();
         }
+
+        //Méthode appelé automatiquement quand l'utilisateur ferme l'application
+        protected override void OnClosed(EventArgs e)
+        {
+            mutex?.Dispose();//Si le mutex n'est pas null, on le libère (pour éviter l'erreur s'il est null)
+            base.OnClosed(e);//Call la méthode de la class base. Permet de bien gérer la fermeture
+        }
+
+        //public void ConnexionChannel(Socket serv)
+        //{
+        //    byte[] buffer = new byte[8192];
+        //    int bytesRead;
+        //    try
+        //    {
+        //        bytesRead = serv.Receive(buffer);
+        //        if (bytesRead > 0)
+        //        {
+        //            string messageRead = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        //            Console.WriteLine("Client : " + messageRead);
+        //            string msgtosend = "Hello";
+        //            byte[] bufferReponse = Encoding.ASCII.GetBytes(msgtosend);
+        //            serv.Send(bufferReponse);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
+        //}
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {

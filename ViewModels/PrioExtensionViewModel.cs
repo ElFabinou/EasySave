@@ -14,33 +14,31 @@ using System.Windows.Markup;
 
 namespace easysave.ViewModels
 {
-    public class CryptosoftExtensionViewModel
+    public class PrioExtensionViewModel
     {
-        public void CallAddCryptosoftExtension(string extension) {
-            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
-            cryptosoftExtensionModel.AddCryptosoftExtension(extension);
+        public void CallAddPrioExtension(string extension) {
+            PrioExtensionModel cryptosoftExtensionModel = new PrioExtensionModel();
+            cryptosoftExtensionModel.AddPrioExtension(extension);
         }
 
-        public void CallRemoveCryptosoftExtension(string extension)
+        public void CallRemovePrioExtension(string extension)
         {
-            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
-            cryptosoftExtensionModel.RemoveCryptosoftExtension(extension);
+            PrioExtensionModel cryptosoftExtensionModel = new PrioExtensionModel();
+            cryptosoftExtensionModel.RemovePrioExtension(extension);
         }
 
         public List<string> GetExtensionList()
         {
-            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
+            PrioExtensionModel cryptosoftExtensionModel = new PrioExtensionModel();
             List<string> list = cryptosoftExtensionModel.getExtensionList();
             return list;
         }
 
         public bool CheckFileExtension(string extension)
         {
-            CryptosoftExtensionModel cryptosoftExtensionModel = new CryptosoftExtensionModel();
+            PrioExtensionModel cryptosoftExtensionModel = new PrioExtensionModel();
             bool result = cryptosoftExtensionModel.CheckFileExtension(extension);
             return result;
         }
     }
-
-
 }

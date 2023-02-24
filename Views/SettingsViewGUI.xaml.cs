@@ -53,6 +53,9 @@ namespace easysave.Views
             cbFormat.ItemsSource = extensions;
             this.language = Instance.rm;
             translateAllItems();
+            LoadExtensionList();
+            LoadPrioExtensionList();
+            LoadBlacklist();
         }
 
         private void cbFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -91,15 +94,33 @@ namespace easysave.Views
             tabSelector.SelectedIndex = 2;
         }
 
+        private void cryptosoft_extensions_Click(object sender, RoutedEventArgs e)
+        {
+            tabSelector.SelectedIndex = 3;
+        }
+
+        private void prio_extensions_Click(object sender, RoutedEventArgs e)
+        {
+            tabSelector.SelectedIndex = 4;
+        }
+
+
         private void translateAllItems()
         {
             tabItemLanguage.Text = language.GetString("gui-tabItemLanguage");
             tabItemFormat.Text = language.GetString("gui-tabItemFormat");
             tabItemBlacklist.Text = language.GetString("gui-tabItemBlacklist");
-
             changeLanguage.Content = language.GetString("gui-tabItemLanguage");
             changeLogsFormat.Content = language.GetString("gui-tabItemFormat");
             blacklist.Content = language.GetString("gui-tabItemBlacklist");
+            prioExtensions.Content = language.GetString("gui-tabItemPrio");
+            mainMenu.Content = language.GetString("settings_choice_back");
+            addBlacklistBtn.Content = language.GetString("settings_choice_add");
+            removeBlacklistBtn.Content = language.GetString("settings_choice_delete");
+            addExtensionBtn.Content = language.GetString("settings_choice_add");
+            removeExtensionBtn.Content = language.GetString("settings_choice_delete");
+            addPrioExtensionBtn.Content = language.GetString("settings_choice_add");
+            removePrioExtensionBtn.Content = language.GetString("settings_choice_delete");
         }
 
         private void AddBlacklistBtn(object sender, RoutedEventArgs e)
@@ -119,8 +140,60 @@ namespace easysave.Views
 
         private void LoadBlacklist()
         {
-            BlacklistModelView blacklist = new BlacklistModelView();
-            ListViewBlacklist.ItemsSource = blacklist.GetBlacklist();
+            BlacklistModelView extensionViewModel = new BlacklistModelView();
+            ListViewBlacklist.ItemsSource = extensionViewModel.GetBlacklist();
+        }
+
+        private void AddExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxExtensions.Text;
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            extensionViewModel.CallAddCryptosoftExtension(text);
+            LoadExtensionList();
+        }
+        private void RemoveExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxExtensions.Text;
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            extensionViewModel.CallRemoveCryptosoftExtension(text);
+            LoadExtensionList();
+        }
+
+        private void LoadExtensionList()
+        {
+            CryptosoftExtensionViewModel extensionViewModel = new CryptosoftExtensionViewModel();
+            ListViewExtensions.ItemsSource = extensionViewModel.GetExtensionList();
+        }
+
+        private void AddPrioExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxPrioExtensions.Text;
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            prioExtensionViewModel.CallAddPrioExtension(text);
+            LoadPrioExtensionList();
+        }
+        private void RemovePrioExtensionBtn(object sender, RoutedEventArgs e)
+        {
+            string text = textBoxPrioExtensions.Text;
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            prioExtensionViewModel.CallRemovePrioExtension(text);
+            LoadPrioExtensionList();
+        }
+
+        private void LoadPrioExtensionList()
+        {
+            PrioExtensionViewModel prioExtensionViewModel = new PrioExtensionViewModel();
+            ListViewPrioExtensions.ItemsSource = prioExtensionViewModel.GetExtensionList();
+        }
+
+        private void mainMenu_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(null);
+        }
+
+        private void tabSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

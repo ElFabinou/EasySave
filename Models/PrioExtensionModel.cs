@@ -8,83 +8,83 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//Cette classe permet d'ajouter/retirer des éléments à la config d'extensions crypto
-
-
 namespace easysave.Models
 {
-    public class CryptosoftExtensionModel
+    public class PrioExtensionModel
     {
 
-        public List<string> _extensions;
+        public List<string> _prioExtensions;
 
-        public CryptosoftExtensionModel()
+        public PrioExtensionModel()
         {   
-            _extensions = new List<string>();
+            _prioExtensions = new List<string>();
         }
 
-        public CryptosoftExtensionModel cryptosoftExtensionModel;
+        public PrioExtensionModel prioExtensionModel;
 
-        //Fonction qui vérifie si le fichier est en extension
-        public bool CheckFileExtension(string extension)
+        //Vérifier l'extension du fichier
+        public bool CheckFileExtension(string prioExtension)
         {
-            return ContainsExtension(extension);
+            return ContainsExtension(prioExtension);
         }
 
-        //Fonction qui permet d'ajouter au fichier de config un élément en config crypto
-        public void AddCryptosoftExtension(string extension)
+        //Ajouter une extension dans la liste des extensions
+        public void AddPrioExtension(string prioExtension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
-            List<string> extensions = getExtensionList();
-            extensions.Add(extension);
-            string jsonString = JsonConvert.SerializeObject(extensions, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path + "extensions.json"))
+            List<string> prioExtensions = getExtensionList();
+            prioExtensions.Add(prioExtension);
+            string jsonString = JsonConvert.SerializeObject(prioExtensions, Newtonsoft.Json.Formatting.Indented);
+            using (var streamWriter = new StreamWriter(path + "prioExtensions.json"))
             {
                 streamWriter.Write(jsonString);
             }
         }
-        //Fonction qui permet de retirer du fichier de config un élément en config crypto
-        public void RemoveCryptosoftExtension(string extension)
+
+        //Retirer une extension de la liste des extensions
+        public void RemovePrioExtension(string prioExtension)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
             createConfigFileIfNotExists();
             List<string> processes = getExtensionList();
-            processes.Remove(extension);
+            processes.Remove(prioExtension);
             string jsonString = JsonConvert.SerializeObject(processes, Newtonsoft.Json.Formatting.Indented);
-            using (var streamWriter = new StreamWriter(path + "extensions.json"))
+            using (var streamWriter = new StreamWriter(path + "prioExtensions.json"))
             {
                 streamWriter.Write(jsonString);
             }
         }
 
+        //Liste des extensions
         public List<string> getExtensionList()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            List<string>? extensions = new List<string>();
+            List<string>? prioExtensions = new List<string>();
             createConfigFileIfNotExists();
-            using (StreamReader r = new StreamReader(path + "extensions.json"))
+            using (StreamReader r = new StreamReader(path + "prioExtensions.json"))
             {
                 string json = r.ReadToEnd();
                 if (json != null && json != "")
                 {
-                    extensions = JsonConvert.DeserializeObject<List<string>>(json);
+                    prioExtensions = JsonConvert.DeserializeObject<List<string>>(json);
                 }
-                return extensions;
+                return prioExtensions;
             }
         }
-        //Fonction qui permet de récupérer un élément en crypto extension
-        public bool ContainsExtension(string extension)
+
+        public bool ContainsExtension(string prioExtension)
         {
-            return getExtensionList().Contains(extension);
+            return getExtensionList().Contains(prioExtension);
         }
 
+        //Charger les extensions
         public List<string> LoadExtensionsFromFile()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            if (File.Exists(path + "extensions.json"))
+            if (File.Exists(path + "prioExtensions.json"))
             {
-                using (StreamReader r = new StreamReader(path + "extensions.json"))
+                using (StreamReader r = new StreamReader(path + "prioExtensions.json"))
                 {
                     string json = r.ReadToEnd();
                     return JsonConvert.DeserializeObject<List<string>>(json);
@@ -97,21 +97,20 @@ namespace easysave.Models
             }
         }
 
-        //Sauvegarde de la blacklist
-        public void SaveExtensionsToFile(string[] extensions)
+        //Sauvegarder les extensions
+        public void SaveExtensionsToFile(string[] prioExtensions)
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            string json = JsonConvert.SerializeObject(extensions);
-            File.WriteAllText(path + "extensions.json", json);
+            string json = JsonConvert.SerializeObject(prioExtensions);
+            File.WriteAllText(path + "prioExtensions.json", json);
         }
 
-        //Créer le fichier de configuration
         public bool createConfigFileIfNotExists()
         {
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
-            if (File.Exists(path + "extensions.json")) return false;
+            if (File.Exists(path + "prioExtensions.json")) return false;
             System.IO.Directory.CreateDirectory(@path);
-            var file = File.Create(@path + "extensions.json");
+            var file = File.Create(@path + "prioExtensions.json");
             file.Close();
             return true;
         }
