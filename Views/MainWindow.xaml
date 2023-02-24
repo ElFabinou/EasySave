@@ -13,7 +13,7 @@
             <Button x:Name="initSlotCreation" Content="Créer un travail de sauvegarde" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSlotCreation_Click" Canvas.Left="476" Canvas.Top="434"/>
             <Button x:Name="initSettings" Content="Paramètres" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initSettings_Click" Canvas.Left="476" Canvas.Top="484"/>
             <Button x:Name="initLeave" Content="Quitter" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" Width="348" FontSize="16" Background="WhiteSmoke" FontWeight="Bold" Click="initLeave_Click" Canvas.Left="476" Canvas.Top="534"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="108" FontSize="16" TextAlignment="Center" FontWeight="Bold" RenderTransformOrigin="0.519,-0.55" Canvas.Top="659"><Run Language="fr-fr" Text="Version 2.0"/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="108" FontSize="16" TextAlignment="Center" FontWeight="Bold" RenderTransformOrigin="0.519,-0.55" Canvas.Top="659"><Run Language="fr-fr" Text="Version 3.0"/></TextBlock>
             <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden"/>
         </Canvas>
     </Grid>
