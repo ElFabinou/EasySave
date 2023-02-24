@@ -17,7 +17,7 @@ namespace easysave.Models
     {
 
         public LoggerHandler loggerHandler;
-        private static SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+        private static SemaphoreSlim _semaphoreEdit = new SemaphoreSlim(1);
 
         public LoggerHandlerModel(LoggerHandler loggerHandler)
         {
@@ -68,7 +68,7 @@ namespace easysave.Models
         //Mise à jour des state logs
         public List<StateLog> updateStateLog(List<StateLog>? stateLogs = null)
         {
-            _semaphore.Wait();
+            _semaphoreEdit.Wait();
             stateLogs = getAllStateLog();
             stateLogs.Add(loggerHandler.getStateLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -93,14 +93,14 @@ namespace easysave.Models
                     }
                     break;
             }
-            _semaphore.Release();
+            _semaphoreEdit.Release();
             return stateLogs;
         }
 
         //Mise à jour des daily logs
         public List<DailyLog> updateDailyLog(List<DailyLog>? dailyLogs = null)
         {
-            _semaphore.Wait();
+            _semaphoreEdit.Wait();
             if (dailyLogs==null) dailyLogs = getAllDailyLog();
             dailyLogs.Add(loggerHandler.getDailyLog());
             string path = ConfigurationManager.AppSettings["configPath"]!.ToString().Replace("%username%", Environment.UserName);
@@ -120,7 +120,7 @@ namespace easysave.Models
                     streamWriter.Write(jsonString);
                 }
             }
-            _semaphore.Release();
+            _semaphoreEdit.Release();
             return dailyLogs;
         }
 
